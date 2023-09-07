@@ -1,4 +1,4 @@
-package com.project.presentation.ui.screens
+package com.project.presentation.ui.screens.spalsh
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
@@ -54,8 +54,7 @@ fun SplashScreenContent(modifier: Modifier = Modifier) {
 }
 
 @Preview(
-    showBackground = true,
-    showSystemUi = true
+    showBackground = true
 )
 @Composable
 fun SplashPreview() {
