@@ -60,12 +60,12 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
 
-//    val accompanist_version = "0.28.0"
+    val accompanist_version = "0.28.0"
     implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
-//    implementation ("com.google.accompanist:accompanist-navigation-animation:$accompanist_version")
+    implementation ("com.google.accompanist:accompanist-navigation-animation:$accompanist_version")
     implementation("androidx.compose.ui:ui-text-google-fonts:1.5.0")
     implementation ("androidx.navigation:navigation-runtime-ktx:2.6.0")
-    implementation ("androidx.navigation:navigation-compose:2.6.0")
+    implementation ("androidx.navigation:navigation-compose:2.7.1")
 
     implementation ("com.airbnb.android:lottie-compose:6.0.0")
 
