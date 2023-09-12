@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.project.presentation.ui.screens.login.LoginScreen
+import com.project.presentation.ui.screens.signup.SignUpScreen
 import com.project.presentation.ui.screens.spalsh.SplashScreen
 
 sealed class AppDestinations(val route: String) {
@@ -78,14 +79,19 @@ fun SetupNavGraph(
             )
         }
 
+        composable(route = AppDestinations.SignUp.route) {
+            SignUpScreen(
+                homeNavigate = {
+                    navController.navigate(AppDestinations.Home.route) {
+                        launchSingleTop = true
+                        popUpTo(0) { inclusive = true }
+                    }
+                }
+            )
+        }
         composable(route = AppDestinations.Home.route) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(text = "Home Screen", style = MaterialTheme.typography.bodyLarge)
-            }
-        }
-        composable(route = AppDestinations.SignUp.route) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "SignUp Screen", style = MaterialTheme.typography.bodyLarge)
             }
         }
     }

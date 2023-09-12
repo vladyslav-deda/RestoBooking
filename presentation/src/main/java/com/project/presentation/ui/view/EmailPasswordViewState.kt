@@ -8,7 +8,7 @@ data class EmailPasswordViewState(
     val email: String = "",
     val password: PasswordViewState = PasswordViewState(),
     val errorMessage: String? = null
-)  {
+) {
     @StringRes
     val emailLabelText = R.string.email
 
@@ -30,4 +30,27 @@ data class PasswordViewState(
     }
 
     fun isEmpty(): Boolean = password.isEmpty()
+}
+
+data class SignUpViewState(
+    val name: String = "",
+    val surname: String = "",
+    val email: String = "",
+    val password: PasswordViewState = PasswordViewState(),
+    val duplicatePassword: PasswordViewState = PasswordViewState(labelText = R.string.confirm_password),
+    val errorMessage: String? = null,
+    val isInputFieldInFocus: Boolean = false
+) {
+    @StringRes
+    val emailLabelText = R.string.email
+
+    @StringRes
+    val nameLabelText = R.string.email
+
+    @StringRes
+    val surnameLabelText = R.string.email
+
+    fun isButtonEnabled(): Boolean =
+        errorMessage == null && email.isNotEmpty() && password.isEmpty()
+            .not() && duplicatePassword.isEmpty().not()
 }

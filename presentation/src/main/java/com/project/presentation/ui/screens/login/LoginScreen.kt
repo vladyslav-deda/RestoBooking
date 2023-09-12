@@ -54,7 +54,7 @@ fun LoginScreen(
 
     Scaffold { contentPadding ->
         Box(
-            modifier = Modifier
+            modifier = modifier
                 .padding(contentPadding)
                 .fillMaxSize(),
             contentAlignment = Alignment.Center
