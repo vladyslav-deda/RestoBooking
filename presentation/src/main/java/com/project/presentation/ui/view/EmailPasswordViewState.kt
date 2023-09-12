@@ -45,10 +45,10 @@ data class SignUpViewState(
     val emailLabelText = R.string.email
 
     @StringRes
-    val nameLabelText = R.string.email
+    val nameLabelText = R.string.name
 
     @StringRes
-    val surnameLabelText = R.string.email
+    val surnameLabelText = R.string.surname
 
     fun isButtonEnabled(): Boolean =
         errorMessage == null && email.isNotEmpty() && password.isEmpty()

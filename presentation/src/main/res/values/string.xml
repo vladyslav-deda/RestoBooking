@@ -5,6 +5,7 @@
     <string name="sign_in">Sign in</string>
     <string name="confirm_password">Confirm password</string>
     <string name="go_to_sign_up">I don`t have an account</string>
-    <string name="Name">name</string>
-    <string name="Surname">surname</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="sign_up">Sign up</string>
 </resources>

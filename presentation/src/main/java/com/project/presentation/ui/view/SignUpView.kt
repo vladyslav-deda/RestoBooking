@@ -8,11 +8,17 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -71,5 +77,53 @@ fun SignUpView(
             }
         )
         Spacer(modifier = Modifier.height(20.dp))
+        TextInputField(
+            value = viewState.email,
+            onInputFieldFocusChanged = onInputFieldFocusChanged,
+            onValueChange = onEmailTextChange,
+            isError = viewState.errorMessage?.isNotEmpty() == true,
+            labelText = stringResource(id = viewState.emailLabelText),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email),
+            clearFocus = {
+                focusManager.clearFocus()
+            }
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        PasswordInputField(
+            value = viewState.password.password,
+            onValueChange = onPasswordTextChange,
+            isError = viewState.password.isError,
+            labelText = viewState.password.labelText,
+            showPassword = viewState.password.showPassword,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            endIcon = viewState.password.endIcon(),
+            clearFocus = { focusManager.clearFocus() },
+            onPasswordVisibilityClick = onPasswordVisibilityClick
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        PasswordInputField(
+            value = viewState.duplicatePassword.password,
+            onValueChange = onDuplicatePasswordTextChange,
+            isError = viewState.duplicatePassword.isError,
+            labelText = viewState.duplicatePassword.labelText,
+            showPassword = viewState.duplicatePassword.showPassword,
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
+            endIcon = viewState.duplicatePassword.endIcon(),
+            clearFocus = { focusManager.clearFocus() },
+            onPasswordVisibilityClick = onDuplicatePasswordVisibilityClick
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        Button(
+            onClick = onRegisterClicked,
+//            enabled = viewState.isButtonEnabled(),
+            shape = RoundedCornerShape(8.dp),
+            colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.main_yellow))
+        ) {
+            Text(
+                modifier = Modifier.padding(vertical = 8.dp, horizontal = 54.dp),
+                text = stringResource(id = R.string.sign_up),
+                style = MaterialTheme.typography.titleLarge
+            )
+        }
     }
 }

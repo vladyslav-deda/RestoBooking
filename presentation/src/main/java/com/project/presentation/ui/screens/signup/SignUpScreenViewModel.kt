@@ -12,10 +12,34 @@ class SignUpScreenViewModel : ViewModel() {
     private val _uiState: MutableStateFlow<SignUpUIState> = MutableStateFlow(SignUpUIState())
     val uiState: StateFlow<SignUpUIState> = _uiState.asStateFlow()
 
+    fun onNameInputChanged(name: String) {
+        _uiState.update {
+            it.copy(
+                signUpState = it.signUpState.copy(
+                    name = name,
+                    password = it.signUpState.password.copy(isError = false),
+                    duplicatePassword = it.signUpState.duplicatePassword.copy(isError = false)
+                )
+            )
+        }
+    }
+
+    fun onSurnameInputChanged(surname: String) {
+        _uiState.update {
+            it.copy(
+                signUpState = it.signUpState.copy(
+                    surname = surname,
+                    password = it.signUpState.password.copy(isError = false),
+                    duplicatePassword = it.signUpState.duplicatePassword.copy(isError = false)
+                )
+            )
+        }
+    }
+
     fun onEmailInputChanged(email: String) {
         _uiState.update {
             it.copy(
-                signUpState = SignUpViewState(
+                signUpState = it.signUpState.copy(
                     email = email,
                     password = it.signUpState.password.copy(isError = false),
                     duplicatePassword = it.signUpState.duplicatePassword.copy(isError = false)
@@ -26,12 +50,9 @@ class SignUpScreenViewModel : ViewModel() {
 
     fun onPasswordInputChanged(password: String) {
         _uiState.update {
-            val passwordViewState =
-                it.signUpState.password.copy(password = password, isError = false)
             it.copy(
-                signUpState = SignUpViewState(
-                    email = it.signUpState.email,
-                    password = passwordViewState,
+                signUpState = it.signUpState.copy(
+                    password = it.signUpState.password.copy(password = password, isError = false),
                     duplicatePassword = it.signUpState.duplicatePassword.copy(isError = false)
                 )
             )
@@ -40,12 +61,9 @@ class SignUpScreenViewModel : ViewModel() {
 
     fun onPasswordVisibilityChanged() {
         _uiState.update {
-            val passwordViewState =
-                it.signUpState.password.copy(showPassword = it.signUpState.password.showPassword.not())
             it.copy(
-                signUpState = SignUpViewState(
-                    email = it.signUpState.email,
-                    password =passwordViewState,
+                signUpState = it.signUpState.copy(
+                    password =it.signUpState.password.copy(showPassword = it.signUpState.password.showPassword.not()),
                     duplicatePassword = it.signUpState.duplicatePassword.copy(isError = false)
                 )
             )
@@ -54,13 +72,10 @@ class SignUpScreenViewModel : ViewModel() {
 
     fun onDuplicatePasswordVisibilityChanged() {
         _uiState.update {
-            val duplicateViewState =
-                it.signUpState.duplicatePassword.copy(showPassword = it.signUpState.duplicatePassword.showPassword.not())
             it.copy(
-                signUpState = SignUpViewState(
-                    email = it.signUpState.email,
+                signUpState = it.signUpState.copy(
                     password = it.signUpState.password.copy(isError = false),
-                    duplicatePassword = duplicateViewState
+                    duplicatePassword = it.signUpState.duplicatePassword.copy(showPassword = it.signUpState.duplicatePassword.showPassword.not())
                 )
             )
         }
@@ -68,15 +83,19 @@ class SignUpScreenViewModel : ViewModel() {
 
     fun onDuplicatePasswordInputChanged(password: String) {
         _uiState.update {
-            val duplicateViewState =
-                it.signUpState.duplicatePassword.copy(password = password, isError = false)
-
             it.copy(
-                signUpState = SignUpViewState(
-                    email = it.signUpState.email,
+                signUpState = it.signUpState.copy(
                     password = it.signUpState.password.copy(isError = false),
-                    duplicatePassword = duplicateViewState
+                    duplicatePassword = it.signUpState.duplicatePassword.copy(password = password, isError = false)
                 )
+            )
+        }
+    }
+
+    fun onInputFieldFocusChanged(isFocused:Boolean){
+        _uiState.update {
+            it.copy(
+                signUpState = it.signUpState.copy(isInputFieldInFocus = isFocused)
             )
         }
     }
