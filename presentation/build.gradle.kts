@@ -42,6 +42,7 @@ kapt {
 
 dependencies {
 
+    implementation(project(":domain"))
 
     implementation("androidx.core:core-ktx:1.10.1")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")

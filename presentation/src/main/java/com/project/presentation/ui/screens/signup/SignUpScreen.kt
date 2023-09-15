@@ -1,7 +1,7 @@
 package com.project.presentation.ui.screens.signup
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -37,7 +37,10 @@ fun SignUpScreen(
         Box(
             modifier = modifier
                 .padding(contentPadding)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .clickable {
+                    viewModel.onInputFieldFocusChanged(uiState.signUpState.isInputFieldInFocus.not())
+                },
             contentAlignment = Alignment.Center
         ) {
             Image(
@@ -49,14 +52,14 @@ fun SignUpScreen(
             SignUpView(
                 viewState = uiState.signUpState,
                 onInputFieldFocusChanged = viewModel::onInputFieldFocusChanged,
-                onNameTextChange = viewModel::onNameInputChanged,
-                onSurnameTextChange = viewModel::onSurnameInputChanged,
+                onNameAndSurnameInputChanged = viewModel::onNameAndSurnameInputChanged,
                 onEmailTextChange = viewModel::onEmailInputChanged,
                 onPasswordTextChange = viewModel::onPasswordInputChanged,
                 onDuplicatePasswordTextChange = viewModel::onDuplicatePasswordInputChanged,
                 onPasswordVisibilityClick = viewModel::onPasswordVisibilityChanged,
                 onDuplicatePasswordVisibilityClick = viewModel::onDuplicatePasswordVisibilityChanged,
-                onRegisterClicked = {})
+                onRegisterClicked = viewModel::onRegisterClick
+            )
             if (uiState.isLoading) {
                 LoadingView()
             }

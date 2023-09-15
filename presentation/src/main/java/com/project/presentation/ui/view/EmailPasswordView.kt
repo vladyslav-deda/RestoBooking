@@ -1,7 +1,9 @@
 package com.project.presentation.ui.view
 
+import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -20,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -54,7 +57,7 @@ fun EmailPasswordView(
         TextInputField(
             value = viewState.email,
             onValueChange = onEmailTextChange,
-            isError = viewState.password.isError,
+            isError = viewState.errorMessage?.isNotEmpty() == true,
             labelText = stringResource(viewState.emailLabelText),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         ) {
@@ -64,7 +67,7 @@ fun EmailPasswordView(
         PasswordInputField(
             value = viewState.password.password,
             onValueChange = onPasswordTextChange,
-            isError = viewState.password.isError,
+            isError = viewState.errorMessage?.isNotEmpty() == true,
             labelText = viewState.password.labelText,
             showPassword = viewState.password.showPassword,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -73,14 +76,16 @@ fun EmailPasswordView(
             onPasswordVisibilityClick = onPasswordVisibilityClick
         )
         Spacer(modifier = Modifier.height(20.dp))
-        if (viewState.password.isError) {
-            Text(
-                modifier = Modifier.fillMaxWidth(),
-                text = viewState.errorMessage ?: "",
-                style = MaterialTheme.typography.titleSmall.copy(color = MaterialTheme.colorScheme.error),
-                textAlign = TextAlign.Center
-            )
-            Spacer(modifier = Modifier.height(20.dp))
+        AnimatedVisibility(viewState.errorMessage?.isNotEmpty() == true) {
+            Column {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = viewState.errorMessage ?: "",
+                    style = MaterialTheme.typography.titleSmall.copy(color = MaterialTheme.colorScheme.error),
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(20.dp))
+            }
         }
         Button(
             onClick = onSignInClicked,

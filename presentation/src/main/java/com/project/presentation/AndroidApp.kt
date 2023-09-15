@@ -11,7 +11,6 @@ import com.project.presentation.ui.theme.RestoBookingTheme
 fun AndroidApp() {
 
     val navController = rememberNavController()
-    Log.i("myLogs", "AndroidApp: ${navController.currentBackStackEntryAsState().value?.destination?.route}")
     RestoBookingTheme {
         SetupNavGraph(navController = navController)
     }

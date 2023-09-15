@@ -19,7 +19,7 @@ data class EmailPasswordViewState(
 data class PasswordViewState(
     val password: String = "",
     val showPassword: Boolean = false,
-    val isError: Boolean = false,
+//    val isError: Boolean = false,
     @StringRes
     val labelText: Int = R.string.password
 ) {
@@ -33,8 +33,7 @@ data class PasswordViewState(
 }
 
 data class SignUpViewState(
-    val name: String = "",
-    val surname: String = "",
+    val nameAndSurname: String = "",
     val email: String = "",
     val password: PasswordViewState = PasswordViewState(),
     val duplicatePassword: PasswordViewState = PasswordViewState(labelText = R.string.confirm_password),
@@ -45,10 +44,7 @@ data class SignUpViewState(
     val emailLabelText = R.string.email
 
     @StringRes
-    val nameLabelText = R.string.name
-
-    @StringRes
-    val surnameLabelText = R.string.surname
+    val nameAndSurnameLabelText = R.string.name
 
     fun isButtonEnabled(): Boolean =
         errorMessage == null && email.isNotEmpty() && password.isEmpty()

@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -22,6 +23,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.project.presentation.R
 
@@ -30,8 +32,7 @@ fun SignUpView(
     modifier: Modifier = Modifier,
     viewState: SignUpViewState,
     onInputFieldFocusChanged: (Boolean) -> Unit,
-    onNameTextChange: (String) -> Unit,
-    onSurnameTextChange: (String) -> Unit,
+    onNameAndSurnameInputChanged: (String) -> Unit,
     onEmailTextChange: (String) -> Unit,
     onPasswordTextChange: (String) -> Unit,
     onDuplicatePasswordTextChange: (String) -> Unit,
@@ -40,6 +41,9 @@ fun SignUpView(
     onRegisterClicked: () -> Unit
 ) {
     val focusManager = LocalFocusManager.current
+    if (viewState.isInputFieldInFocus.not()){
+        focusManager.clearFocus()
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -54,23 +58,11 @@ fun SignUpView(
             )
         }
         TextInputField(
-            value = viewState.name,
+            value = viewState.nameAndSurname,
             onInputFieldFocusChanged = onInputFieldFocusChanged,
-            onValueChange = onNameTextChange,
+            onValueChange = onNameAndSurnameInputChanged,
             isError = viewState.errorMessage?.isNotEmpty() == true,
-            labelText = stringResource(id = viewState.nameLabelText),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            clearFocus = {
-                focusManager.clearFocus()
-            }
-        )
-        Spacer(modifier = Modifier.height(20.dp))
-        TextInputField(
-            value = viewState.surname,
-            onInputFieldFocusChanged = onInputFieldFocusChanged,
-            onValueChange = onSurnameTextChange,
-            isError = viewState.errorMessage?.isNotEmpty() == true,
-            labelText = stringResource(id = viewState.surnameLabelText),
+            labelText = stringResource(id = viewState.nameAndSurnameLabelText),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             clearFocus = {
                 focusManager.clearFocus()
@@ -91,8 +83,9 @@ fun SignUpView(
         Spacer(modifier = Modifier.height(20.dp))
         PasswordInputField(
             value = viewState.password.password,
+            onInputFieldFocusChanged = onInputFieldFocusChanged,
             onValueChange = onPasswordTextChange,
-            isError = viewState.password.isError,
+            isError = viewState.errorMessage?.isNotEmpty() == true,
             labelText = viewState.password.labelText,
             showPassword = viewState.password.showPassword,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -103,8 +96,9 @@ fun SignUpView(
         Spacer(modifier = Modifier.height(20.dp))
         PasswordInputField(
             value = viewState.duplicatePassword.password,
+            onInputFieldFocusChanged = onInputFieldFocusChanged,
             onValueChange = onDuplicatePasswordTextChange,
-            isError = viewState.duplicatePassword.isError,
+            isError = viewState.errorMessage?.isNotEmpty() == true,
             labelText = viewState.duplicatePassword.labelText,
             showPassword = viewState.duplicatePassword.showPassword,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Password),
@@ -112,6 +106,16 @@ fun SignUpView(
             clearFocus = { focusManager.clearFocus() },
             onPasswordVisibilityClick = onDuplicatePasswordVisibilityClick
         )
+        Spacer(modifier = Modifier.height(20.dp))
+        AnimatedVisibility(viewState.errorMessage?.isNotEmpty() == true) {
+            Text(
+                modifier = Modifier.fillMaxWidth(),
+                text = viewState.errorMessage ?: "",
+                style = MaterialTheme.typography.titleSmall.copy(color = MaterialTheme.colorScheme.error),
+                textAlign = TextAlign.Center
+            )
+            Spacer(modifier = Modifier.height(20.dp))
+        }
         Spacer(modifier = Modifier.height(20.dp))
         Button(
             onClick = onRegisterClicked,

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "588585934816",
+    "project_id": "restobooking-7d88a",
+    "storage_bucket": "restobooking-7d88a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588585934816:android:0687212d804c6fd1bb5585",
+        "android_client_info": {
+          "package_name": "com.project.restobooking"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyALDUsRACysPkFawmvulJeJRWuLRksn8c8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

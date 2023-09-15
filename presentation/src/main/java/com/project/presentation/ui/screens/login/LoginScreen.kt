@@ -15,6 +15,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -43,12 +44,6 @@ fun LoginScreen(
 
     if (uiState.isNavigateHome) {
         homeNavigate()
-        return
-    }
-
-    if (uiState.isNavigateSignUp) {
-        signUpNavigate()
-        viewModel.resetSignUpStatus()
         return
     }
 
@@ -82,7 +77,7 @@ fun LoginScreen(
                     onPasswordTextChange = { viewModel.onPasswordInputChanged(it) },
                     onEmailTextChange = { viewModel.onEmailInputChanged(it) },
                     onPasswordVisibilityClick = { viewModel.onPasswordVisibilityChanged() },
-                    onSignInClicked = { }
+                    onSignInClicked = viewModel::onSignInClicked
                 )
                 Spacer(modifier = Modifier.height(20.dp))
                 Text(
@@ -91,7 +86,10 @@ fun LoginScreen(
                             signUpNavigate()
                         },
                     text = stringResource(R.string.go_to_sign_up),
-                    style = MaterialTheme.typography.titleMedium.copy(color = Color.White,textDecoration = TextDecoration.Underline)
+                    style = MaterialTheme.typography.titleMedium.copy(
+                        color = Color.White,
+                        textDecoration = TextDecoration.Underline
+                    )
                 )
             }
 
