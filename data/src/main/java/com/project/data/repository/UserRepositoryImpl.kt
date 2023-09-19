@@ -2,7 +2,7 @@ package com.project.data.repository
 
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.project.domain.model.User
+import com.project.domain.model.CreateUser
 import com.project.domain.repository.UserRepository
 import kotlinx.coroutines.tasks.await
 import javax.inject.Inject
@@ -25,7 +25,7 @@ class UserRepositoryImpl @Inject constructor(
         }
 
 
-    override suspend fun firebaseSignUpNewUser(user: User): Result<Unit> =
+    override suspend fun firebaseSignUpNewUser(user: CreateUser): Result<Unit> =
         try {
             val result = auth.createUserWithEmailAndPassword(user.email, user.password).await()
             val profileUpdates = UserProfileChangeRequest.Builder()

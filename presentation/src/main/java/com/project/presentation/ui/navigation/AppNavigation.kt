@@ -15,7 +15,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.project.presentation.R
+import com.project.presentation.ui.screens.home.HomeScreen
 import com.project.presentation.ui.screens.login.LoginScreen
+import com.project.presentation.ui.screens.profile.ProfileScreen
 import com.project.presentation.ui.screens.signup.SignUpScreen
 import com.project.presentation.ui.screens.spalsh.SplashScreen
 
@@ -30,7 +32,7 @@ sealed class AppDestinations(
     object SignUp : AppDestinations("sign_up_screen")
     object Home : AppDestinations("home_screen", "Home", R.drawable.ic_home)
     object Reservations :
-        AppDestinations("reservations_screen", "Reservations", R.drawable.ic_reservation)
+        AppDestinations("reservations_screen", "Reservations", R.drawable.ic_my_reservation)
 
     object Profile : AppDestinations("profile_screen", "Profile", R.drawable.ic_profile)
 }
@@ -60,7 +62,7 @@ fun SetupNavGraph(
         ) {
             SplashScreen(
                 navigateLogin = {
-                    navController.navigate(AppDestinations.Home.route) {
+                    navController.navigate(AppDestinations.Login.route) {
                         launchSingleTop = true
                         popUpTo(0) { inclusive = true }
                     }
@@ -93,9 +95,7 @@ fun SetupNavGraph(
             )
         }
         composable(route = AppDestinations.Home.route) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "Home Screen", style = MaterialTheme.typography.bodyLarge)
-            }
+            HomeScreen()
         }
         composable(route = AppDestinations.Reservations.route) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -103,9 +103,7 @@ fun SetupNavGraph(
             }
         }
         composable(route = AppDestinations.Profile.route) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "Profile Screen", style = MaterialTheme.typography.bodyLarge)
-            }
+            ProfileScreen()
         }
     }
 }

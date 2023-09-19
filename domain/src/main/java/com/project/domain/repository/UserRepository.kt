@@ -1,7 +1,7 @@
 package com.project.domain.repository
 
 import com.google.firebase.auth.FirebaseUser
-import com.project.domain.model.User
+import com.project.domain.model.CreateUser
 
 interface UserRepository {
 
@@ -9,7 +9,7 @@ interface UserRepository {
 
     suspend fun firebaseSignInWithEmailAndPassword(email: String, password: String): Result<Unit>
 
-    suspend fun firebaseSignUpNewUser(user: User): Result<Unit>
+    suspend fun firebaseSignUpNewUser(user: CreateUser): Result<Unit>
 
     fun logout()
 }

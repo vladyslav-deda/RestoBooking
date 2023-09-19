@@ -1,10 +1,12 @@
 package com.project.data.di
 
 import com.google.firebase.auth.FirebaseAuth
+import com.project.data.interactors.GetCurrentUserUseCaseImpl
 import com.project.data.interactors.LoginUserUseCaseImpl
 import com.project.data.interactors.SignUpUserUseCaseImpl
 import com.project.data.repository.UserRepositoryImpl
 import com.project.domain.repository.UserRepository
+import com.project.domain.usecase.GetCurrentUserUseCase
 import com.project.domain.usecase.LoginUserUseCase
 import com.project.domain.usecase.SignUpUserUseCase
 import dagger.Module
@@ -28,4 +30,10 @@ object UserModule {
     fun provideLoginUserUseCase(
         repository: UserRepository
     ): LoginUserUseCase = LoginUserUseCaseImpl(repository)
+
+
+    @Provides
+    fun provideGetCurrentUserUseCase(
+        repository: UserRepository
+    ): GetCurrentUserUseCase = GetCurrentUserUseCaseImpl(repository)
 }

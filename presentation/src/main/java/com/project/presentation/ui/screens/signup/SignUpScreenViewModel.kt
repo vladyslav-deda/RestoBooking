@@ -3,13 +3,12 @@ package com.project.presentation.ui.screens.signup
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.domain.model.User
+import com.project.domain.model.CreateUser
 import com.project.domain.usecase.LoginUserUseCase
 import com.project.domain.usecase.SignUpUserUseCase
 import com.project.presentation.R
 import com.project.presentation.ui.view.SignUpViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -131,7 +130,7 @@ class SignUpScreenViewModel @Inject constructor(
                 }
                 return@launch
             }
-            val newUser = User(
+            val newUser = CreateUser(
                 nameSurname = nameSurname,
                 email = email,
                 password = password
