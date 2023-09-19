@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -67,19 +68,23 @@ fun BottomNavigationItem(
     ) {
         Column(
             modifier = Modifier
-                .padding(12.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(6.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             item.icon?.let {
                 Icon(
-                    imageVector = it,
+                    modifier = Modifier
+                        .size(30.dp),
+                    painter = painterResource(id = it),
                     contentDescription = null,
                     tint = Color.White
                 )
+                Spacer(modifier = Modifier.height(4.dp))
             }
+
             Text(
                 text = item.title ?: "",
-                style = MaterialTheme.typography.titleSmall.copy(color = Color.White)
+                style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
             )
         }
     }
