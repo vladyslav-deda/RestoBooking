@@ -42,7 +42,10 @@ fun BottomNavigation(
             ) {
                 viewModel.getListOfItems().forEach { item ->
                     BottomNavigationItem(item = item, isSelected = item.route == screen.route) {
-                        navController.navigate(item.route)
+                        navController.navigate(item.route) {
+                            launchSingleTop = true
+                            popUpTo(0) { inclusive = true }
+                        }
                     }
                 }
             }
