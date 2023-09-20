@@ -21,7 +21,7 @@ fun AndroidApp() {
     RestoBookingTheme {
         val showNavigationBar =
             navController.currentBackStackEntryAsState().value?.destination?.route?.let { route ->
-                route != AppDestinations.Splash.route && route != AppDestinations.Login.route && route != AppDestinations.SignUp.route
+                route == AppDestinations.Home.route || route == AppDestinations.Reservations.route || route == AppDestinations.Profile.route
             } ?: false
 
         Surface {

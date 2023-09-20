@@ -1,6 +1,5 @@
 package com.project.presentation.ui.view
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
@@ -22,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
@@ -109,7 +107,7 @@ fun TextInputField(
     value: String,
     onInputFieldFocusChanged: (Boolean) -> Unit = {},
     onValueChange: (String) -> Unit,
-    isError: Boolean,
+    isError: Boolean = false,
     labelText: String,
     keyboardOptions: KeyboardOptions,
     clearFocus: () -> Unit

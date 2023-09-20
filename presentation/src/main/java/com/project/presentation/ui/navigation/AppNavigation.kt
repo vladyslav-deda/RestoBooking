@@ -15,6 +15,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.project.presentation.R
+import com.project.presentation.ui.screens.add_food_establishments.AddFoodEstablishmentsScreen
 import com.project.presentation.ui.screens.home.HomeScreen
 import com.project.presentation.ui.screens.login.LoginScreen
 import com.project.presentation.ui.screens.profile.ProfileScreen
@@ -35,6 +36,7 @@ sealed class AppDestinations(
         AppDestinations("reservations_screen", "Reservations", R.drawable.ic_my_reservation)
 
     object Profile : AppDestinations("profile_screen", "Profile", R.drawable.ic_profile)
+    object AddFoodEstablishments : AppDestinations("add_food_establishments")
 }
 
 @Composable
@@ -44,7 +46,7 @@ fun SetupNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppDestinations.Splash.route,
+        startDestination = AppDestinations.Home.route,
         modifier = modifier,
     ) {
         composable(
@@ -62,7 +64,7 @@ fun SetupNavGraph(
         ) {
             SplashScreen(
                 navigateLogin = {
-                    navController.navigate(AppDestinations.Login.route) {
+                    navController.navigate(AppDestinations.Home.route) {
                         launchSingleTop = true
                         popUpTo(0) { inclusive = true }
                     }
@@ -103,7 +105,18 @@ fun SetupNavGraph(
             }
         }
         composable(route = AppDestinations.Profile.route) {
-            ProfileScreen()
+            ProfileScreen(
+                navigateToAddFoodEstablishments = {
+                    navController.navigate(AppDestinations.AddFoodEstablishments.route)
+                }
+            )
+        }
+        composable(route = AppDestinations.AddFoodEstablishments.route){
+            AddFoodEstablishmentsScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

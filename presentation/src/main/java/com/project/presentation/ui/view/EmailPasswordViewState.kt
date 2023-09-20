@@ -19,7 +19,6 @@ data class EmailPasswordViewState(
 data class PasswordViewState(
     val password: String = "",
     val showPassword: Boolean = false,
-//    val isError: Boolean = false,
     @StringRes
     val labelText: Int = R.string.password
 ) {
@@ -44,7 +43,7 @@ data class SignUpViewState(
     val emailLabelText = R.string.email
 
     @StringRes
-    val nameAndSurnameLabelText = R.string.name
+    val nameAndSurnameLabelText = R.string.name_and_surname
 
     fun isButtonEnabled(): Boolean =
         errorMessage == null && email.isNotEmpty() && password.isEmpty()
