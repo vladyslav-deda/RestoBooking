@@ -87,7 +87,7 @@ fun EmailPasswordView(
         }
         Button(
             onClick = onSignInClicked,
-//            enabled = viewState.isButtonEnabled(),
+            enabled = viewState.isButtonEnabled(),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.main_yellow))
         ) {

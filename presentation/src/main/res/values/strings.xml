@@ -11,8 +11,11 @@
     <string name="all_fields_must_be_filled">All fields must be filled</string>
     <string name="different_passwords_message">Passwords do not match</string>
     <string name="reservations">Reservations</string>
-    <string name="add_a_food_establishments">Add a food establishments</string>
+    <string name="add_a_food_establishment">Add a food establishment</string>
     <string name="personal_details">Personal details</string>
     <string name="logout">Logout</string>
     <string name="name">Name</string>
+    <string name="address">Address</string>
+    <string name="description">Description</string>
+    <string name="continue_label">Continue</string>
 </resources>

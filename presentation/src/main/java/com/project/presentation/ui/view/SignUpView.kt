@@ -119,7 +119,7 @@ fun SignUpView(
         Spacer(modifier = Modifier.height(20.dp))
         Button(
             onClick = onRegisterClicked,
-//            enabled = viewState.isButtonEnabled(),
+            enabled = viewState.isButtonEnabled(),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.main_yellow))
         ) {

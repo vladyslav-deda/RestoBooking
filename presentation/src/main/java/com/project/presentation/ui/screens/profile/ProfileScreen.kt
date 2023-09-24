@@ -77,7 +77,7 @@ fun ProfileScreen(
                 Spacer(modifier = Modifier.height(40.dp))
                 MenuItem(
                     icon = R.drawable.ic_add,
-                    title = stringResource(R.string.add_a_food_establishments)
+                    title = stringResource(R.string.add_a_food_establishment)
                 ) {
                     navigateToAddFoodEstablishments()
                 }
