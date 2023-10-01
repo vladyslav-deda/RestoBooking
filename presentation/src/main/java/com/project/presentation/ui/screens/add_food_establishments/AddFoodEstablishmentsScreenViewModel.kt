@@ -2,18 +2,29 @@ package com.project.presentation.ui.screens.add_food_establishments
 
 import android.net.Uri
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.project.domain.model.FoodEstablishment
+import com.project.domain.model.FoodEstablishmentType
+import com.project.domain.model.Photo
+import com.project.domain.repository.FoodEstablishmentRepository
+import com.project.domain.usecase.GetCurrentUserUseCase
 import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep
-import com.project.presentation.ui.screens.add_food_establishments.model.FoodEstablishmentType
 import com.project.presentation.ui.view.register_food_establishment.AddPhotoViewState
 import com.project.presentation.ui.view.register_food_establishment.MainInfoViewState
-import com.project.presentation.ui.view.register_food_establishment.Photo
 import com.project.presentation.ui.view.register_food_establishment.TablesViewState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class AddFoodEstablishmentsScreenViewModel : ViewModel() {
+@HiltViewModel
+class AddFoodEstablishmentsScreenViewModel @Inject constructor(
+    private val foodEstablishmentRepository: FoodEstablishmentRepository,
+    private val getCurrentUserUseCase: GetCurrentUserUseCase
+) : ViewModel() {
 
     private val _uiState: MutableStateFlow<AddFoodEstablishmentsUIState> =
         MutableStateFlow(AddFoodEstablishmentsUIState())
@@ -162,6 +173,31 @@ class AddFoodEstablishmentsScreenViewModel : ViewModel() {
         _uiState.update {
             it.copy(
                 addPhotoViewState = AddPhotoViewState(photoList = newList)
+            )
+        }
+    }
+
+    fun onRegisterClicked() {
+        viewModelScope.launch {
+            foodEstablishmentRepository.registerFoodEstablishment(
+                foodEstablishment = FoodEstablishment(
+                    name = _uiState.value.mainInfoViewState.name ?: "",
+                    foodEstablishmentType = _uiState.value.mainInfoViewState.foodEstablishmentType!!,
+                    address = _uiState.value.mainInfoViewState.address ?: "",
+                    description = _uiState.value.mainInfoViewState.description ?: "",
+                    twoSeaterTableValue = _uiState.value.tablesViewState.twoSeaterTableValue,
+                    fourSeaterTableValue = _uiState.value.tablesViewState.fourSeaterTableValue,
+                    sixSeaterTableValue = _uiState.value.tablesViewState.sixSeaterTableValue,
+                    photoList = _uiState.value.addPhotoViewState.photoList,
+                    ownerName = getCurrentUserUseCase.invoke().getOrNull()?.nameSurname ?: ""
+                )
+            ).fold(
+                onSuccess = {
+
+                },
+                onFailure = {
+
+                }
             )
         }
     }

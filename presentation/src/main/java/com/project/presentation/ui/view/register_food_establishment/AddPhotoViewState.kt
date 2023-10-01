@@ -1,6 +1,6 @@
 package com.project.presentation.ui.view.register_food_establishment
 
-import android.net.Uri
+import com.project.domain.model.Photo
 
 data class AddPhotoViewState(
     val photoList: List<Photo> = emptyPhotoList
@@ -21,7 +21,3 @@ data class AddPhotoViewState(
 
 }
 
-data class Photo(
-    val index: Int,
-    val uri: Uri?
-)

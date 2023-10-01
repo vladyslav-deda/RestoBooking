@@ -6,10 +6,3 @@ enum class AddFoodEstablishmentStep(val title: String, val stepNumber: Int) {
     AddFoodEstablishmentPhotos("Photos", 3)
 }
 
-enum class FoodEstablishmentType(val title: String) {
-    Cafe("Cafe"),
-    Restaurant("Restaurant"),
-    Pub("Pub"),
-    Pizzeria("Pizzeria"),
-    Bar("Bar")
-}

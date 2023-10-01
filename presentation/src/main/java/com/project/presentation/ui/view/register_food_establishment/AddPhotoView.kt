@@ -85,7 +85,7 @@ fun AddPhotoView(
                         .padding(4.dp)
                         .size(110.dp)
                         .clickable {
-                            clickedItemIndex = item.index
+                            clickedItemIndex = item.index!!
                             photoPicker.launch(
                                 PickVisualMediaRequest(
                                     ActivityResultContracts.PickVisualMedia.ImageOnly

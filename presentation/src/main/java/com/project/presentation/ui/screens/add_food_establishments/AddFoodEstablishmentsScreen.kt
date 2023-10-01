@@ -102,7 +102,7 @@ fun AddFoodEstablishmentsScreen(
                     AddFoodEstablishmentPhotos -> AddPhotoView(
                         viewState = uiState.addPhotoViewState,
                         onPhotoChanged = viewModel::changePhoto,
-                        onRegisterClicked = {}
+                        onRegisterClicked = viewModel::onRegisterClicked
                     )
                 }
             }

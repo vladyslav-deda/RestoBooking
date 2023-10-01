@@ -37,8 +37,8 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
+import com.project.domain.model.FoodEstablishmentType
 import com.project.presentation.R
-import com.project.presentation.ui.screens.add_food_establishments.model.FoodEstablishmentType
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
