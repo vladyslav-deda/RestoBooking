@@ -2,7 +2,6 @@ package com.project.presentation.ui.view.register_food_establishment
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -84,7 +83,7 @@ fun MainInfoView(
                 .fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = viewState.foodEstablishmentType?.title ?: "Food establishment type",
+                value = viewState.foodEstablishmentType?.title ?: stringResource(R.string.food_establishment_type),
                 modifier = modifier
                     .clickable {
                         expandedTypesMenu = !expandedTypesMenu
@@ -176,7 +175,7 @@ fun MainInfoView(
         Spacer(modifier = Modifier.height(14.dp))
         Button(
             onClick = onContinueClicked,
-            enabled = viewState.isContinueButtonEnabled(),
+//            enabled = viewState.isContinueButtonEnabled(),
             shape = RoundedCornerShape(8.dp),
             colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.main_yellow))
         ) {

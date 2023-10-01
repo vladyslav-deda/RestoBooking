@@ -18,4 +18,10 @@
     <string name="address">Address</string>
     <string name="description">Description</string>
     <string name="continue_label">Continue</string>
+    <string name="register_label">Register</string>
+    <string name="specify_the_number_of_tables">Specify the number of tables</string>
+    <string name="two_seater_table">Two-seater table</string>
+    <string name="four_seater_table">Four-seater table</string>
+    <string name="six_seater_table">Six-seater table</string>
+    <string name="food_establishment_type">Food establishment type</string>
 </resources>

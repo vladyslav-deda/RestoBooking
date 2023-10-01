@@ -6,7 +6,6 @@ data class TablesViewState(
     val sixSeaterTableValue: Int = 0
 ) {
 
-//
 //    fun isContinueButtonEnabled() =
 //        name?.isNotEmpty() == true && foodEstablishmentType != null && address?.isNotEmpty() == true && description?.isNotEmpty() == true
 }

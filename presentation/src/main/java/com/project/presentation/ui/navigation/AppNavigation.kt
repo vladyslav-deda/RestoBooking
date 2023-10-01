@@ -46,7 +46,7 @@ fun SetupNavGraph(
 ) {
     NavHost(
         navController = navController,
-        startDestination = AppDestinations.Home.route,
+        startDestination = AppDestinations.Splash.route,
         modifier = modifier,
     ) {
         composable(

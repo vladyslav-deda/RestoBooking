@@ -1,9 +1,12 @@
 package com.project.presentation.ui.screens.add_food_establishments
 
+import android.net.Uri
 import androidx.lifecycle.ViewModel
 import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep
 import com.project.presentation.ui.screens.add_food_establishments.model.FoodEstablishmentType
+import com.project.presentation.ui.view.register_food_establishment.AddPhotoViewState
 import com.project.presentation.ui.view.register_food_establishment.MainInfoViewState
+import com.project.presentation.ui.view.register_food_establishment.Photo
 import com.project.presentation.ui.view.register_food_establishment.TablesViewState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -138,15 +141,37 @@ class AddFoodEstablishmentsScreenViewModel : ViewModel() {
                 currentStep = nextStep
             )
         }
-
     }
 
+    fun decreaseStepNumber() {
+        val nextStepNumber = _uiState.value.currentStep.stepNumber - 1
+        AddFoodEstablishmentStep.values().firstOrNull {
+            it.stepNumber == nextStepNumber
+        }?.let {
+            _uiState.update {
+                it.copy(
+                    currentStep = it.currentStep
+                )
+            }
+        }
+    }
+
+    fun changePhoto(index: Int, uri: Uri) {
+        val newList = _uiState.value.addPhotoViewState.photoList.toMutableList()
+        newList[index] = Photo(index, uri)
+        _uiState.update {
+            it.copy(
+                addPhotoViewState = AddPhotoViewState(photoList = newList)
+            )
+        }
+    }
 }
 
 data class AddFoodEstablishmentsUIState(
     val currentStep: AddFoodEstablishmentStep = AddFoodEstablishmentStep.AddFoodEstablishmentMainInfo,
     val mainInfoViewState: MainInfoViewState = MainInfoViewState(),
-    val tablesViewState: TablesViewState = TablesViewState()
+    val tablesViewState: TablesViewState = TablesViewState(),
+    val addPhotoViewState: AddPhotoViewState = AddPhotoViewState()
 ) {
     private fun getMaxSteps() = 3
 

@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -31,6 +30,7 @@ import com.project.presentation.R
 import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep.AddFoodEstablishmentMainInfo
 import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep.AddFoodEstablishmentPhotos
 import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep.AddFoodEstablishmentTables
+import com.project.presentation.ui.view.register_food_establishment.AddPhotoView
 import com.project.presentation.ui.view.register_food_establishment.MainInfoView
 import com.project.presentation.ui.view.register_food_establishment.TablesView
 
@@ -54,11 +54,17 @@ fun AddFoodEstablishmentsScreen(
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Black),
                 navigationIcon = {
-                    IconButton(onClick = navigateBack) {
+                    IconButton(onClick = {
+                        if (uiState.currentStep.stepNumber == 1) {
+                            navigateBack()
+                        } else {
+                            viewModel.decreaseStepNumber()
+                        }
+                    }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             tint = Color.White,
-                            contentDescription = "Localized description"
+                            contentDescription = null
                         )
                     }
                 },
@@ -93,7 +99,11 @@ fun AddFoodEstablishmentsScreen(
                         onContinueClicked = viewModel::onContinueClicked
                     )
 
-                    AddFoodEstablishmentPhotos -> TODO()
+                    AddFoodEstablishmentPhotos -> AddPhotoView(
+                        viewState = uiState.addPhotoViewState,
+                        onPhotoChanged = viewModel::changePhoto,
+                        onRegisterClicked = {}
+                    )
                 }
             }
         }
