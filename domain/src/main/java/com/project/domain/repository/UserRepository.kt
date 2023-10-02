@@ -12,4 +12,6 @@ interface UserRepository {
     suspend fun firebaseSignUpNewUser(user: CreateUser): Result<Unit>
 
     fun logout()
+
+    fun isUserLoggedIn(): Boolean
 }

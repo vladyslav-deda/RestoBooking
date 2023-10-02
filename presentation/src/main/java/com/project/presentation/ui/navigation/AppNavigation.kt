@@ -64,6 +64,12 @@ fun SetupNavGraph(
         ) {
             SplashScreen(
                 navigateLogin = {
+                    navController.navigate(AppDestinations.Login.route) {
+                        launchSingleTop = true
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
+                navigateHome = {
                     navController.navigate(AppDestinations.Home.route) {
                         launchSingleTop = true
                         popUpTo(0) { inclusive = true }
@@ -72,7 +78,18 @@ fun SetupNavGraph(
             )
         }
 
-        composable(route = AppDestinations.Login.route) {
+        composable(
+            route = AppDestinations.Login.route,
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(700)
+                )
+            }) {
             LoginScreen(
                 homeNavigate = {
                     navController.navigate(AppDestinations.Home.route) {
@@ -86,7 +103,18 @@ fun SetupNavGraph(
             )
         }
 
-        composable(route = AppDestinations.SignUp.route) {
+        composable(
+            route = AppDestinations.SignUp.route,
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(700)
+                )
+            }) {
             SignUpScreen(
                 homeNavigate = {
                     navController.navigate(AppDestinations.Home.route) {
@@ -96,22 +124,72 @@ fun SetupNavGraph(
                 }
             )
         }
-        composable(route = AppDestinations.Home.route) {
+        composable(
+            route = AppDestinations.Home.route,
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(700)
+                )
+            }) {
             HomeScreen()
         }
-        composable(route = AppDestinations.Reservations.route) {
+        composable(
+            route = AppDestinations.Reservations.route,
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(700)
+                )
+            }) {
             Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                 Text(text = "Reservations Screen", style = MaterialTheme.typography.bodyLarge)
             }
         }
-        composable(route = AppDestinations.Profile.route) {
+        composable(
+            route = AppDestinations.Profile.route,
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(700)
+                )
+            }) {
             ProfileScreen(
                 navigateToAddFoodEstablishment = {
                     navController.navigate(AppDestinations.AddFoodEstablishments.route)
+                },
+                navigateToLoginScreen = {
+                    navController.navigate(AppDestinations.Login.route) {
+                        launchSingleTop = true
+                        popUpTo(0) { inclusive = true }
+                    }
                 }
             )
         }
-        composable(route = AppDestinations.AddFoodEstablishments.route){
+        composable(
+            route = AppDestinations.AddFoodEstablishments.route,
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(700)
+                )
+            }) {
             AddFoodEstablishmentsScreen(
                 navigateBack = {
                     navController.popBackStack()

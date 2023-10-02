@@ -137,7 +137,8 @@ fun HomeSearchView(
             Column {
                 Row {
                     OutlinedTextField(
-                        value = viewState.getFormattedFromTime() ?: stringResource(R.string.select_time_from),
+                        value = viewState.getFormattedFromTime()
+                            ?: stringResource(R.string.select_time_from),
                         modifier = Modifier
                             .weight(1f)
                             .clickable {
@@ -167,7 +168,8 @@ fun HomeSearchView(
                     )
                     Spacer(modifier = Modifier.width(20.dp))
                     OutlinedTextField(
-                        value = viewState.getFormattedToTime() ?: stringResource(R.string.select_time_to),
+                        value = viewState.getFormattedToTime()
+                            ?: stringResource(R.string.select_time_to),
                         modifier = Modifier
                             .weight(1f)
                             .clickable {
@@ -341,10 +343,9 @@ fun HomeSearchView(
                     inactivePeriodBackground = colorResource(id = R.color.gray),
                     selectorColor = colorResource(id = R.color.main_yellow),
                     selectorTextColor = Color.White,
-                    borderColor = Color.Red,
                     activeTextColor = Color.White,
                     inactiveTextColor = colorResource(id = R.color.dark_gray),
-                    inactiveBackgroundColor = colorResource(id = R.color.gray)
+                    inactiveBackgroundColor = colorResource(id = R.color.light_gray)
                 )
             ) {
                 onFromTimeSelected(it)
@@ -370,14 +371,13 @@ fun HomeSearchView(
             timepicker(
                 initialTime = currentTime,
                 title = "Select time of the reservation",
-                timeRange = viewState.selectedTimeFrom!! ..LocalTime.MAX,
+                timeRange = viewState.selectedTimeFrom!!..LocalTime.MAX,
                 is24HourClock = true,
                 colors = TimePickerDefaults.colors(
                     activeBackgroundColor = colorResource(id = R.color.main_yellow),
                     inactivePeriodBackground = colorResource(id = R.color.gray),
                     selectorColor = colorResource(id = R.color.main_yellow),
                     selectorTextColor = Color.White,
-                    borderColor = Color.Red,
                     activeTextColor = Color.White,
                     inactiveTextColor = colorResource(id = R.color.dark_gray),
                     inactiveBackgroundColor = colorResource(id = R.color.gray),

@@ -38,7 +38,8 @@ import com.project.presentation.R
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     viewModel: ProfileScreenViewModel = hiltViewModel(),
-    navigateToAddFoodEstablishment: () -> Unit
+    navigateToAddFoodEstablishment: () -> Unit,
+    navigateToLoginScreen: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -93,7 +94,8 @@ fun ProfileScreen(
                     icon = R.drawable.ic_logout,
                     title = stringResource(R.string.logout)
                 ) {
-
+                    viewModel.logout()
+                    navigateToLoginScreen()
                 }
             }
         }

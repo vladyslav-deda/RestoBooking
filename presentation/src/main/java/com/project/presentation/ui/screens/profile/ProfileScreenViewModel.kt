@@ -2,6 +2,7 @@ package com.project.presentation.ui.screens.profile
 
 import androidx.lifecycle.ViewModel
 import com.project.domain.model.User
+import com.project.domain.repository.UserRepository
 import com.project.domain.usecase.GetCurrentUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +13,8 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileScreenViewModel @Inject constructor(
-    getCurrentUserUseCase: GetCurrentUserUseCase
+    getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val userRepository: UserRepository
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<ProfileUIState> = MutableStateFlow(ProfileUIState())
@@ -25,6 +27,10 @@ class ProfileScreenViewModel @Inject constructor(
                 currentUser = currentUser
             )
         }
+    }
+
+    fun logout(){
+        userRepository.logout()
     }
 }
 
