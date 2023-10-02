@@ -17,6 +17,7 @@
     <string name="name">Name</string>
     <string name="address">Address</string>
     <string name="description">Description</string>
+    <string name="city">City</string>
     <string name="continue_label">Continue</string>
     <string name="register_label">Register</string>
     <string name="specify_the_number_of_tables">Specify the number of tables</string>
@@ -24,4 +25,9 @@
     <string name="four_seater_table">Four-seater table</string>
     <string name="six_seater_table">Six-seater table</string>
     <string name="food_establishment_type">Food establishment type</string>
+    <string name="select_date">Select date of reservation</string>
+    <string name="select_time">Select time of reservation</string>
+    <string name="persons">%1$s persons</string>
+    <string name="number_of_persons">Select number of persons</string>
+    <string name="search">Search</string>
 </resources>

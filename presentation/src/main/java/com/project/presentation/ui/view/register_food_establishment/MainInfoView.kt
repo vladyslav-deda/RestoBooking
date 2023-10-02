@@ -48,6 +48,7 @@ fun MainInfoView(
     onNameChanged: (String) -> Unit,
     onFoodEstablishmentTypeChanged: (FoodEstablishmentType) -> Unit,
     onAddressChanged: (String) -> Unit,
+    onCityChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
     onContinueClicked: () -> Unit
 ) {
@@ -83,7 +84,8 @@ fun MainInfoView(
                 .fillMaxWidth()
         ) {
             OutlinedTextField(
-                value = viewState.foodEstablishmentType?.title ?: stringResource(R.string.food_establishment_type),
+                value = viewState.foodEstablishmentType?.title
+                    ?: stringResource(R.string.food_establishment_type),
                 modifier = modifier
                     .clickable {
                         expandedTypesMenu = !expandedTypesMenu
@@ -119,20 +121,21 @@ fun MainInfoView(
                     expanded = expandedTypesMenu,
                     onDismissRequest = { expandedTypesMenu = false }
                 ) {
-                    FoodEstablishmentType.values().forEach {
-                        DropdownMenuItem(
-                            text = {
-                                Text(text = it.title)
-                            },
-                            onClick = {
-                                onFoodEstablishmentTypeChanged(it)
-                                expandedTypesMenu = !expandedTypesMenu
-                            }
-                        )
-                    }
+                    FoodEstablishmentType.values()
+                        .filter { it.title != null }
+                        .forEach {
+                            DropdownMenuItem(
+                                text = {
+                                    Text(text = it.title!!)
+                                },
+                                onClick = {
+                                    onFoodEstablishmentTypeChanged(it)
+                                    expandedTypesMenu = !expandedTypesMenu
+                                }
+                            )
+                        }
                 }
             }
-
         }
         Spacer(modifier = Modifier.height(14.dp))
         OutlinedTextField(
@@ -141,6 +144,25 @@ fun MainInfoView(
                 .fillMaxWidth(),
             onValueChange = onAddressChanged,
             placeholder = { Text(text = stringResource(id = viewState.addressLabelText)) },
+            keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                cursorColor = colorResource(id = R.color.gray),
+                textColor = Color.Black,
+                placeholderColor = colorResource(id = R.color.gray),
+                focusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.Black
+            ),
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+        )
+        Spacer(modifier = Modifier.height(14.dp))
+        OutlinedTextField(
+            value = viewState.city ?: "",
+            modifier = modifier
+                .fillMaxWidth(),
+            onValueChange = onCityChanged,
+            placeholder = { Text(text = stringResource(id = viewState.cityLabelText)) },
             keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             colors = TextFieldDefaults.outlinedTextFieldColors(

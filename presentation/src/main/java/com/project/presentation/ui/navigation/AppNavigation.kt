@@ -106,7 +106,7 @@ fun SetupNavGraph(
         }
         composable(route = AppDestinations.Profile.route) {
             ProfileScreen(
-                navigateToAddFoodEstablishments = {
+                navigateToAddFoodEstablishment = {
                     navController.navigate(AppDestinations.AddFoodEstablishments.route)
                 }
             )

@@ -1,15 +1,16 @@
 package com.project.presentation.ui.screens.home
 
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import com.project.domain.model.FoodEstablishment
 import com.project.domain.repository.FoodEstablishmentRepository
+import com.project.presentation.ui.view.HomeSearchViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -21,27 +22,55 @@ class HomeViewModel @Inject constructor(
         MutableStateFlow(HomeUIState())
     val uiState: StateFlow<HomeUIState> = _uiState.asStateFlow()
 
-    fun fetch() {
-        viewModelScope.launch {
-            foodEstablishmentRepository.fetchFoodEstablishments()
-                .fold(
-                    onSuccess = { list ->
-                        _uiState.update {
-                            it.copy(
-                                list = list
-                            )
-                        }
-                        val test = _uiState.value.list
-                        val t = 0
-                    },
-                    onFailure = {
-
-                    }
+    fun onCityChanged(city: String) {
+        _uiState.update {
+            it.copy(
+                homeSearchViewState = it.homeSearchViewState.copy(
+                    city = city
                 )
+            )
         }
+    }
+
+    fun onDateSelected(date: LocalDate) {
+        _uiState.update {
+            it.copy(
+                homeSearchViewState = it.homeSearchViewState.copy(
+                    selectedDate = date,
+                    selectedTime = null
+                )
+            )
+        }
+    }
+
+    fun onTimeSelected(time: LocalTime) {
+        _uiState.update {
+            it.copy(
+                homeSearchViewState = it.homeSearchViewState.copy(
+                    selectedTime = time
+                )
+            )
+        }
+    }
+
+    fun onNumberOfPersonsChanged(number: Int) {
+        _uiState.update {
+            it.copy(
+                homeSearchViewState = it.homeSearchViewState.copy(
+                    numberOfPersons = number
+                )
+            )
+        }
+    }
+
+    fun onSearchClicked() {
+
     }
 }
 
-data class HomeUIState(
-    val list: List<FoodEstablishment> = emptyList()
-)
+data class HomeUIState constructor(
+    val list: List<FoodEstablishment> = emptyList(),
+    val homeSearchViewState: HomeSearchViewState = HomeSearchViewState()
+) {
+
+}

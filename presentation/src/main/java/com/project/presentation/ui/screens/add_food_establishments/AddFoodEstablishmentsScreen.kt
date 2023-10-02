@@ -84,6 +84,7 @@ fun AddFoodEstablishmentsScreen(
                         onNameChanged = viewModel::onMainInfoNameChanged,
                         onFoodEstablishmentTypeChanged = viewModel::onMainInfoTypeChanged,
                         onAddressChanged = viewModel::onMainInfoAddressChanged,
+                        onCityChanged = viewModel::onMainInfoCityChanged,
                         onDescriptionChanged = viewModel::onMainInfoDescriptionChanged,
                         onContinueClicked = viewModel::onContinueClicked
                     )

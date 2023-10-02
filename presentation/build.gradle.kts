@@ -10,7 +10,7 @@ android {
     compileSdk = 34
 
     defaultConfig {
-        minSdk = 24
+        minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
@@ -76,4 +76,5 @@ dependencies {
 
     implementation ("io.coil-kt:coil-compose:2.3.0")
     implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation ("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc")
 }

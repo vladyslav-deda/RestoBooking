@@ -61,6 +61,16 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
         }
     }
 
+    fun onMainInfoCityChanged(city: String) {
+        _uiState.update {
+            it.copy(
+                mainInfoViewState = it.mainInfoViewState.copy(
+                    city = city
+                )
+            )
+        }
+    }
+
     fun onMainInfoDescriptionChanged(description: String) {
         _uiState.update {
             it.copy(
@@ -189,7 +199,8 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
                     fourSeaterTableValue = _uiState.value.tablesViewState.fourSeaterTableValue,
                     sixSeaterTableValue = _uiState.value.tablesViewState.sixSeaterTableValue,
                     photoList = _uiState.value.addPhotoViewState.photoList,
-                    ownerName = getCurrentUserUseCase.invoke().getOrNull()?.nameSurname ?: ""
+                    ownerName = getCurrentUserUseCase.invoke().getOrNull()?.nameSurname ?: "",
+                    city = _uiState.value.mainInfoViewState.city ?: ""
                 )
             ).fold(
                 onSuccess = {

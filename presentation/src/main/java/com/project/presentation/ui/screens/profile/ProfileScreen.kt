@@ -38,7 +38,7 @@ import com.project.presentation.R
 fun ProfileScreen(
     modifier: Modifier = Modifier,
     viewModel: ProfileScreenViewModel = hiltViewModel(),
-    navigateToAddFoodEstablishments: () -> Unit
+    navigateToAddFoodEstablishment: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -79,7 +79,7 @@ fun ProfileScreen(
                     icon = R.drawable.ic_add,
                     title = stringResource(R.string.add_a_food_establishment)
                 ) {
-                    navigateToAddFoodEstablishments()
+                    navigateToAddFoodEstablishment()
                 }
                 Spacer(modifier = Modifier.height(40.dp))
                 MenuItem(

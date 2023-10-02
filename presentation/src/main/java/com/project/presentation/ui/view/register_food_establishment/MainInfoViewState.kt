@@ -8,7 +8,8 @@ data class MainInfoViewState(
     val name: String? = null,
     val foodEstablishmentType: FoodEstablishmentType? = null,
     val address: String? = null,
-    val description: String? = null
+    val description: String? = null,
+    val city: String? = null,
 ) {
 
     @StringRes
@@ -19,6 +20,9 @@ data class MainInfoViewState(
 
     @StringRes
     val descriptionLabelText: Int = R.string.description
+
+    @StringRes
+    val cityLabelText: Int = R.string.city
 
     fun isContinueButtonEnabled() =
         name?.isNotEmpty() == true && foodEstablishmentType != null && address?.isNotEmpty() == true && description?.isNotEmpty() == true
