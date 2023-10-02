@@ -63,7 +63,8 @@ fun HomeScreen(
                 viewState = uiState.homeSearchViewState,
                 onCityChanged = viewModel::onCityChanged,
                 onDateSelected = viewModel::onDateSelected,
-                onTimeSelected = viewModel::onTimeSelected,
+                onFromTimeSelected = viewModel::onTimeFromSelected,
+                onToTimeSelected = viewModel::onTimeToSelected,
                 onNumberOfPersonsChanged = viewModel::onNumberOfPersonsChanged,
                 onSearchClicked = viewModel::onSearchClicked
             )

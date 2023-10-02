@@ -5,10 +5,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -55,12 +57,14 @@ fun HomeSearchView(
     viewState: HomeSearchViewState,
     onCityChanged: (String) -> Unit,
     onDateSelected: (LocalDate) -> Unit,
-    onTimeSelected: (LocalTime) -> Unit,
+    onFromTimeSelected: (LocalTime) -> Unit,
+    onToTimeSelected: (LocalTime) -> Unit,
     onNumberOfPersonsChanged: (Int) -> Unit,
     onSearchClicked: () -> Unit,
 ) {
     val dateDialogState = rememberMaterialDialogState()
-    val timeDialogState = rememberMaterialDialogState()
+    val timeFromDialogState = rememberMaterialDialogState()
+    val timeToDialogState = rememberMaterialDialogState()
     val focusManager = LocalFocusManager.current
     val currentDay = LocalDate.now()
     val allowedDates = listOf(currentDay, currentDay.plusDays(1), currentDay.plusDays(2))
@@ -131,35 +135,69 @@ fun HomeSearchView(
         Spacer(modifier = Modifier.height(20.dp))
         AnimatedVisibility(visible = viewState.selectedDate != null) {
             Column {
-                OutlinedTextField(
-                    value = viewState.getFormattedTime() ?: stringResource(R.string.select_time),
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .clickable {
-                            timeDialogState.show()
-                        },
-                    onValueChange = {},
-                    leadingIcon = {
-                        Icon(
-                            painterResource(id = R.drawable.ic_clock),
-                            contentDescription = null,
-                            tint = colorResource(
-                                id = R.color.main_yellow
+                Row {
+                    OutlinedTextField(
+                        value = viewState.getFormattedFromTime() ?: stringResource(R.string.select_time_from),
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable {
+                                timeFromDialogState.show()
+                            },
+                        onValueChange = {},
+                        leadingIcon = {
+                            Icon(
+                                painterResource(id = R.drawable.ic_clock),
+                                contentDescription = null,
+                                tint = colorResource(
+                                    id = R.color.main_yellow
+                                )
                             )
-                        )
-                    },
-                    colors = TextFieldDefaults.outlinedTextFieldColors(
-                        disabledTextColor = if (viewState.selectedTime != null) Color.Black
-                        else colorResource(id = R.color.gray),
-                        placeholderColor = colorResource(id = R.color.gray),
-                        disabledBorderColor = Color.Black,
-                        focusedBorderColor = Color.Black,
-                        unfocusedBorderColor = Color.Black
-                    ),
-                    shape = RoundedCornerShape(8.dp),
-                    singleLine = true,
-                    enabled = false
-                )
+                        },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            disabledTextColor = if (viewState.selectedTimeFrom != null) Color.Black
+                            else colorResource(id = R.color.gray),
+                            placeholderColor = colorResource(id = R.color.gray),
+                            disabledBorderColor = Color.Black,
+                            focusedBorderColor = Color.Black,
+                            unfocusedBorderColor = Color.Black
+                        ),
+                        shape = RoundedCornerShape(8.dp),
+                        singleLine = true,
+                        enabled = false
+                    )
+                    Spacer(modifier = Modifier.width(20.dp))
+                    OutlinedTextField(
+                        value = viewState.getFormattedToTime() ?: stringResource(R.string.select_time_to),
+                        modifier = Modifier
+                            .weight(1f)
+                            .clickable {
+                                viewState.selectedTimeFrom?.let {
+                                    timeToDialogState.show()
+                                }
+                            },
+                        onValueChange = {},
+                        leadingIcon = {
+                            Icon(
+                                painterResource(id = R.drawable.ic_clock),
+                                contentDescription = null,
+                                tint = colorResource(
+                                    id = R.color.main_yellow
+                                )
+                            )
+                        },
+                        colors = TextFieldDefaults.outlinedTextFieldColors(
+                            disabledTextColor = if (viewState.selectedTimeTo != null) Color.Black
+                            else colorResource(id = R.color.gray),
+                            placeholderColor = colorResource(id = R.color.gray),
+                            disabledBorderColor = Color.Black,
+                            focusedBorderColor = Color.Black,
+                            unfocusedBorderColor = Color.Black
+                        ),
+                        shape = RoundedCornerShape(8.dp),
+                        singleLine = true,
+                        enabled = false
+                    )
+                }
                 Spacer(modifier = Modifier.height(20.dp))
             }
         }
@@ -277,7 +315,7 @@ fun HomeSearchView(
             }
         }
         MaterialDialog(
-            dialogState = timeDialogState,
+            dialogState = timeFromDialogState,
             buttons = {
                 positiveButton(
                     text = "Ok",
@@ -309,7 +347,43 @@ fun HomeSearchView(
                     inactiveBackgroundColor = colorResource(id = R.color.gray)
                 )
             ) {
-                onTimeSelected(it)
+                onFromTimeSelected(it)
+            }
+        }
+        MaterialDialog(
+            dialogState = timeToDialogState,
+            buttons = {
+                positiveButton(
+                    text = "Ok",
+                    textStyle = MaterialTheme.typography.titleSmall.copy(
+                        colorResource(id = R.color.main_yellow)
+                    )
+                )
+                negativeButton(
+                    text = "Cancel",
+                    textStyle = MaterialTheme.typography.titleSmall.copy(
+                        colorResource(id = R.color.dark_gray)
+                    )
+                )
+            }
+        ) {
+            timepicker(
+                initialTime = currentTime,
+                title = "Select time of the reservation",
+                timeRange = viewState.selectedTimeFrom!! ..LocalTime.MAX,
+                is24HourClock = true,
+                colors = TimePickerDefaults.colors(
+                    activeBackgroundColor = colorResource(id = R.color.main_yellow),
+                    inactivePeriodBackground = colorResource(id = R.color.gray),
+                    selectorColor = colorResource(id = R.color.main_yellow),
+                    selectorTextColor = Color.White,
+                    borderColor = Color.Red,
+                    activeTextColor = Color.White,
+                    inactiveTextColor = colorResource(id = R.color.dark_gray),
+                    inactiveBackgroundColor = colorResource(id = R.color.gray),
+                )
+            ) {
+                onToTimeSelected(it)
             }
         }
     }

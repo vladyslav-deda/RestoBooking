@@ -37,17 +37,8 @@ class HomeViewModel @Inject constructor(
             it.copy(
                 homeSearchViewState = it.homeSearchViewState.copy(
                     selectedDate = date,
-                    selectedTime = null
-                )
-            )
-        }
-    }
-
-    fun onTimeSelected(time: LocalTime) {
-        _uiState.update {
-            it.copy(
-                homeSearchViewState = it.homeSearchViewState.copy(
-                    selectedTime = time
+                    selectedTimeTo = null,
+                    selectedTimeFrom = null
                 )
             )
         }
@@ -63,6 +54,27 @@ class HomeViewModel @Inject constructor(
         }
     }
 
+    fun onTimeFromSelected(time: LocalTime) {
+        _uiState.update {
+            it.copy(
+                homeSearchViewState = it.homeSearchViewState.copy(
+                    selectedTimeFrom = time,
+                    selectedTimeTo = null
+                )
+            )
+        }
+    }
+
+    fun onTimeToSelected(time: LocalTime) {
+        _uiState.update {
+            it.copy(
+                homeSearchViewState = it.homeSearchViewState.copy(
+                    selectedTimeTo = time
+                )
+            )
+        }
+    }
+
     fun onSearchClicked() {
 
     }
@@ -71,6 +83,4 @@ class HomeViewModel @Inject constructor(
 data class HomeUIState constructor(
     val list: List<FoodEstablishment> = emptyList(),
     val homeSearchViewState: HomeSearchViewState = HomeSearchViewState()
-) {
-
-}
+)

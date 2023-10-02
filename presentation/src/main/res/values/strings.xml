@@ -26,7 +26,8 @@
     <string name="six_seater_table">Six-seater table</string>
     <string name="food_establishment_type">Food establishment type</string>
     <string name="select_date">Select date of reservation</string>
-    <string name="select_time">Select time of reservation</string>
+    <string name="select_time_from">Time from</string>
+    <string name="select_time_to">Time to</string>
     <string name="persons">%1$s persons</string>
     <string name="number_of_persons">Select number of persons</string>
     <string name="search">Search</string>
