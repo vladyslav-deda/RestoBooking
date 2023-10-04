@@ -1,5 +1,7 @@
 package com.project.domain.model
 
+import java.time.LocalTime
+
 data class FoodEstablishment(
     val id: String = "",
     val name: String = "",
@@ -11,5 +13,7 @@ data class FoodEstablishment(
     val sixSeaterTableValue: Int = 0,
     val photoList: List<Photo> = emptyList(),
     val ownerName: String = "",
-    val city: String = ""
+    val city: String = "",
+    val selectedTimeFrom: LocalTime? = null,
+    val selectedTimeTo: LocalTime? = null,
 )

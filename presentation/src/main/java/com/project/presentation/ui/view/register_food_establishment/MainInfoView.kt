@@ -4,11 +4,13 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -39,6 +41,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.project.domain.model.FoodEstablishmentType
 import com.project.presentation.R
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
+import com.vanpra.composematerialdialogs.datetime.time.timepicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.time.LocalTime
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,8 +57,13 @@ fun MainInfoView(
     onAddressChanged: (String) -> Unit,
     onCityChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
-    onContinueClicked: () -> Unit
+    onContinueClicked: () -> Unit,
+    onFromTimeSelected: (LocalTime) -> Unit,
+    onToTimeSelected: (LocalTime) -> Unit,
+    onPhoneForReservationChanged: (String) -> Unit
 ) {
+    val timeFromDialogState = rememberMaterialDialogState()
+    val timeToDialogState = rememberMaterialDialogState()
     val focusManager = LocalFocusManager.current
     var expandedTypesMenu by remember { mutableStateOf(false) }
     Column(
@@ -66,6 +78,82 @@ fun MainInfoView(
                 .fillMaxWidth(),
             onValueChange = onNameChanged,
             placeholder = { Text(text = stringResource(id = viewState.nameLabelText)) },
+            keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                cursorColor = colorResource(id = R.color.gray),
+                textColor = Color.Black,
+                placeholderColor = colorResource(id = R.color.gray),
+                focusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.Black
+            ),
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+        )
+        Spacer(modifier = Modifier.height(14.dp))
+        OutlinedTextField(
+            value = viewState.city ?: "",
+            modifier = modifier
+                .fillMaxWidth(),
+            onValueChange = onCityChanged,
+            placeholder = { Text(text = stringResource(id = viewState.cityLabelText)) },
+            keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                cursorColor = colorResource(id = R.color.gray),
+                textColor = Color.Black,
+                placeholderColor = colorResource(id = R.color.gray),
+                focusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.Black
+            ),
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+        )
+        Spacer(modifier = Modifier.height(14.dp))
+        OutlinedTextField(
+            value = viewState.address ?: "",
+            modifier = modifier
+                .fillMaxWidth(),
+            onValueChange = onAddressChanged,
+            placeholder = { Text(text = stringResource(id = viewState.addressLabelText)) },
+            keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                cursorColor = colorResource(id = R.color.gray),
+                textColor = Color.Black,
+                placeholderColor = colorResource(id = R.color.gray),
+                focusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.Black
+            ),
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+        )
+        Spacer(modifier = Modifier.height(14.dp))
+        OutlinedTextField(
+            value = viewState.phoneForReservation ?: "",
+            modifier = modifier
+                .fillMaxWidth(),
+            onValueChange = onPhoneForReservationChanged,
+            placeholder = { Text(text = stringResource(id = viewState.phoneForReservationLabelText)) },
+            keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                cursorColor = colorResource(id = R.color.gray),
+                textColor = Color.Black,
+                placeholderColor = colorResource(id = R.color.gray),
+                focusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.Black
+            ),
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+        )
+        Spacer(modifier = Modifier.height(14.dp))
+        OutlinedTextField(
+            value = viewState.description ?: "",
+            modifier = modifier
+                .fillMaxWidth(),
+            onValueChange = onDescriptionChanged,
+            placeholder = { Text(text = stringResource(id = viewState.descriptionLabelText)) },
             keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }),
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
             colors = TextFieldDefaults.outlinedTextFieldColors(
@@ -138,62 +226,53 @@ fun MainInfoView(
             }
         }
         Spacer(modifier = Modifier.height(14.dp))
-        OutlinedTextField(
-            value = viewState.address ?: "",
-            modifier = modifier
-                .fillMaxWidth(),
-            onValueChange = onAddressChanged,
-            placeholder = { Text(text = stringResource(id = viewState.addressLabelText)) },
-            keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                cursorColor = colorResource(id = R.color.gray),
-                textColor = Color.Black,
-                placeholderColor = colorResource(id = R.color.gray),
-                focusedBorderColor = Color.Black,
-                unfocusedBorderColor = Color.Black
-            ),
-            shape = RoundedCornerShape(8.dp),
-            singleLine = true,
-        )
-        Spacer(modifier = Modifier.height(14.dp))
-        OutlinedTextField(
-            value = viewState.city ?: "",
-            modifier = modifier
-                .fillMaxWidth(),
-            onValueChange = onCityChanged,
-            placeholder = { Text(text = stringResource(id = viewState.cityLabelText)) },
-            keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                cursorColor = colorResource(id = R.color.gray),
-                textColor = Color.Black,
-                placeholderColor = colorResource(id = R.color.gray),
-                focusedBorderColor = Color.Black,
-                unfocusedBorderColor = Color.Black
-            ),
-            shape = RoundedCornerShape(8.dp),
-            singleLine = true,
-        )
-        Spacer(modifier = Modifier.height(14.dp))
-        OutlinedTextField(
-            value = viewState.description ?: "",
-            modifier = modifier
-                .fillMaxWidth(),
-            onValueChange = onDescriptionChanged,
-            placeholder = { Text(text = stringResource(id = viewState.descriptionLabelText)) },
-            keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
-            colors = TextFieldDefaults.outlinedTextFieldColors(
-                cursorColor = colorResource(id = R.color.gray),
-                textColor = Color.Black,
-                placeholderColor = colorResource(id = R.color.gray),
-                focusedBorderColor = Color.Black,
-                unfocusedBorderColor = Color.Black
-            ),
-            shape = RoundedCornerShape(8.dp),
-            singleLine = true,
-        )
+        Row {
+            OutlinedTextField(
+                value = viewState.getFormattedFromTime()
+                    ?: stringResource(R.string.select_time_from),
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                        timeFromDialogState.show()
+                    },
+                onValueChange = {},
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    disabledTextColor = if (viewState.selectedTimeFrom != null) Color.Black
+                    else colorResource(id = R.color.gray),
+                    placeholderColor = colorResource(id = R.color.gray),
+                    disabledBorderColor = Color.Black,
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black
+                ),
+                shape = RoundedCornerShape(8.dp),
+                singleLine = true,
+                enabled = false
+            )
+            Spacer(modifier = Modifier.width(20.dp))
+            OutlinedTextField(
+                value = viewState.getFormattedToTime()
+                    ?: stringResource(R.string.select_time_to),
+                modifier = Modifier
+                    .weight(1f)
+                    .clickable {
+                        viewState.selectedTimeFrom?.let {
+                            timeToDialogState.show()
+                        }
+                    },
+                onValueChange = {},
+                colors = TextFieldDefaults.outlinedTextFieldColors(
+                    disabledTextColor = if (viewState.selectedTimeTo != null) Color.Black
+                    else colorResource(id = R.color.gray),
+                    placeholderColor = colorResource(id = R.color.gray),
+                    disabledBorderColor = Color.Black,
+                    focusedBorderColor = Color.Black,
+                    unfocusedBorderColor = Color.Black
+                ),
+                shape = RoundedCornerShape(8.dp),
+                singleLine = true,
+                enabled = false
+            )
+        }
         Spacer(modifier = Modifier.height(14.dp))
         Button(
             onClick = onContinueClicked,
@@ -206,6 +285,76 @@ fun MainInfoView(
                 text = stringResource(id = R.string.continue_label),
                 style = MaterialTheme.typography.titleLarge
             )
+        }
+
+        MaterialDialog(
+            dialogState = timeFromDialogState,
+            buttons = {
+                positiveButton(
+                    text = "Ok",
+                    textStyle = MaterialTheme.typography.titleSmall.copy(
+                        colorResource(id = R.color.main_yellow)
+                    )
+                )
+                negativeButton(
+                    text = "Cancel",
+                    textStyle = MaterialTheme.typography.titleSmall.copy(
+                        colorResource(id = R.color.dark_gray)
+                    )
+                )
+            }
+        ) {
+            timepicker(
+                initialTime = LocalTime.MIDNIGHT,
+                title = "Specify the time when the establishment opens",
+//                timeRange = if (viewState.selectedDate == currentDay) currentTime..LocalTime.MAX else LocalTime.MIDNIGHT..LocalTime.MAX,
+                is24HourClock = true,
+                colors = TimePickerDefaults.colors(
+                    activeBackgroundColor = colorResource(id = R.color.main_yellow),
+                    inactivePeriodBackground = colorResource(id = R.color.gray),
+                    selectorColor = colorResource(id = R.color.main_yellow),
+                    selectorTextColor = Color.White,
+                    activeTextColor = Color.White,
+                    inactiveTextColor = colorResource(id = R.color.dark_gray),
+                    inactiveBackgroundColor = colorResource(id = R.color.light_gray)
+                )
+            ) {
+                onFromTimeSelected(it)
+            }
+        }
+        MaterialDialog(
+            dialogState = timeToDialogState,
+            buttons = {
+                positiveButton(
+                    text = "Ok",
+                    textStyle = MaterialTheme.typography.titleSmall.copy(
+                        colorResource(id = R.color.main_yellow)
+                    )
+                )
+                negativeButton(
+                    text = "Cancel",
+                    textStyle = MaterialTheme.typography.titleSmall.copy(
+                        colorResource(id = R.color.dark_gray)
+                    )
+                )
+            }
+        ) {
+            timepicker(
+                title = "Specify the time when the establishment opens",
+                timeRange = viewState.selectedTimeFrom!!..LocalTime.MAX,
+                is24HourClock = true,
+                colors = TimePickerDefaults.colors(
+                    activeBackgroundColor = colorResource(id = R.color.main_yellow),
+                    inactivePeriodBackground = colorResource(id = R.color.gray),
+                    selectorColor = colorResource(id = R.color.main_yellow),
+                    selectorTextColor = Color.White,
+                    activeTextColor = Color.White,
+                    inactiveTextColor = colorResource(id = R.color.dark_gray),
+                    inactiveBackgroundColor = colorResource(id = R.color.gray),
+                )
+            ) {
+                onToTimeSelected(it)
+            }
         }
     }
 }

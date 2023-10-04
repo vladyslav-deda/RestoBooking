@@ -1,5 +1,6 @@
 package com.project.presentation.ui.screens.add_food_establishments
 
+import android.widget.Toast
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,6 +23,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,18 +32,21 @@ import com.project.presentation.R
 import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep.AddFoodEstablishmentMainInfo
 import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep.AddFoodEstablishmentPhotos
 import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep.AddFoodEstablishmentTables
+import com.project.presentation.ui.view.common.LoadingView
 import com.project.presentation.ui.view.register_food_establishment.AddPhotoView
 import com.project.presentation.ui.view.register_food_establishment.MainInfoView
-import com.project.presentation.ui.view.register_food_establishment.TablesView
+import com.project.presentation.ui.view.register_food_establishment.AddTagsView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddFoodEstablishmentsScreen(
     modifier: Modifier = Modifier,
     viewModel: AddFoodEstablishmentsScreenViewModel = hiltViewModel(),
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    navigateToProfileScreen: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     Scaffold(
         topBar = {
@@ -77,6 +82,15 @@ fun AddFoodEstablishmentsScreen(
                 .padding(contentPadding)
         ) {
             ProgressStep(uiState.getProgress())
+            if (uiState.isLoading) {
+                LoadingView()
+            } else if (uiState.isError) {
+                Toast.makeText(
+                    context,
+                    "Something went wrong, please try again",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
             Crossfade(targetState = uiState.currentStep, label = "") {
                 when (it) {
                     AddFoodEstablishmentMainInfo -> MainInfoView(
@@ -86,17 +100,17 @@ fun AddFoodEstablishmentsScreen(
                         onAddressChanged = viewModel::onMainInfoAddressChanged,
                         onCityChanged = viewModel::onMainInfoCityChanged,
                         onDescriptionChanged = viewModel::onMainInfoDescriptionChanged,
+                        onToTimeSelected = viewModel::onMainInfoTimeToSelected,
+                        onFromTimeSelected = viewModel::onMainInfoTimeFromSelected,
+                        onPhoneForReservationChanged = viewModel::onMainInfoPhoneForReservationChanged,
                         onContinueClicked = viewModel::onContinueClicked
                     )
 
-                    AddFoodEstablishmentTables -> TablesView(
-                        viewState = uiState.tablesViewState,
-                        onTwoSeaterTableValueIncreased = viewModel::onTwoSeaterTableValueIncreased,
-                        onTwoSeaterTableValueDecreased = viewModel::onTwoSeaterTableValueDecreased,
-                        onFourSeaterTableValueChangedIncreased = viewModel::onFourSeaterTableValueChangedIncreased,
-                        onFourSeaterTableValueChangedDecreased = viewModel::onFourSeaterTableValueChangedDecreased,
-                        onSixSeaterTableValueChangedIncreased = viewModel::onSixSeaterTableValueChangedIncreased,
-                        onSixSeaterTableValueChangedDecreased = viewModel::onSixSeaterTableValueChangedDecreased,
+                    AddFoodEstablishmentTables -> AddTagsView(
+                        viewState = uiState.addTagsViewState,
+                        addTagToTheList = viewModel::addTagToSelected,
+                        removeTagFromTheList = viewModel::removeTagFromSelected,
+                        setValueForAddNewTagClicked = viewModel::setValueForAddNewTagClicked,
                         onContinueClicked = viewModel::onContinueClicked
                     )
 

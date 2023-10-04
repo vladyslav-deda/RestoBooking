@@ -193,8 +193,19 @@ fun SetupNavGraph(
             AddFoodEstablishmentsScreen(
                 navigateBack = {
                     navController.popBackStack()
+                },
+                navigateToProfileScreen = {
+                    navigateAndClearBackStack(AppDestinations.Profile.route, navController )
                 }
             )
         }
+    }
+
+}
+
+fun navigateAndClearBackStack(route: String, navController: NavHostController) {
+    navController.navigate(route) {
+        launchSingleTop = true
+        popUpTo(0) { inclusive = true }
     }
 }

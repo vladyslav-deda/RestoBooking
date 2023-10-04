@@ -18,7 +18,9 @@ class Mapper {
             sixSeaterTableValue = foodEstablishment.sixSeaterTableValue,
             photoUrlList = imageUrlList,
             ownerName = foodEstablishment.ownerName,
-            city = foodEstablishment.city
+            city = foodEstablishment.city,
+            selectedTimeFrom = foodEstablishment.selectedTimeFrom,
+            selectedTimeTo = foodEstablishment.selectedTimeTo
         )
 
     fun foodEstablishmentDtoToDomain(foodEstablishmentDto:FoodEstablishmentDto) =
@@ -32,6 +34,8 @@ class Mapper {
             sixSeaterTableValue = foodEstablishmentDto.sixSeaterTableValue,
             photoList = foodEstablishmentDto.photoUrlList.mapIndexedNotNull { index, uri -> Photo(index, Uri.parse(uri)) },
             ownerName = foodEstablishmentDto.ownerName,
-            city = foodEstablishmentDto.city
+            city = foodEstablishmentDto.city,
+            selectedTimeFrom = foodEstablishmentDto.selectedTimeFrom,
+            selectedTimeTo = foodEstablishmentDto.selectedTimeTo
         )
 }
