@@ -38,4 +38,5 @@
     <string name="tag">Тег</string>
     <string name="add_tag">Додайте свій тег</string>
     <string name="cancel">Відмінити</string>
+    <string name="chose_tags">Оберіть теги, натиснувши на необхідний, щоб підібрати заклад саме для Вас</string>
 </resources>

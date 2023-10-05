@@ -176,7 +176,7 @@ fun AddTagsView(
 }
 
 @Composable
-private fun TagView(
+fun TagView(
     modifier: Modifier = Modifier,
     tag: Tag,
     onClicked: (Boolean) -> Unit
@@ -195,7 +195,7 @@ private fun TagView(
                 shape = shape
             )
             .background(
-                color = White,
+                color = if (tag.isSelected) colorResource(id = R.color.light_yellow) else White,
                 shape = shape
             )
             .clip(shape = shape)

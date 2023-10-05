@@ -31,11 +31,11 @@ sealed class AppDestinations(
     object Splash : AppDestinations("splash_screen")
     object Login : AppDestinations("login_screen")
     object SignUp : AppDestinations("sign_up_screen")
-    object Home : AppDestinations("home_screen", "Home", R.drawable.ic_home)
+    object Home : AppDestinations("home_screen", "Головна", R.drawable.ic_home)
     object Reservations :
-        AppDestinations("reservations_screen", "Reservations", R.drawable.ic_my_reservation)
+        AppDestinations("reservations_screen", "Мої заклади", R.drawable.ic_my_reservation)
 
-    object Profile : AppDestinations("profile_screen", "Profile", R.drawable.ic_profile)
+    object Profile : AppDestinations("profile_screen", "Профіль", R.drawable.ic_profile)
     object AddFoodEstablishments : AppDestinations("add_food_establishments")
 }
 
@@ -195,7 +195,7 @@ fun SetupNavGraph(
                     navController.popBackStack()
                 },
                 navigateToProfileScreen = {
-                    navigateAndClearBackStack(AppDestinations.Profile.route, navController )
+                    navigateAndClearBackStack(AppDestinations.Profile.route, navController)
                 }
             )
         }

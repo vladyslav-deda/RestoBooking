@@ -13,14 +13,13 @@ class Mapper {
             foodEstablishmentType = foodEstablishment.foodEstablishmentType,
             address = foodEstablishment.address,
             description = foodEstablishment.description,
-            twoSeaterTableValue = foodEstablishment.twoSeaterTableValue,
-            fourSeaterTableValue = foodEstablishment.fourSeaterTableValue,
-            sixSeaterTableValue = foodEstablishment.sixSeaterTableValue,
             photoUrlList = imageUrlList,
             ownerName = foodEstablishment.ownerName,
             city = foodEstablishment.city,
             selectedTimeFrom = foodEstablishment.selectedTimeFrom,
-            selectedTimeTo = foodEstablishment.selectedTimeTo
+            selectedTimeTo = foodEstablishment.selectedTimeTo,
+            phoneForBooking = foodEstablishment.phoneForBooking,
+            tags = foodEstablishment.tags
         )
 
     fun foodEstablishmentDtoToDomain(foodEstablishmentDto:FoodEstablishmentDto) =
@@ -29,13 +28,12 @@ class Mapper {
             foodEstablishmentType = foodEstablishmentDto.foodEstablishmentType,
             address = foodEstablishmentDto.address,
             description = foodEstablishmentDto.description,
-            twoSeaterTableValue = foodEstablishmentDto.twoSeaterTableValue,
-            fourSeaterTableValue = foodEstablishmentDto.fourSeaterTableValue,
-            sixSeaterTableValue = foodEstablishmentDto.sixSeaterTableValue,
             photoList = foodEstablishmentDto.photoUrlList.mapIndexedNotNull { index, uri -> Photo(index, Uri.parse(uri)) },
             ownerName = foodEstablishmentDto.ownerName,
             city = foodEstablishmentDto.city,
             selectedTimeFrom = foodEstablishmentDto.selectedTimeFrom,
-            selectedTimeTo = foodEstablishmentDto.selectedTimeTo
+            selectedTimeTo = foodEstablishmentDto.selectedTimeTo,
+            phoneForBooking = foodEstablishmentDto.phoneForBooking,
+            tags = foodEstablishmentDto.tags
         )
 }

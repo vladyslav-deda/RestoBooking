@@ -3,7 +3,7 @@ package com.project.presentation.ui.screens.add_food_establishments.model
 enum class Tags(
     val title: String
 ) {
-    SMOKING("Можна палити"),
+    SMOKING("Можна курити"),
     NON_SMOKING("Не можна курити"),
     PETS_ALLOWED("Можна з тваринами"),
     NO_PETS("Без тварин"),

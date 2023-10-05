@@ -3,17 +3,15 @@ package com.project.domain.model
 import java.time.LocalTime
 
 data class FoodEstablishment(
-    val id: String = "",
     val name: String = "",
-    val foodEstablishmentType: FoodEstablishmentType = FoodEstablishmentType.Default,
-    val address: String = "",
-    val description: String = "",
-    val twoSeaterTableValue: Int = 0,
-    val fourSeaterTableValue: Int = 0,
-    val sixSeaterTableValue: Int = 0,
-    val photoList: List<Photo> = emptyList(),
-    val ownerName: String = "",
     val city: String = "",
+    val address: String = "",
+    val phoneForBooking:String = "",
+    val description: String = "",
+    val foodEstablishmentType: FoodEstablishmentType = FoodEstablishmentType.Default,
+    val tags:List<String> = emptyList(),
     val selectedTimeFrom: LocalTime? = null,
     val selectedTimeTo: LocalTime? = null,
+    val photoList: List<Photo> = emptyList(),
+    val ownerName: String = ""
 )

@@ -4,13 +4,12 @@ import androidx.lifecycle.ViewModel
 import com.project.domain.model.FoodEstablishment
 import com.project.domain.repository.FoodEstablishmentRepository
 import com.project.presentation.ui.view.HomeSearchViewState
+import com.project.presentation.ui.view.register_food_establishment.Tag
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import java.time.LocalDate
-import java.time.LocalTime
 import javax.inject.Inject
 
 @HiltViewModel
@@ -32,44 +31,19 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    fun onDateSelected(date: LocalDate) {
+    fun handleTagSelection(tag: Tag) {
+        val index = _uiState.value.homeSearchViewState.tags.indexOf(tag)
+        val newTag = Tag(
+            title = tag.title,
+            isSelected = !tag.isSelected
+        )
+        val newSelectedList = _uiState.value.homeSearchViewState.tags.toMutableList()
+        newSelectedList.removeAt(index)
+        newSelectedList.add(index, newTag)
         _uiState.update {
             it.copy(
-                homeSearchViewState = it.homeSearchViewState.copy(
-                    selectedDate = date,
-                    selectedTimeTo = null,
-                    selectedTimeFrom = null
-                )
-            )
-        }
-    }
-
-    fun onNumberOfPersonsChanged(number: Int) {
-        _uiState.update {
-            it.copy(
-                homeSearchViewState = it.homeSearchViewState.copy(
-                    numberOfPersons = number
-                )
-            )
-        }
-    }
-
-    fun onTimeFromSelected(time: LocalTime) {
-        _uiState.update {
-            it.copy(
-                homeSearchViewState = it.homeSearchViewState.copy(
-                    selectedTimeFrom = time,
-                    selectedTimeTo = null
-                )
-            )
-        }
-    }
-
-    fun onTimeToSelected(time: LocalTime) {
-        _uiState.update {
-            it.copy(
-                homeSearchViewState = it.homeSearchViewState.copy(
-                    selectedTimeTo = time
+                homeSearchViewState = HomeSearchViewState(
+                    tags = newSelectedList
                 )
             )
         }

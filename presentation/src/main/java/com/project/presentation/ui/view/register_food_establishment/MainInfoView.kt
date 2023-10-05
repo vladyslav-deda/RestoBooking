@@ -163,8 +163,7 @@ fun MainInfoView(
                 focusedBorderColor = Color.Black,
                 unfocusedBorderColor = Color.Black
             ),
-            shape = RoundedCornerShape(8.dp),
-            singleLine = true,
+            shape = RoundedCornerShape(8.dp)
         )
         Spacer(modifier = Modifier.height(14.dp))
         Box(
@@ -340,8 +339,9 @@ fun MainInfoView(
             }
         ) {
             timepicker(
+                initialTime = viewState.selectedTimeFrom!!,
                 title = "Specify the time when the establishment opens",
-                timeRange = viewState.selectedTimeFrom!!..LocalTime.MAX,
+                timeRange = viewState.selectedTimeFrom..LocalTime.MAX,
                 is24HourClock = true,
                 colors = TimePickerDefaults.colors(
                     activeBackgroundColor = colorResource(id = R.color.main_yellow),

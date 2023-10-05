@@ -220,7 +220,9 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
                     ownerName = getCurrentUserUseCase.invoke().getOrNull()?.nameSurname ?: "",
                     city = _uiState.value.mainInfoViewState.city ?: "",
                     selectedTimeTo = _uiState.value.mainInfoViewState.selectedTimeTo,
-                    selectedTimeFrom = _uiState.value.mainInfoViewState.selectedTimeFrom
+                    selectedTimeFrom = _uiState.value.mainInfoViewState.selectedTimeFrom,
+                    phoneForBooking = _uiState.value.mainInfoViewState.phoneForReservation?:"",
+                    tags = _uiState.value.addTagsViewState.selectedTagsList.map { it.title }
                 )
             ).fold(
                 onSuccess = {

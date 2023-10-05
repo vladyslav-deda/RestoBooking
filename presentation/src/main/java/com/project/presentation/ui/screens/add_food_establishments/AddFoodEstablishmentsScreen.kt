@@ -48,6 +48,9 @@ fun AddFoodEstablishmentsScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
+    if (uiState.navigateToProfile){
+        navigateToProfileScreen()
+    }
     Scaffold(
         topBar = {
             TopAppBar(
@@ -59,12 +62,13 @@ fun AddFoodEstablishmentsScreen(
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Black),
                 navigationIcon = {
-                    IconButton(onClick = {
-                        if (uiState.currentStep.stepNumber == 1) {
-                            navigateBack()
-                        } else {
+                    IconButton(
+                        onClick = {
+//                        if (uiState.currentStep.stepNumber == 1) {
+//                            navigateBack()
+//                        } else {
                             viewModel.decreaseStepNumber()
-                        }
+//                        }
                     }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
