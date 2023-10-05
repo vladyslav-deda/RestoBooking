@@ -1,6 +1,7 @@
 package com.project.presentation.ui.screens.home
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.project.domain.model.FoodEstablishment
 import com.project.domain.repository.FoodEstablishmentRepository
 import com.project.presentation.ui.view.HomeSearchViewState
@@ -10,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
@@ -20,6 +22,40 @@ class HomeViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<HomeUIState> =
         MutableStateFlow(HomeUIState())
     val uiState: StateFlow<HomeUIState> = _uiState.asStateFlow()
+
+    init {
+        viewModelScope.launch {
+            foodEstablishmentRepository.fetchFoodEstablishments()
+                .fold(
+                    onSuccess = {
+                        val tagsTitleList = mutableListOf<String>()
+                        it.forEach {
+                            it.tags.forEach {
+                                if (!tagsTitleList.contains(it)) {
+                                    tagsTitleList.add(it)
+                                }
+                            }
+
+                        }
+                        val tags = tagsTitleList.map {
+                            Tag(
+                                title = it
+                            )
+                        }
+                        _uiState.update {
+                            it.copy(
+                                homeSearchViewState = it.homeSearchViewState.copy(
+                                    tags = tags
+                                )
+                            )
+                        }
+                    },
+                    onFailure = {
+                        
+                    }
+                )
+        }
+    }
 
     fun onCityChanged(city: String) {
         _uiState.update {

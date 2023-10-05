@@ -45,7 +45,13 @@ import com.vanpra.composematerialdialogs.MaterialDialog
 import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
 import com.vanpra.composematerialdialogs.datetime.time.timepicker
 import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.time.Instant
+import java.time.LocalDateTime
 import java.time.LocalTime
+import java.time.ZoneId
+import java.util.Calendar
+import java.util.Date
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,8 +64,8 @@ fun MainInfoView(
     onCityChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
     onContinueClicked: () -> Unit,
-    onFromTimeSelected: (LocalTime) -> Unit,
-    onToTimeSelected: (LocalTime) -> Unit,
+    onFromTimeSelected: (Date) -> Unit,
+    onToTimeSelected: (Date) -> Unit,
     onPhoneForReservationChanged: (String) -> Unit
 ) {
     val timeFromDialogState = rememberMaterialDialogState()
@@ -318,7 +324,10 @@ fun MainInfoView(
                     inactiveBackgroundColor = colorResource(id = R.color.light_gray)
                 )
             ) {
-                onFromTimeSelected(it)
+                val date = Calendar.getInstance()
+                date.set(Calendar.HOUR, it.hour)
+                date.set(Calendar.MINUTE, it.minute)
+                onFromTimeSelected(date.time)
             }
         }
         MaterialDialog(
@@ -338,10 +347,12 @@ fun MainInfoView(
                 )
             }
         ) {
+            val instant = Instant.ofEpochMilli(viewState.selectedTimeFrom!!.time)
+            val initialTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalTime()
             timepicker(
-                initialTime = viewState.selectedTimeFrom!!,
+                initialTime = initialTime!!,
                 title = "Specify the time when the establishment opens",
-                timeRange = viewState.selectedTimeFrom..LocalTime.MAX,
+                timeRange = initialTime..LocalTime.MAX,
                 is24HourClock = true,
                 colors = TimePickerDefaults.colors(
                     activeBackgroundColor = colorResource(id = R.color.main_yellow),
@@ -353,7 +364,11 @@ fun MainInfoView(
                     inactiveBackgroundColor = colorResource(id = R.color.gray),
                 )
             ) {
-                onToTimeSelected(it)
+                val date = Calendar.getInstance()
+                date.set(Calendar.HOUR, it.hour)
+                date.set(Calendar.MINUTE, it.minute)
+
+                onToTimeSelected(date.time)
             }
         }
     }

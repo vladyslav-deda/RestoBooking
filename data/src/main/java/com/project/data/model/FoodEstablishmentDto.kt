@@ -1,7 +1,7 @@
 package com.project.data.model
 
 import com.project.domain.model.FoodEstablishmentType
-import java.time.LocalTime
+import java.util.Date
 
 data class FoodEstablishmentDto(
     val name: String = "",
@@ -11,8 +11,8 @@ data class FoodEstablishmentDto(
     val description: String = "",
     val foodEstablishmentType: FoodEstablishmentType = FoodEstablishmentType.Default,
     val tags:List<String> = emptyList(),
-    val selectedTimeFrom: LocalTime? = null,
-    val selectedTimeTo: LocalTime? = null,
+    val selectedTimeFrom: Date? = null,
+    val selectedTimeTo: Date? = null,
     val photoUrlList: List<String> = emptyList(),
     val ownerName: String = "",
 )

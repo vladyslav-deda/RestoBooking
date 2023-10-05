@@ -20,7 +20,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.time.LocalTime
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -84,7 +84,7 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
         }
     }
 
-    fun onMainInfoTimeFromSelected(time: LocalTime) {
+    fun onMainInfoTimeFromSelected(time: Date) {
         _uiState.update {
             it.copy(
                 mainInfoViewState = it.mainInfoViewState.copy(
@@ -95,7 +95,7 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
         }
     }
 
-    fun onMainInfoTimeToSelected(time: LocalTime) {
+    fun onMainInfoTimeToSelected(time: Date) {
         _uiState.update {
             it.copy(
                 mainInfoViewState = it.mainInfoViewState.copy(

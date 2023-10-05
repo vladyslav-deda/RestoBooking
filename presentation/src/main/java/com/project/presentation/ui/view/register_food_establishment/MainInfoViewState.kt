@@ -3,8 +3,10 @@ package com.project.presentation.ui.view.register_food_establishment
 import androidx.annotation.StringRes
 import com.project.domain.model.FoodEstablishmentType
 import com.project.presentation.R
-import java.time.LocalTime
+import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
+import java.util.Date
+import java.util.Locale
 
 data class MainInfoViewState(
     val name: String? = null,
@@ -13,8 +15,8 @@ data class MainInfoViewState(
     val description: String? = null,
     val phoneForReservation: String? = null,
     val foodEstablishmentType: FoodEstablishmentType? = null,
-    val selectedTimeFrom: LocalTime? = null,
-    val selectedTimeTo: LocalTime? = null,
+    val selectedTimeFrom: Date? = null,
+    val selectedTimeTo: Date? = null,
 ) {
 
     @StringRes
@@ -32,13 +34,12 @@ data class MainInfoViewState(
     @StringRes
     val phoneForReservationLabelText: Int = R.string.phone_for_reservation
 
-
     fun isContinueButtonEnabled() =
         name?.isNotEmpty() == true && foodEstablishmentType != null && address?.isNotEmpty() == true && description?.isNotEmpty() == true
 
-    private val timeFormatter = DateTimeFormatter.ofPattern("HH:mm")
+    private var simpleDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
-    fun getFormattedFromTime() = selectedTimeFrom?.format(timeFormatter)
+    fun getFormattedFromTime() = selectedTimeFrom?.let { simpleDateFormat.format(it) }
 
-    fun getFormattedToTime() = selectedTimeTo?.format(timeFormatter)
+    fun getFormattedToTime() = selectedTimeTo?.let { simpleDateFormat.format(it) }
 }
