@@ -39,12 +39,19 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
             }
         }
 
-    override suspend fun fetchFoodEstablishments(): Result<List<FoodEstablishment>> =
+    override suspend fun fetchFoodEstablishments(
+        city: String,
+        tags: List<String>
+    ): Result<List<FoodEstablishment>> =
         withContext(Dispatchers.IO) {
             try {
-                val postCollection = firestore.collection(FOOD_ESTABLISHMENT_COLLECTION)
-
-                val task = postCollection.get().await()
+                val collection = firestore.collection(FOOD_ESTABLISHMENT_COLLECTION)
+                val query = if (city.isNotEmpty()) {
+                    collection.whereEqualTo("city", city)
+                } else {
+                    collection
+                }
+                val task = query.get().await()
                 val posts = task.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject<FoodEstablishmentDto>()?.toDomain()
                 }

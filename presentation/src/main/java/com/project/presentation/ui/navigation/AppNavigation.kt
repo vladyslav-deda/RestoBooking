@@ -12,15 +12,25 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
 import com.project.presentation.R
+import com.project.presentation.ui.navigation.SrpDestinationsArgs.CITY_ARG
+import com.project.presentation.ui.navigation.SrpDestinationsArgs.TAGS_ARG
 import com.project.presentation.ui.screens.add_food_establishments.AddFoodEstablishmentsScreen
 import com.project.presentation.ui.screens.home.HomeScreen
 import com.project.presentation.ui.screens.login.LoginScreen
 import com.project.presentation.ui.screens.profile.ProfileScreen
 import com.project.presentation.ui.screens.signup.SignUpScreen
 import com.project.presentation.ui.screens.spalsh.SplashScreen
+import com.project.presentation.ui.screens.srp.SrpScreen
+
+object SrpDestinationsArgs {
+    const val CITY_ARG = "city"
+    const val TAGS_ARG = "tags"
+}
 
 sealed class AppDestinations(
     val route: String,
@@ -37,6 +47,7 @@ sealed class AppDestinations(
 
     object Profile : AppDestinations("profile_screen", "Профіль", R.drawable.ic_profile)
     object AddFoodEstablishments : AppDestinations("add_food_establishments")
+    object Srp : AppDestinations("srp_screen")
 }
 
 @Composable
@@ -136,7 +147,11 @@ fun SetupNavGraph(
                     animationSpec = tween(700)
                 )
             }) {
-            HomeScreen()
+            HomeScreen(
+                navigateToSrp = { city, tags ->
+                    navController.navigate("${AppDestinations.Srp.route}/$city/$tags")
+                }
+            )
         }
         composable(
             route = AppDestinations.Reservations.route,
@@ -197,6 +212,25 @@ fun SetupNavGraph(
                 navigateToProfileScreen = {
                     navigateAndClearBackStack(AppDestinations.Profile.route, navController)
                 }
+            )
+        }
+        composable(
+            route = "${AppDestinations.Srp.route}/{$CITY_ARG}/{$TAGS_ARG}",
+            arguments = listOf(
+                navArgument(CITY_ARG) { type = NavType.StringType },
+                navArgument(TAGS_ARG) { type = NavType.StringArrayType }),
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(700)
+                )
+            }) {
+            SrpScreen(
+
             )
         }
     }

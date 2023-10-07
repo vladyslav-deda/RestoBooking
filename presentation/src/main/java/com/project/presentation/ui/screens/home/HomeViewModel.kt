@@ -51,7 +51,7 @@ class HomeViewModel @Inject constructor(
                         }
                     },
                     onFailure = {
-                        
+
                     }
                 )
         }
@@ -78,7 +78,7 @@ class HomeViewModel @Inject constructor(
         newSelectedList.add(index, newTag)
         _uiState.update {
             it.copy(
-                homeSearchViewState = HomeSearchViewState(
+                homeSearchViewState = it.homeSearchViewState.copy(
                     tags = newSelectedList
                 )
             )
@@ -86,11 +86,24 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onSearchClicked() {
+        _uiState.update {
+            it.copy(
+                continueClicked = true
+            )
+        }
+    }
 
+    fun resetContinueClickedStatus() {
+        _uiState.update {
+            it.copy(
+                continueClicked = false
+            )
+        }
     }
 }
 
 data class HomeUIState constructor(
     val list: List<FoodEstablishment> = emptyList(),
-    val homeSearchViewState: HomeSearchViewState = HomeSearchViewState()
+    val homeSearchViewState: HomeSearchViewState = HomeSearchViewState(),
+    val continueClicked: Boolean = false
 )

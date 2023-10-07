@@ -6,5 +6,8 @@ interface FoodEstablishmentRepository {
 
     suspend fun registerFoodEstablishment(foodEstablishment: FoodEstablishment): Result<Unit>
 
-    suspend fun fetchFoodEstablishments():Result<List<FoodEstablishment>>
+    suspend fun fetchFoodEstablishments(
+        city: String = "",
+        tags: List<String> = emptyList()
+    ): Result<List<FoodEstablishment>>
 }

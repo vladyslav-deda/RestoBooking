@@ -1,10 +1,10 @@
 package com.project.domain.model
 
 enum class FoodEstablishmentType(val title: String? = null) {
-    Cafe("Cafe"),
-    Restaurant("Restaurant"),
-    Pub("Pub"),
-    Pizzeria("Pizzeria"),
-    Bar("Bar"),
+    Cafe("Кафе"),
+    Restaurant("Ресторан"),
+    Pub("Паб"),
+    Pizzeria("Піцерія"),
+    Bar("Бар"),
     Default
 }
