@@ -230,7 +230,9 @@ fun SetupNavGraph(
                 )
             }) {
             SrpScreen(
-
+                navigateBack = {
+                    navController.popBackStack()
+                }
             )
         }
     }
