@@ -17,11 +17,13 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.project.presentation.R
+import com.project.presentation.ui.navigation.PdpDestinationArgs.ID_ARG
 import com.project.presentation.ui.navigation.SrpDestinationsArgs.CITY_ARG
 import com.project.presentation.ui.navigation.SrpDestinationsArgs.TAGS_ARG
 import com.project.presentation.ui.screens.add_food_establishments.AddFoodEstablishmentsScreen
 import com.project.presentation.ui.screens.home.HomeScreen
 import com.project.presentation.ui.screens.login.LoginScreen
+import com.project.presentation.ui.screens.pdp.PdpScreen
 import com.project.presentation.ui.screens.profile.ProfileScreen
 import com.project.presentation.ui.screens.signup.SignUpScreen
 import com.project.presentation.ui.screens.spalsh.SplashScreen
@@ -30,6 +32,10 @@ import com.project.presentation.ui.screens.srp.SrpScreen
 object SrpDestinationsArgs {
     const val CITY_ARG = "city"
     const val TAGS_ARG = "tags"
+}
+
+object PdpDestinationArgs {
+    const val ID_ARG = "name"
 }
 
 sealed class AppDestinations(
@@ -48,6 +54,7 @@ sealed class AppDestinations(
     object Profile : AppDestinations("profile_screen", "Профіль", R.drawable.ic_profile)
     object AddFoodEstablishments : AppDestinations("add_food_establishments")
     object Srp : AppDestinations("srp_screen")
+    object Pdp : AppDestinations("pdp_screen")
 }
 
 @Composable
@@ -207,7 +214,10 @@ fun SetupNavGraph(
             }) {
             AddFoodEstablishmentsScreen(
                 navigateBack = {
-                    navController.popBackStack()
+                    navController.navigate(AppDestinations.Profile.route) {
+                        launchSingleTop = true
+                        popUpTo(0) { inclusive = true }
+                    }
                 },
                 navigateToProfileScreen = {
                     navigateAndClearBackStack(AppDestinations.Profile.route, navController)
@@ -230,6 +240,32 @@ fun SetupNavGraph(
                 )
             }) {
             SrpScreen(
+                navigateBack = {
+                    navController.navigate(AppDestinations.Home.route) {
+                        launchSingleTop = true
+                        popUpTo(0) { inclusive = true }
+                    }
+                },
+                navigateToPdp = { id ->
+                    navController.navigate("${AppDestinations.Pdp.route}/$id")
+                }
+            )
+        }
+        composable(
+            route = "${AppDestinations.Pdp.route}/{$ID_ARG}",
+            arguments = listOf(
+                navArgument(ID_ARG) { type = NavType.StringType }),
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(700)
+                )
+            }) {
+            PdpScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }

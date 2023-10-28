@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,19 +39,19 @@ class SrpViewModel @Inject constructor(
                 )
             }
             foodEstablishmentRepository.fetchFoodEstablishments(
-                city = city
+                city = city.trim()
             ).fold(
                 onSuccess = { list ->
                     _uiState.update {
                         it.copy(
-                            list = list+list+list+list+list+list+list,
+                            list = list,
                             isLoading = false
                         )
                     }
                     Log.i("myLogs", "onSuccess: ${list.size}, city = $city")
                 },
                 onFailure = {
-                    Log.i("myLogs", "error: ${it.localizedMessage}")
+                    Timber.e("error: " + it.localizedMessage)
                 }
             )
         }
@@ -59,6 +60,6 @@ class SrpViewModel @Inject constructor(
 
 data class SrpUIState(
     val isLoading: Boolean = false,
+    val navigateToSrp: Boolean = false,
     val list: List<FoodEstablishment> = emptyList()
-
 )

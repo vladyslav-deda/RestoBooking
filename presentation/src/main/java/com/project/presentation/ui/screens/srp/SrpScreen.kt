@@ -44,7 +44,8 @@ import com.project.presentation.ui.view.common.LoadingView
 fun SrpScreen(
     modifier: Modifier = Modifier,
     viewModel: SrpViewModel = hiltViewModel(),
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    navigateToPdp: (foodEstablishmentId: String) -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -97,14 +98,17 @@ fun SrpScreen(
                                 tags = item.tags
                             )
                         ) {
-
+                            navigateToPdp(item.id)
                         }
 
-                        if (index < uiState.list.lastIndex)
+                        if (index < uiState.list.lastIndex) {
+                            Spacer(modifier = Modifier.height(20.dp))
                             Divider(
                                 color = colorResource(id = R.color.main_yellow),
                                 thickness = 1.dp
                             )
+                        }
+
                         Spacer(modifier = Modifier.height(20.dp))
                     }
 //                    items(uiState.list) {

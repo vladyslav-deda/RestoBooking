@@ -11,6 +11,7 @@ object Mapper {
 
     fun FoodEstablishment.toDto(imageUrlList: List<String>): FoodEstablishmentDto {
         return FoodEstablishmentDto(
+            id = this.id,
             name = this.name,
             foodEstablishmentType = this.foodEstablishmentType,
             address = this.address,
@@ -28,6 +29,7 @@ object Mapper {
 
     fun FoodEstablishmentDto.toDomain(): FoodEstablishment {
         return FoodEstablishment(
+            id = this.id,
             name = this.name,
             foodEstablishmentType = this.foodEstablishmentType,
             address = this.address,

@@ -20,7 +20,6 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
     private val firestore: FirebaseFirestore
 ) : FoodEstablishmentRepository {
 
-
     override suspend fun registerFoodEstablishment(foodEstablishment: FoodEstablishment): Result<Unit> =
         withContext(Dispatchers.IO) {
             try {
@@ -52,10 +51,25 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
                     collection
                 }
                 val task = query.get().await()
+
                 val posts = task.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject<FoodEstablishmentDto>()?.toDomain()
                 }
                 Result.success(posts)
+            } catch (e: Exception) {
+                Result.failure(e)
+            }
+        }
+
+    override suspend fun getFoodEstablishmentById(id: String): Result<FoodEstablishment> =
+        withContext(Dispatchers.IO) {
+            try {
+                val collection = firestore.collection(FOOD_ESTABLISHMENT_COLLECTION)
+                val task = collection.whereEqualTo("id", id).get().await()
+                val posts = task.documents.mapNotNull { documentSnapshot ->
+                    documentSnapshot.toObject<FoodEstablishmentDto>()?.toDomain()
+                }
+                Result.success(posts[0])
             } catch (e: Exception) {
                 Result.failure(e)
             }

@@ -7,11 +7,13 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import timber.log.Timber
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
 class SplashScreenViewModel @Inject constructor(
-    private val userRepository: UserRepository
+    userRepository: UserRepository
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<SplashScreenUIState> =
@@ -19,6 +21,14 @@ class SplashScreenViewModel @Inject constructor(
     val uiState: StateFlow<SplashScreenUIState> = _uiState.asStateFlow()
 
     init {
+        val list = mutableListOf<String>()
+        for (i in 1..3){
+            val id = UUID.randomUUID().toString()
+            list.add(id)
+        }
+        list.forEach {
+            Timber.e(it)
+        }
         if (userRepository.isUserLoggedIn()) {
             _uiState.update {
                 it.copy(

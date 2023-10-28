@@ -10,4 +10,8 @@ interface FoodEstablishmentRepository {
         city: String = "",
         tags: List<String> = emptyList()
     ): Result<List<FoodEstablishment>>
+
+    suspend fun getFoodEstablishmentById(
+        id: String
+    ): Result<FoodEstablishment>
 }

@@ -3,6 +3,7 @@ package com.project.domain.model
 import java.util.Date
 
 data class FoodEstablishment(
+    val id: String = "",
     val name: String = "",
     val city: String = "",
     val address: String = "",

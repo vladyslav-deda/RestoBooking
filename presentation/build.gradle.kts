@@ -19,7 +19,10 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
@@ -62,19 +65,24 @@ dependencies {
 
 
     val accompanist_version = "0.28.0"
-    implementation ("androidx.hilt:hilt-navigation-compose:1.0.0")
-    implementation ("com.google.accompanist:accompanist-navigation-animation:$accompanist_version")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
+    implementation("com.google.accompanist:accompanist-navigation-animation:$accompanist_version")
     implementation("androidx.compose.ui:ui-text-google-fonts:1.5.0")
-    implementation ("androidx.navigation:navigation-runtime-ktx:2.6.0")
-    implementation ("androidx.navigation:navigation-compose:2.7.1")
+    implementation("androidx.navigation:navigation-runtime-ktx:2.6.0")
+    implementation("androidx.navigation:navigation-compose:2.7.1")
 
-    implementation ("com.airbnb.android:lottie-compose:6.0.0")
+    implementation("com.airbnb.android:lottie-compose:6.0.0")
 
-    implementation ("androidx.lifecycle:lifecycle-runtime-compose:2.6.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0")
     implementation("com.google.dagger:hilt-android:2.44")
     kapt("com.google.dagger:hilt-android-compiler:2.44")
 
-    implementation ("io.coil-kt:coil-compose:2.3.0")
+    implementation("io.coil-kt:coil-compose:2.3.0")
     implementation("io.coil-kt:coil-compose:2.4.0")
-    implementation ("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc")
+    implementation("io.github.vanpra.compose-material-dialogs:datetime:0.8.1-rc")
+    implementation("com.jakewharton.timber:timber:5.0.1")
+
+    implementation("com.google.accompanist:accompanist-pager:0.28.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
+    implementation("androidx.compose.ui:ui-util:1.4.3")
 }

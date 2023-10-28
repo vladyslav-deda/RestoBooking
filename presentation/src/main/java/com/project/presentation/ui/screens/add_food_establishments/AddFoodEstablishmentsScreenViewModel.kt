@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.Date
+import java.util.UUID
 import javax.inject.Inject
 
 @HiltViewModel
@@ -210,8 +211,10 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
                     isLoading = true
                 )
             }
+            val idOfNewFoodEstablishment = UUID.randomUUID().toString()
             foodEstablishmentRepository.registerFoodEstablishment(
                 foodEstablishment = FoodEstablishment(
+                    id = idOfNewFoodEstablishment,
                     name = _uiState.value.mainInfoViewState.name ?: "",
                     foodEstablishmentType = _uiState.value.mainInfoViewState.foodEstablishmentType!!,
                     address = _uiState.value.mainInfoViewState.address ?: "",
@@ -221,7 +224,7 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
                     city = _uiState.value.mainInfoViewState.city ?: "",
                     selectedTimeTo = _uiState.value.mainInfoViewState.selectedTimeTo,
                     selectedTimeFrom = _uiState.value.mainInfoViewState.selectedTimeFrom,
-                    phoneForBooking = _uiState.value.mainInfoViewState.phoneForReservation?:"",
+                    phoneForBooking = _uiState.value.mainInfoViewState.phoneForReservation ?: "",
                     tags = _uiState.value.addTagsViewState.selectedTagsList.map { it.title }
                 )
             ).fold(
