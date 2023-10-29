@@ -4,8 +4,6 @@ import androidx.annotation.StringRes
 import com.project.domain.model.FoodEstablishmentType
 import com.project.presentation.R
 import java.text.SimpleDateFormat
-import java.time.format.DateTimeFormatter
-import java.util.Date
 import java.util.Locale
 
 data class MainInfoViewState(
@@ -15,8 +13,8 @@ data class MainInfoViewState(
     val description: String? = null,
     val phoneForReservation: String? = null,
     val foodEstablishmentType: FoodEstablishmentType? = null,
-    val selectedTimeFrom: Date? = null,
-    val selectedTimeTo: Date? = null,
+    val selectedTimeFrom: Long? = null,
+    val selectedTimeTo: Long? = null,
 ) {
 
     @StringRes

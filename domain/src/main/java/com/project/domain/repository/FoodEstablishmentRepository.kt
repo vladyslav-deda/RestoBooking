@@ -14,4 +14,10 @@ interface FoodEstablishmentRepository {
     suspend fun getFoodEstablishmentById(
         id: String
     ): Result<FoodEstablishment>
+
+    suspend fun addComment(
+        foodEstablishmentId: String,
+        commentText: String,
+        rating: Int
+    ): Result<Unit>
 }

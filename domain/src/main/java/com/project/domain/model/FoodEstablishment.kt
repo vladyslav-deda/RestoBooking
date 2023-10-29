@@ -1,7 +1,5 @@
 package com.project.domain.model
 
-import java.util.Date
-
 data class FoodEstablishment(
     val id: String = "",
     val name: String = "",
@@ -11,10 +9,10 @@ data class FoodEstablishment(
     val description: String = "",
     val foodEstablishmentType: FoodEstablishmentType = FoodEstablishmentType.Default,
     val tags: List<String> = emptyList(),
-    val selectedTimeFrom: Date? = null,
-    val selectedTimeTo: Date? = null,
+    val selectedTimeFrom: Long? = null,
+    val selectedTimeTo: Long? = null,
     val photoList: List<Photo> = emptyList(),
     val ownerName: String = "",
-    val rating: Int = 0,
-    val comments: List<String> = emptyList()
+    val rating: Float = 3.5f,
+    val comments: List<Comment> = emptyList()
 )

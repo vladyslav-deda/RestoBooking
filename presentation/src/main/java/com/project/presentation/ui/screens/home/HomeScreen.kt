@@ -1,6 +1,6 @@
 package com.project.presentation.ui.screens.home
 
-import android.util.Log
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -19,6 +19,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.presentation.R
 import com.project.presentation.ui.view.HomeSearchView
+import com.project.presentation.ui.view.common.LoadingView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -29,7 +30,6 @@ fun HomeScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    Log.i("myLogs", "HomeScreen: uiState.continueClicked = ${uiState.continueClicked}")
     if (uiState.continueClicked) {
         viewModel.resetContinueClickedStatus()
         navigateToSrp(
@@ -50,17 +50,22 @@ fun HomeScreen(
             )
         }
     ) { contentPadding ->
-        Column(
-            modifier = modifier
-                .padding(contentPadding)
-                .fillMaxSize(),
-        ) {
-            HomeSearchView(
-                viewState = uiState.homeSearchViewState,
-                onCityChanged = viewModel::onCityChanged,
-                handleTagClick = viewModel::handleTagSelection,
-                onSearchClicked = viewModel::onSearchClicked
-            )
+        Box(modifier = Modifier.fillMaxSize()) {
+            if (uiState.isLoading) {
+                LoadingView()
+            }
+            Column(
+                modifier = modifier
+                    .padding(contentPadding)
+                    .fillMaxSize(),
+            ) {
+                HomeSearchView(
+                    viewState = uiState.homeSearchViewState,
+                    onCityChanged = viewModel::onCityChanged,
+                    handleTagClick = viewModel::handleTagSelection,
+                    onSearchClicked = viewModel::onSearchClicked
+                )
+            }
         }
     }
 }

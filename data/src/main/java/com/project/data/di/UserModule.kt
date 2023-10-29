@@ -43,9 +43,10 @@ object UserModule {
     ): GetCurrentUserUseCase = GetCurrentUserUseCaseImpl(repository)
 
     @Provides
-    fun provideFoodEstablishmentRepository(): FoodEstablishmentRepository =
+    fun provideFoodEstablishmentRepository(repository: UserRepository): FoodEstablishmentRepository =
         FoodEstablishmentRepositoryImpl(
             storage = Firebase.storage.reference,
-            firestore = Firebase.firestore
+            firestore = Firebase.firestore,
+            userRepository = repository
         )
 }

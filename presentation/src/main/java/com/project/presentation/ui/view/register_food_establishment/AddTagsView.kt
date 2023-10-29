@@ -53,10 +53,12 @@ fun AddTagsView(
 ) {
 
     if (viewState.addNewTagClicked) {
-        AddTagDialog(onDismissDialog = { setValueForAddNewTagClicked(false) }, onAddClicked = {
-            val newTag = Tag(title = it)
-            addTagToTheList(newTag)
-        })
+        AddTagDialog(
+            onDismissDialog = { setValueForAddNewTagClicked(false) },
+            onAddClicked = {
+                val newTag = Tag(title = it)
+                addTagToTheList(newTag)
+            })
     }
 
     Column(

@@ -1,7 +1,7 @@
 package com.project.data.model
 
+import com.project.domain.model.Comment
 import com.project.domain.model.FoodEstablishmentType
-import java.util.Date
 
 data class FoodEstablishmentDto(
     val id: String = "",
@@ -12,8 +12,9 @@ data class FoodEstablishmentDto(
     val description: String = "",
     val foodEstablishmentType: FoodEstablishmentType = FoodEstablishmentType.Default,
     val tags: List<String> = emptyList(),
-    val selectedTimeFrom: Date? = null,
-    val selectedTimeTo: Date? = null,
+    val selectedTimeFrom: Long? = null,
+    val selectedTimeTo: Long? = null,
     val photoUrlList: List<String> = emptyList(),
     val ownerName: String = "",
+    val comments: List<Comment> = emptyList()
 )

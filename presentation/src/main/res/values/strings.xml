@@ -41,4 +41,7 @@
     <string name="chose_tags">Оберіть теги, натиснувши на необхідний, щоб підібрати заклад саме для Вас</string>
     <string name="sorting">Сортування</string>
     <string name="filters">Фільтрування</string>
+    <string name="add_comment">Додайте відгук</string>
+    <string name="comment">Відгук</string>
+    <string name="add_rating">Як би Ви оцінили цей заклад?</string>
 </resources>

@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,6 +26,11 @@ class HomeViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isLoading = true
+                )
+            }
             foodEstablishmentRepository.fetchFoodEstablishments()
                 .fold(
                     onSuccess = {
@@ -51,9 +57,14 @@ class HomeViewModel @Inject constructor(
                         }
                     },
                     onFailure = {
-
+                        Timber.e(it)
                     }
                 )
+            _uiState.update {
+                it.copy(
+                    isLoading = false
+                )
+            }
         }
     }
 
@@ -102,7 +113,8 @@ class HomeViewModel @Inject constructor(
     }
 }
 
-data class HomeUIState constructor(
+data class HomeUIState(
+    val isLoading: Boolean = false,
     val list: List<FoodEstablishment> = emptyList(),
     val homeSearchViewState: HomeSearchViewState = HomeSearchViewState(),
     val continueClicked: Boolean = false

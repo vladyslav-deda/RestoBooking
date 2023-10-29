@@ -7,6 +7,6 @@ data class SrpItemViewState(
     val photo: Photo = Photo(),
     val name: String = "",
     val foodEstablishmentType: FoodEstablishmentType = FoodEstablishmentType.Default,
-    val rating: Int = 0,
+    val rating: Float = 0.0f,
     val tags: List<String> = emptyList()
 )

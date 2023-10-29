@@ -11,8 +11,8 @@ import com.project.domain.usecase.GetCurrentUserUseCase
 import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep
 import com.project.presentation.ui.screens.add_food_establishments.model.Tags
 import com.project.presentation.ui.view.register_food_establishment.AddPhotoViewState
-import com.project.presentation.ui.view.register_food_establishment.MainInfoViewState
 import com.project.presentation.ui.view.register_food_establishment.AddTagsViewState
+import com.project.presentation.ui.view.register_food_establishment.MainInfoViewState
 import com.project.presentation.ui.view.register_food_establishment.Tag
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import java.util.Date
 import java.util.UUID
 import javax.inject.Inject
 
@@ -85,7 +84,7 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
         }
     }
 
-    fun onMainInfoTimeFromSelected(time: Date) {
+    fun onMainInfoTimeFromSelected(time: Long) {
         _uiState.update {
             it.copy(
                 mainInfoViewState = it.mainInfoViewState.copy(
@@ -96,7 +95,7 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
         }
     }
 
-    fun onMainInfoTimeToSelected(time: Date) {
+    fun onMainInfoTimeToSelected(time: Long) {
         _uiState.update {
             it.copy(
                 mainInfoViewState = it.mainInfoViewState.copy(

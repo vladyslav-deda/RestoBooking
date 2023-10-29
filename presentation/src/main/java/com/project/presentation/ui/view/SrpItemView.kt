@@ -74,6 +74,12 @@ fun SrpItemView(
                 text = viewState.name,
                 style = MaterialTheme.typography.headlineMedium.copy(color = Color.Black)
             )
+            if (viewState.rating > 0) {
+                Spacer(modifier = Modifier.height(12.dp))
+                RatingBar(
+                    rating = viewState.rating,
+                )
+            }
             Spacer(modifier = Modifier.height(12.dp))
             Text(
                 text = "Тип закладу: ${viewState.foodEstablishmentType.title}",
@@ -123,12 +129,8 @@ fun SrpItemView(
         }
     }
 }
-//}
 
-
-@Preview(
-    showBackground = true
-)
+@Preview
 @Composable
 fun SrpItemViewPreview() {
     SrpItemView(

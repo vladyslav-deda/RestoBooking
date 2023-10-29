@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.project.domain.model.Photo
 import com.project.presentation.R
 import com.project.presentation.ui.view.SrpItemView
 import com.project.presentation.ui.view.SrpItemViewState
@@ -85,32 +86,39 @@ fun SrpScreen(
                     onSortingClick = { },
                     onFiltersClick = { }
                 )
-                LazyColumn(
-                    modifier = Modifier.padding(20.dp)
-                ) {
-                    itemsIndexed(uiState.list) { index, item ->
-                        SrpItemView(
-                            viewState = SrpItemViewState(
-                                photo = item.photoList[0],
-                                name = item.name,
-                                foodEstablishmentType = item.foodEstablishmentType,
-                                rating = item.rating,
-                                tags = item.tags
-                            )
-                        ) {
-                            navigateToPdp(item.id)
-                        }
+                if (uiState.isLoading) {
+                    LoadingView()
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.padding(20.dp)
+                    ) {
+                        itemsIndexed(uiState.list) { index, item ->
+                            SrpItemView(
+                                viewState = SrpItemViewState(
+                                    photo = if (item.photoList.isNotEmpty()) {
+                                        item.photoList[0]
+                                    } else {
+                                        Photo()
+                                    },
+                                    name = item.name,
+                                    foodEstablishmentType = item.foodEstablishmentType,
+                                    rating = item.rating,
+                                    tags = item.tags
+                                )
+                            ) {
+                                navigateToPdp(item.id)
+                            }
 
-                        if (index < uiState.list.lastIndex) {
+                            if (index < uiState.list.lastIndex) {
+                                Spacer(modifier = Modifier.height(20.dp))
+                                Divider(
+                                    color = colorResource(id = R.color.main_yellow),
+                                    thickness = 1.dp
+                                )
+                            }
+
                             Spacer(modifier = Modifier.height(20.dp))
-                            Divider(
-                                color = colorResource(id = R.color.main_yellow),
-                                thickness = 1.dp
-                            )
                         }
-
-                        Spacer(modifier = Modifier.height(20.dp))
-                    }
 //                    items(uiState.list) {
 //                        SrpItemView(
 //                            viewState = SrpItemViewState(
@@ -124,10 +132,8 @@ fun SrpScreen(
 //
 //                        }
 //                    }
+                    }
                 }
-            }
-            if (uiState.isLoading) {
-                LoadingView()
             }
         }
     }

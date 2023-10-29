@@ -34,6 +34,7 @@ fun PhotoSliderView(
     modifier: Modifier = Modifier,
     photos: List<Photo>
 ) {
+    if (photos.isEmpty()) return
     val pagerState = rememberPagerState(initialPage = 0)
     LaunchedEffect(Unit) {
         while (true) {

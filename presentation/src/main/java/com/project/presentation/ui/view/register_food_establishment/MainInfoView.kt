@@ -50,7 +50,6 @@ import java.time.LocalDateTime
 import java.time.LocalTime
 import java.time.ZoneId
 import java.util.Calendar
-import java.util.Date
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -64,8 +63,8 @@ fun MainInfoView(
     onCityChanged: (String) -> Unit,
     onDescriptionChanged: (String) -> Unit,
     onContinueClicked: () -> Unit,
-    onFromTimeSelected: (Date) -> Unit,
-    onToTimeSelected: (Date) -> Unit,
+    onFromTimeSelected: (Long) -> Unit,
+    onToTimeSelected: (Long) -> Unit,
     onPhoneForReservationChanged: (String) -> Unit
 ) {
     val timeFromDialogState = rememberMaterialDialogState()
@@ -325,9 +324,9 @@ fun MainInfoView(
                 )
             ) {
                 val date = Calendar.getInstance()
-                date.set(Calendar.HOUR, it.hour)
+                date.set(Calendar.HOUR_OF_DAY, it.hour)
                 date.set(Calendar.MINUTE, it.minute)
-                onFromTimeSelected(date.time)
+                onFromTimeSelected(date.timeInMillis)
             }
         }
         MaterialDialog(
@@ -347,11 +346,11 @@ fun MainInfoView(
                 )
             }
         ) {
-            val instant = Instant.ofEpochMilli(viewState.selectedTimeFrom!!.time)
+            val instant = Instant.ofEpochMilli(viewState.selectedTimeFrom!!)
             val initialTime = LocalDateTime.ofInstant(instant, ZoneId.systemDefault()).toLocalTime()
             timepicker(
                 initialTime = initialTime!!,
-                title = "Specify the time when the establishment opens",
+                title = "Specify the time when the establishment closes",
                 timeRange = initialTime..LocalTime.MAX,
                 is24HourClock = true,
                 colors = TimePickerDefaults.colors(
@@ -365,10 +364,10 @@ fun MainInfoView(
                 )
             ) {
                 val date = Calendar.getInstance()
-                date.set(Calendar.HOUR, it.hour)
+                date.set(Calendar.HOUR_OF_DAY, it.hour)
                 date.set(Calendar.MINUTE, it.minute)
 
-                onToTimeSelected(date.time)
+                onToTimeSelected(date.timeInMillis)
             }
         }
     }

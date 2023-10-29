@@ -22,7 +22,8 @@ object Mapper {
             selectedTimeFrom = this.selectedTimeFrom,
             selectedTimeTo = this.selectedTimeTo,
             phoneForBooking = this.phoneForBooking,
-            tags = this.tags
+            tags = this.tags,
+            comments=this.comments
         )
 
     }
@@ -45,7 +46,8 @@ object Mapper {
             selectedTimeFrom = this.selectedTimeFrom,
             selectedTimeTo = this.selectedTimeTo,
             phoneForBooking = this.phoneForBooking,
-            tags = this.tags
+            tags = this.tags,
+            comments=this.comments
         )
     }
 }
