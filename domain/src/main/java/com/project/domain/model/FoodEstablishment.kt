@@ -13,6 +13,6 @@ data class FoodEstablishment(
     val selectedTimeTo: Long? = null,
     val photoList: List<Photo> = emptyList(),
     val ownerName: String = "",
-    val rating: Float = 3.5f,
+    val rating: Float = 0f,
     val comments: List<Comment> = emptyList()
 )

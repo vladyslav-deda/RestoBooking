@@ -23,12 +23,16 @@ object Mapper {
             selectedTimeTo = this.selectedTimeTo,
             phoneForBooking = this.phoneForBooking,
             tags = this.tags,
-            comments=this.comments
+            comments = this.comments
         )
-
     }
 
     fun FoodEstablishmentDto.toDomain(): FoodEstablishment {
+        var totalRatingCount = 0.0f
+        comments.forEach {
+            totalRatingCount += it.rating
+        }
+        val rating: Float = totalRatingCount / comments.size
         return FoodEstablishment(
             id = this.id,
             name = this.name,
@@ -47,7 +51,8 @@ object Mapper {
             selectedTimeTo = this.selectedTimeTo,
             phoneForBooking = this.phoneForBooking,
             tags = this.tags,
-            comments=this.comments
+            comments = this.comments,
+            rating = rating
         )
     }
 }

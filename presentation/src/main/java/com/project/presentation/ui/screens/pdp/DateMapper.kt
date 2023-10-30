@@ -18,9 +18,9 @@ object DateMapper {
         val duration = Duration.between(dateTime, now)
 
         if (duration.toMinutes() < 1) {
-            return "Just now"
+            return "Щойно"
         } else if (duration.toHours() < 1) {
-            return "${duration.toMinutes()} mins ago"
+            return "${duration.toMinutes()} хв. тому"
         }
 
         val today = LocalDateTime.of(now.year, now.month, now.dayOfMonth, 0, 0)
@@ -30,8 +30,8 @@ object DateMapper {
         val timeFormatter = DateTimeFormatter.ofPattern("HH:mm", Locale.getDefault())
 
         return when {
-            dateTime.isAfter(today) -> "${duration.toHours()} hours ago"
-            dateTime.isAfter(yesterday) -> "Yesterday at ${dateTime.format(timeFormatter)}"
+            dateTime.isAfter(today) -> "${duration.toHours()} год. тому"
+            dateTime.isAfter(yesterday) -> "Вчора о ${dateTime.format(timeFormatter)}"
             else -> dateTime.format(dateFormatter).replaceFirst("^0".toRegex(), "")
         }
     }

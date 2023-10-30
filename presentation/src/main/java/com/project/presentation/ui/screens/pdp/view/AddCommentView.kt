@@ -60,6 +60,20 @@ fun AddCommentView(
                         text = stringResource(id = R.string.add_comment),
                         style = MaterialTheme.typography.titleMedium
                     )
+
+                    Spacer(modifier = Modifier.height(12.dp))
+                    Text(
+                        text = stringResource(id = R.string.add_rating),
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                    Spacer(modifier = Modifier.height(12.dp))
+                    RatingBar(
+                        onStarClick = {
+                            rating = it.toFloat()
+                        },
+                        rating = rating ?: 0f
+                    )
+
                     Spacer(modifier = Modifier.height(12.dp))
                     OutlinedTextField(
                         value = comment ?: "",
@@ -79,20 +93,6 @@ fun AddCommentView(
                         ),
                         shape = RoundedCornerShape(8.dp),
                     )
-
-                    Spacer(modifier = Modifier.height(12.dp))
-                    Text(
-                        text = stringResource(id = R.string.add_rating),
-                        style = MaterialTheme.typography.titleSmall
-                    )
-                    Spacer(modifier = Modifier.height(12.dp))
-                    RatingBar(
-                        onStarClick = {
-                            rating = it.toFloat()
-                        },
-                        rating = rating ?: 0f
-                    )
-
                     Spacer(modifier = Modifier.height(20.dp))
                     Row(
                         modifier = Modifier.fillMaxWidth(),
@@ -117,7 +117,7 @@ fun AddCommentView(
                             },
                             shape = RoundedCornerShape(8.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.main_yellow)),
-                            enabled = comment?.isNotEmpty() == true
+                            enabled = (rating != null) && (rating!!.toInt() > 0)
                         ) {
                             Text(
                                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 22.dp),

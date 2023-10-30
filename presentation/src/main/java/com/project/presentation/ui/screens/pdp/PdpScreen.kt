@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -12,8 +13,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -124,7 +123,8 @@ fun PdpScreen(
                             phoneForBooking = uiState.foodEstablishment?.phoneForBooking ?: "",
                             workingTime = viewModel.getWorkingHours(),
                             description = uiState.foodEstablishment?.description ?: "",
-                            comments = uiState.foodEstablishment?.comments ?: emptyList()
+                            comments = uiState.foodEstablishment?.comments?: emptyList()
+                                ?: emptyList()
                         ) {
                             viewModel.showAddCommentDialog(true)
                         }
@@ -281,6 +281,7 @@ private fun FoodEstablishmentDetailsView(
             )
             TextButton(
                 onClick = onAddCommentClicked,
+                contentPadding = PaddingValues(),
             ) {
                 Text(
                     text = "+ Додати відгук",
@@ -309,14 +310,18 @@ private fun FoodEstablishmentDetailsView(
                 )
             }
         } else {
-            // TODO  - Fix LazyColumn inside scrollView
-            LazyColumn {
-                items(comments) {
-                    CommentView(comment = it)
+            Column {
+                comments.forEachIndexed { index, comment ->
+                    CommentView(comment = comment)
+                    if (comments.lastIndex != index) {
+                        Divider(
+                            color = colorResource(id = R.color.main_yellow),
+                            thickness = 1.dp
+                        )
+                    }
                 }
             }
         }
-
     }
 }
 
@@ -328,6 +333,7 @@ fun CommentView(
     Column(
         modifier = modifier
     ) {
+        Spacer(modifier = Modifier.height(12.dp))
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -335,27 +341,33 @@ fun CommentView(
         ) {
             Text(
                 text = comment.author,
-                style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black)
+                style = MaterialTheme.typography.bodyLarge.copy(color = Color.Black)
             )
             Text(
                 text = DateMapper.mapDate(comment.dateAdded),
-                style = MaterialTheme.typography.bodyMedium.copy(color = colorResource(id = R.color.gray))
+                style = MaterialTheme.typography.bodySmall.copy(color = colorResource(id = R.color.gray))
             )
         }
-        Spacer(modifier = Modifier.height(12.dp))
+        Spacer(modifier = Modifier.height(8.dp))
         RatingBar(
             rating = comment.rating.toFloat(),
             starSize = 12
         )
+        comment.commentText?.let {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = it,
+                style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black)
+            )
+        }
         Spacer(modifier = Modifier.height(12.dp))
-        Text(
-            text = comment.commentText,
-            style = MaterialTheme.typography.bodySmall.copy(color = Color.Black)
-        )
     }
 }
 
-@Preview
+@Preview(
+    showBackground = true,
+    backgroundColor = 16777215
+)
 @Composable
 fun FoodEstablishmentDetailsViewPreview() {
     val currentDate = Calendar.getInstance().timeInMillis
@@ -377,7 +389,10 @@ fun FoodEstablishmentDetailsViewPreview() {
     )
 }
 
-@Preview
+@Preview(
+    showBackground = true,
+    backgroundColor = 16777215
+)
 @Composable
 fun CommentViewPreview() {
     val currentDate = Calendar.getInstance().timeInMillis

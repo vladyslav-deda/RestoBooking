@@ -94,7 +94,7 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
             val foodEstablishmentRef = collection.document(idInDatabase)
 
             val document = foodEstablishmentRef.get().await()
-            val foodEstablishment = document.toObject(FoodEstablishment::class.java)
+            val foodEstablishment = document.toObject(FoodEstablishmentDto::class.java)?.toDomain()
 
             // Отримати поточний список коментарів
             val currentComments = foodEstablishment?.comments?.toMutableList()
@@ -103,20 +103,21 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
             // Додати новий коментар
             val newComment = Comment(
                 author = currentUser ?: "",
-                commentText = commentText,
+                commentText = commentText.ifEmpty { null },
                 rating = rating,
                 dateAdded = currentDate
             )
             currentComments?.add(newComment)
 
+            val images: List<String> =
+                foodEstablishment?.photoList?.map { it.uri.toString() } ?: emptyList()
             // Оновити коментари у копії об'єкта FoodEstablishment
-            val updatedFoodEstablishment =
-                foodEstablishment?.copy(comments = currentComments ?: emptyList())
+            val updatedFoodEstablishment: FoodEstablishmentDto? =
+                foodEstablishment?.copy(comments = currentComments ?: emptyList())?.toDto(images)
 
-            updatedFoodEstablishment?.let {
-                foodEstablishmentRef.set(it).await()
-
-                Result.success(Unit)
+            if (updatedFoodEstablishment != null) {
+                foodEstablishmentRef.set(updatedFoodEstablishment).await()
+                return@withContext Result.success(Unit)
             }
             Result.failure(Exception("Comment was not added successfully"))
 

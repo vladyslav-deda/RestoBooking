@@ -141,7 +141,7 @@ fun MainInfoView(
             onValueChange = onPhoneForReservationChanged,
             placeholder = { Text(text = stringResource(id = viewState.phoneForReservationLabelText)) },
             keyboardActions = KeyboardActions(onNext = { focusManager.clearFocus() }),
-            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
             colors = TextFieldDefaults.outlinedTextFieldColors(
                 cursorColor = colorResource(id = R.color.gray),
                 textColor = Color.Black,
