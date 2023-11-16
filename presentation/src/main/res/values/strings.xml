@@ -44,5 +44,6 @@
     <string name="add_comment">Додайте відгук</string>
     <string name="comment">Відгук</string>
     <string name="add_rating">Як би Ви оцінили цей заклад?</string>
-    <string name="add_tables_counter">Додайте кількість столиків у Вашому закладі. Вважається що один столик розрахований на чотирьох людей.</string>
+    <string name="add_tables_counter">Додайте кількість столиків у Вашому закладі. Вважається, що один столик розрахований на чотирьох людей.</string>
+    <string name="date_of_booking">Дата бронювання</string>
 </resources>

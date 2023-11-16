@@ -2,6 +2,7 @@ package com.project.presentation.ui.view
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -47,7 +48,19 @@ import androidx.compose.ui.unit.dp
 import com.project.presentation.R
 import com.project.presentation.ui.view.register_food_establishment.Tag
 import com.project.presentation.ui.view.register_food_establishment.TagView
+import com.vanpra.composematerialdialogs.MaterialDialog
+import com.vanpra.composematerialdialogs.datetime.date.DatePickerColors
+import com.vanpra.composematerialdialogs.datetime.date.DatePickerDefaults
+import com.vanpra.composematerialdialogs.datetime.date.datepicker
+import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
+import com.vanpra.composematerialdialogs.datetime.time.timepicker
+import com.vanpra.composematerialdialogs.rememberMaterialDialogState
+import java.time.Instant
 import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.ZoneId
+import java.util.Calendar
 
 @Composable
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
@@ -57,9 +70,11 @@ fun HomeSearchView(
     onCityChanged: (String) -> Unit,
     handleTagClick: (Tag) -> Unit,
     onSearchClicked: () -> Unit,
+    onDateSelected: (Long) -> Unit
 ) {
     val focusManager = LocalFocusManager.current
 
+    val dateDialogState = rememberMaterialDialogState()
     Column(
         modifier = Modifier
             .padding(20.dp),
@@ -91,6 +106,37 @@ fun HomeSearchView(
             ),
             singleLine = true,
             shape = RoundedCornerShape(8.dp),
+        )
+        Spacer(modifier = Modifier.height(20.dp))
+        OutlinedTextField(
+            value = viewState.getFormattedDate()
+                ?: stringResource(R.string.date_of_booking),
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable {
+                    dateDialogState.show()
+                },
+            onValueChange = {},
+            colors = TextFieldDefaults.outlinedTextFieldColors(
+                disabledTextColor = if (viewState.selectedDate != null) Color.Black
+                else colorResource(id = R.color.gray),
+                placeholderColor = colorResource(id = R.color.gray),
+                disabledBorderColor = Color.Black,
+                focusedBorderColor = Color.Black,
+                unfocusedBorderColor = Color.Black
+            ),
+            shape = RoundedCornerShape(8.dp),
+            singleLine = true,
+            enabled = false,
+            leadingIcon = {
+                Icon(
+                    painterResource(id = R.drawable.ic_calendar),
+                    contentDescription = null,
+                    tint = colorResource(
+                        id = R.color.main_yellow
+                    )
+                )
+            },
         )
         Spacer(modifier = Modifier.height(20.dp))
         Row(
@@ -159,5 +205,46 @@ fun HomeSearchView(
             )
         }
         Spacer(modifier = Modifier.height(80.dp))
+
+        MaterialDialog(
+            dialogState = dateDialogState,
+            buttons = {
+                positiveButton(
+                    text = "Підтвердити",
+                    textStyle = MaterialTheme.typography.titleSmall.copy(
+                        colorResource(id = R.color.main_yellow)
+                    )
+                )
+                negativeButton(
+                    text = "Відмінити",
+                    textStyle = MaterialTheme.typography.titleSmall.copy(
+                        colorResource(id = R.color.dark_gray)
+                    )
+                )
+            }
+        ) {
+            datepicker(
+                initialDate = LocalDate.now(),
+                title = "Оберіть дату бронювання",
+                waitForPositiveButton = true,
+                allowedDateValidator = {
+                    val now = LocalDate.now()
+                    val oneWeekForward = LocalDate.now().plusDays(7)
+                    it.dayOfMonth >= now.dayOfMonth && it.dayOfMonth < oneWeekForward.dayOfMonth
+                },
+                colors = DatePickerDefaults.colors(
+                    headerBackgroundColor = colorResource(id = R.color.main_yellow),
+                    headerTextColor = Color.White,
+                    dateActiveBackgroundColor = colorResource(id = R.color.main_yellow),
+                    dateInactiveTextColor = colorResource(id = R.color.dark_gray),
+                )
+            ) {
+                val date = Calendar.getInstance()
+                date.set(Calendar.DAY_OF_YEAR, it.dayOfYear)
+                date.set(Calendar.MONTH, it.monthValue)
+                date.set(Calendar.YEAR, it.year)
+                onDateSelected(date.timeInMillis)
+            }
+        }
     }
 }

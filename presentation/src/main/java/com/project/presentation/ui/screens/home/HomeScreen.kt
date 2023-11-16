@@ -63,7 +63,8 @@ fun HomeScreen(
                     viewState = uiState.homeSearchViewState,
                     onCityChanged = viewModel::onCityChanged,
                     handleTagClick = viewModel::handleTagSelection,
-                    onSearchClicked = viewModel::onSearchClicked
+                    onSearchClicked = viewModel::onSearchClicked,
+                    onDateSelected = viewModel::onDateChanged
                 )
             }
         }

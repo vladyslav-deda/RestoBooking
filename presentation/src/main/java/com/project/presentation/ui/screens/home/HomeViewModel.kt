@@ -111,6 +111,16 @@ class HomeViewModel @Inject constructor(
             )
         }
     }
+
+    fun onDateChanged(value: Long) {
+        _uiState.update {
+            it.copy(
+                homeSearchViewState = it.homeSearchViewState.copy(
+                    selectedDate = value
+                )
+            )
+        }
+    }
 }
 
 data class HomeUIState(
