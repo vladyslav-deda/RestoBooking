@@ -30,7 +30,9 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
                 val imagesUrls = mutableListOf<String>()
                 foodEstablishment.photoList.forEach {
                     val ref = storage.child("${foodEstablishment.name}_${it.index}")
-                    it.uri?.let { it1 -> ref.putFile(it1).await() }
+                    it.uri?.let { photoUri ->
+                        ref.putFile(photoUri).await()
+                    }
                     val url: String = ref.downloadUrl.await().toString()
                     imagesUrls.add(url)
                 }
@@ -95,12 +97,9 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
 
             val document = foodEstablishmentRef.get().await()
             val foodEstablishment = document.toObject(FoodEstablishmentDto::class.java)?.toDomain()
-
-            // Отримати поточний список коментарів
             val currentComments = foodEstablishment?.comments?.toMutableList()
 
             val currentDate = Calendar.getInstance().timeInMillis
-            // Додати новий коментар
             val newComment = Comment(
                 author = currentUser ?: "",
                 commentText = commentText.ifEmpty { null },
@@ -111,7 +110,6 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
 
             val images: List<String> =
                 foodEstablishment?.photoList?.map { it.uri.toString() } ?: emptyList()
-            // Оновити коментари у копії об'єкта FoodEstablishment
             val updatedFoodEstablishment: FoodEstablishmentDto? =
                 foodEstablishment?.copy(comments = currentComments ?: emptyList())?.toDto(images)
 

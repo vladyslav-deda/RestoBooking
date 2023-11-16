@@ -16,5 +16,6 @@ data class FoodEstablishmentDto(
     val selectedTimeTo: Long? = null,
     val photoUrlList: List<String> = emptyList(),
     val ownerName: String = "",
-    val comments: List<Comment> = emptyList()
+    val comments: List<Comment> = emptyList(),
+    val tablesForBooking: Int = 0
 )

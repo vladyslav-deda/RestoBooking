@@ -1,5 +1,7 @@
 package com.project.presentation.ui.screens.pdp
 
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,6 +39,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -52,6 +55,7 @@ import com.project.presentation.ui.screens.pdp.view.PhotoSliderView
 import com.project.presentation.ui.view.RatingBar
 import com.project.presentation.ui.view.common.LoadingView
 import com.project.presentation.ui.view.common.TagsView
+import timber.log.Timber
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -123,8 +127,7 @@ fun PdpScreen(
                             phoneForBooking = uiState.foodEstablishment?.phoneForBooking ?: "",
                             workingTime = viewModel.getWorkingHours(),
                             description = uiState.foodEstablishment?.description ?: "",
-                            comments = uiState.foodEstablishment?.comments?: emptyList()
-                                ?: emptyList()
+                            comments = uiState.foodEstablishment?.comments ?: emptyList()
                         ) {
                             viewModel.showAddCommentDialog(true)
                         }
@@ -186,6 +189,7 @@ private fun FoodEstablishmentDetailsView(
     comments: List<Comment>,
     onAddCommentClicked: () -> Unit
 ) {
+    val context = LocalContext.current
     Column(
         modifier = modifier.padding(horizontal = 20.dp)
     ) {
@@ -230,10 +234,20 @@ private fun FoodEstablishmentDetailsView(
                 tint = colorResource(id = R.color.main_yellow)
             )
             Spacer(modifier = Modifier.width(12.dp))
-            Text(
-                text = phoneForBooking,
-                style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black)
-            )
+            TextButton(onClick = {
+                val u = Uri.parse("tel:$phoneForBooking")
+                val i = Intent(Intent.ACTION_DIAL, u)
+                try {
+                    context.startActivity(i)
+                } catch (s: SecurityException) {
+                    Timber.e(s)
+                }
+            }) {
+                Text(
+                    text = phoneForBooking,
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black)
+                )
+            }
         }
         Spacer(modifier = Modifier.height(12.dp))
         Row(

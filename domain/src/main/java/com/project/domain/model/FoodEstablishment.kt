@@ -14,5 +14,6 @@ data class FoodEstablishment(
     val photoList: List<Photo> = emptyList(),
     val ownerName: String = "",
     val rating: Float = 0f,
-    val comments: List<Comment> = emptyList()
+    val comments: List<Comment> = emptyList(),
+    val tablesForBooking: Int = 0
 )

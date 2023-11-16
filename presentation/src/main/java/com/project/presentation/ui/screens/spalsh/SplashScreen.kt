@@ -18,7 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.presentation.R
 import kotlinx.coroutines.delay
 
-private const val SPLASH_LOADING_TIME = 3000L
+private const val SPLASH_LOADING_TIME = 10000L
 
 @Composable
 fun SplashScreen(
@@ -33,11 +33,11 @@ fun SplashScreen(
     SplashScreenContent(modifier)
     LaunchedEffect(Unit) {
         delay(SPLASH_LOADING_TIME)
-    }
-    if (uiState.navigateHomeScreen) {
-        navigateHome()
-    } else if (uiState.navigateLoginScreen) {
-        navigateLogin()
+        if (uiState.navigateHomeScreen) {
+            navigateHome()
+        } else if (uiState.navigateLoginScreen) {
+            navigateLogin()
+        }
     }
 }
 

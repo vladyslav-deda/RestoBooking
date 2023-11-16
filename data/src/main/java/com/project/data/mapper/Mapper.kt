@@ -23,7 +23,8 @@ object Mapper {
             selectedTimeTo = this.selectedTimeTo,
             phoneForBooking = this.phoneForBooking,
             tags = this.tags,
-            comments = this.comments
+            comments = this.comments,
+            tablesForBooking = this.tablesForBooking
         )
     }
 
@@ -52,7 +53,8 @@ object Mapper {
             phoneForBooking = this.phoneForBooking,
             tags = this.tags,
             comments = this.comments,
-            rating = rating
+            rating = rating,
+            tablesForBooking = this.tablesForBooking
         )
     }
 }

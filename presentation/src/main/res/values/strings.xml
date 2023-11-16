@@ -10,7 +10,7 @@
     <string name="sign_up">Зареєструватися</string>
     <string name="all_fields_must_be_filled">Усі поля повинні бути заповненими</string>
     <string name="different_passwords_message">Паролі не співпадають</string>
-    <string name="reservations">Reservations</string>
+    <string name="reservations">Мої бронювання</string>
     <string name="add_a_food_establishment">Додати заклад харчування</string>
     <string name="personal_details">Персональна інформація</string>
     <string name="logout">Вийти</string>
@@ -44,4 +44,5 @@
     <string name="add_comment">Додайте відгук</string>
     <string name="comment">Відгук</string>
     <string name="add_rating">Як би Ви оцінили цей заклад?</string>
+    <string name="add_tables_counter">Додайте кількість столиків у Вашому закладі. Вважається що один столик розрахований на чотирьох людей.</string>
 </resources>

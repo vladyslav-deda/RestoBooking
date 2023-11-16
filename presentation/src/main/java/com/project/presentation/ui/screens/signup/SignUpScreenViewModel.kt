@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -137,27 +138,46 @@ class SignUpScreenViewModel @Inject constructor(
             )
             signUpUserUseCase.invoke(
                 user = newUser
-            )
-            loginUserUseCase.invoke(
-                email = email,
-                password = password
             ).fold(
                 onSuccess = {
-                    _uiState.update {
-                        it.copy(
-                            isNavigateHome = true
-                        )
-                    }
+                    authUser(email, password)
                 },
                 onFailure = { throwable ->
+                    Timber.e(throwable)
                     _uiState.update {
                         it.copy(
-                            signUpState = it.signUpState.copy(errorMessage = throwable.localizedMessage)
+                            signUpState = it.signUpState.copy(errorMessage = throwable.localizedMessage),
+                            isLoading = false
                         )
                     }
                 }
             )
         }
+    }
+
+    private suspend fun authUser(email: String, password: String) {
+        loginUserUseCase.invoke(
+            email = email,
+            password = password
+        ).fold(
+            onSuccess = {
+                _uiState.update {
+                    it.copy(
+                        isNavigateHome = true,
+                        isLoading = false
+                    )
+                }
+            },
+            onFailure = { throwable ->
+                Timber.e(throwable)
+                _uiState.update {
+                    it.copy(
+                        signUpState = it.signUpState.copy(errorMessage = throwable.localizedMessage),
+                        isLoading = false
+                    )
+                }
+            }
+        )
     }
 }
 

@@ -13,6 +13,7 @@ import com.project.presentation.ui.screens.add_food_establishments.model.Tags
 import com.project.presentation.ui.view.register_food_establishment.AddPhotoViewState
 import com.project.presentation.ui.view.register_food_establishment.AddTagsViewState
 import com.project.presentation.ui.view.register_food_establishment.MainInfoViewState
+import com.project.presentation.ui.view.register_food_establishment.SetTablesCounterViewState
 import com.project.presentation.ui.view.register_food_establishment.Tag
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -167,6 +168,16 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
         }
     }
 
+    fun onTablesCounterChanged(value: Int) {
+        _uiState.update {
+            it.copy(
+                setTablesCounterViewState = it.setTablesCounterViewState.copy(
+                    tablesCount = value
+                )
+            )
+        }
+    }
+
     fun onContinueClicked() {
         /**
          * The stepNumber of currentStep equal to index of next step
@@ -253,11 +264,12 @@ data class AddFoodEstablishmentsUIState(
     val currentStep: AddFoodEstablishmentStep = AddFoodEstablishmentStep.AddFoodEstablishmentMainInfo,
     val mainInfoViewState: MainInfoViewState = MainInfoViewState(),
     val addTagsViewState: AddTagsViewState = AddTagsViewState(),
+    val setTablesCounterViewState: SetTablesCounterViewState = SetTablesCounterViewState(),
     val addPhotoViewState: AddPhotoViewState = AddPhotoViewState(),
     val navigateToProfile: Boolean = false,
     val isError: Boolean = false
 ) {
-    private fun getMaxSteps() = 3
+    private fun getMaxSteps() = 4
 
     fun getProgress() =
         if (currentStep.stepNumber == getMaxSteps()) 1f else currentStep.stepNumber * 0.3f

@@ -31,11 +31,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.presentation.R
 import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep.AddFoodEstablishmentMainInfo
 import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep.AddFoodEstablishmentPhotos
-import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep.AddFoodEstablishmentTables
+import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep.AddFoodEstablishmentTablesCount
+import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep.AddFoodEstablishmentTags
 import com.project.presentation.ui.view.common.LoadingView
 import com.project.presentation.ui.view.register_food_establishment.AddPhotoView
-import com.project.presentation.ui.view.register_food_establishment.MainInfoView
 import com.project.presentation.ui.view.register_food_establishment.AddTagsView
+import com.project.presentation.ui.view.register_food_establishment.MainInfoView
+import com.project.presentation.ui.view.register_food_establishment.SetTablesCounterView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -48,7 +50,7 @@ fun AddFoodEstablishmentsScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current
 
-    if (uiState.navigateToProfile){
+    if (uiState.navigateToProfile) {
         navigateToProfileScreen()
     }
     Scaffold(
@@ -69,7 +71,7 @@ fun AddFoodEstablishmentsScreen(
 //                        } else {
                             viewModel.decreaseStepNumber()
 //                        }
-                    }) {
+                        }) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             tint = Color.White,
@@ -110,11 +112,17 @@ fun AddFoodEstablishmentsScreen(
                         onContinueClicked = viewModel::onContinueClicked
                     )
 
-                    AddFoodEstablishmentTables -> AddTagsView(
+                    AddFoodEstablishmentTags -> AddTagsView(
                         viewState = uiState.addTagsViewState,
                         addTagToTheList = viewModel::addTagToSelected,
                         removeTagFromTheList = viewModel::removeTagFromSelected,
                         setValueForAddNewTagClicked = viewModel::setValueForAddNewTagClicked,
+                        onContinueClicked = viewModel::onContinueClicked
+                    )
+
+                    AddFoodEstablishmentTablesCount -> SetTablesCounterView(
+                        viewState = uiState.setTablesCounterViewState,
+                        onTablesCounterChanged = viewModel::onTablesCounterChanged,
                         onContinueClicked = viewModel::onContinueClicked
                     )
 
