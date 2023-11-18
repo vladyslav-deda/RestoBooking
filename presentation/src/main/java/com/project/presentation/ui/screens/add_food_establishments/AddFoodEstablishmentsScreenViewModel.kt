@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import com.project.domain.model.FoodEstablishment
 import com.project.domain.model.FoodEstablishmentType
 import com.project.domain.model.Photo
+import com.project.domain.model.Table
+import com.project.domain.model.TimeSlot
 import com.project.domain.repository.FoodEstablishmentRepository
 import com.project.domain.usecase.GetCurrentUserUseCase
 import com.project.presentation.ui.screens.add_food_establishments.model.AddFoodEstablishmentStep
@@ -21,6 +23,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import java.util.UUID
 import javax.inject.Inject
 
@@ -33,7 +36,6 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<AddFoodEstablishmentsUIState> =
         MutableStateFlow(AddFoodEstablishmentsUIState())
     val uiState: StateFlow<AddFoodEstablishmentsUIState> = _uiState.asStateFlow()
-
 
     fun onMainInfoNameChanged(name: String) {
         _uiState.update {
@@ -222,6 +224,11 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
                 )
             }
             val idOfNewFoodEstablishment = UUID.randomUUID().toString()
+
+            val selectedTimeFrom = _uiState.value.mainInfoViewState.selectedTimeFrom!!
+            val selectedTimeTo = _uiState.value.mainInfoViewState.selectedTimeTo!!
+            val tablesCount = _uiState.value.setTablesCounterViewState.tablesCount
+            val generatedTables = generateTables(tablesCount, selectedTimeFrom, selectedTimeTo)
             foodEstablishmentRepository.registerFoodEstablishment(
                 foodEstablishment = FoodEstablishment(
                     id = idOfNewFoodEstablishment,
@@ -235,7 +242,8 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
                     selectedTimeTo = _uiState.value.mainInfoViewState.selectedTimeTo,
                     selectedTimeFrom = _uiState.value.mainInfoViewState.selectedTimeFrom,
                     phoneForBooking = _uiState.value.mainInfoViewState.phoneForReservation ?: "",
-                    tags = _uiState.value.addTagsViewState.selectedTagsList.map { it.title }
+                    tags = _uiState.value.addTagsViewState.selectedTagsList.map { it.title },
+                    tablesForBooking = generatedTables
                 )
             ).fold(
                 onSuccess = {
@@ -256,6 +264,47 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
                 }
             )
         }
+    }
+
+    fun generateTables(count: Int, timeFrom: Long, timeTo: Long): List<Table> {
+        val tables = mutableListOf<Table>()
+        for (i in 0 until count) {
+            val slotsList = mutableListOf<TimeSlot>()
+            val calendarFrom = Calendar.getInstance().apply {
+                timeInMillis = timeFrom
+            }
+            val calendarTo = Calendar.getInstance().apply {
+                timeInMillis = timeTo
+            }
+            for (j in 0 until DAYS_AHEAD) {
+                val slots = generateTimeSlots(calendarFrom.timeInMillis, calendarTo.timeInMillis)
+                slotsList.addAll(slots)
+                calendarFrom.add(Calendar.DAY_OF_MONTH, 1)
+                calendarTo.add(Calendar.DAY_OF_MONTH, 1)
+            }
+            tables.add(Table(timeSlots = slotsList))
+        }
+
+        return tables
+    }
+
+    private fun generateTimeSlots(timeFrom: Long, timeTo: Long): List<TimeSlot> {
+        val timeSlots = mutableListOf<TimeSlot>()
+        var currentTime = timeFrom
+        var nextTime = currentTime + INTERVAL
+        while (currentTime < timeTo) {
+            if (nextTime <= timeTo) {
+                timeSlots.add(TimeSlot(currentTime, nextTime))
+            }
+            currentTime = nextTime
+            nextTime = currentTime + INTERVAL
+        }
+        return timeSlots
+    }
+
+    companion object {
+        private const val INTERVAL = 30 * 60 * 1000 // 1 hour in milliseconds
+        private const val DAYS_AHEAD = 50
     }
 }
 

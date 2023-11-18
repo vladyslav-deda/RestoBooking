@@ -2,6 +2,7 @@ package com.project.data.model
 
 import com.project.domain.model.Comment
 import com.project.domain.model.FoodEstablishmentType
+import com.project.domain.model.Table
 
 data class FoodEstablishmentDto(
     val id: String = "",
@@ -17,5 +18,5 @@ data class FoodEstablishmentDto(
     val photoUrlList: List<String> = emptyList(),
     val ownerName: String = "",
     val comments: List<Comment> = emptyList(),
-    val tablesForBooking: Int = 0
+    val tablesForBooking: List<Table> = emptyList()
 )
