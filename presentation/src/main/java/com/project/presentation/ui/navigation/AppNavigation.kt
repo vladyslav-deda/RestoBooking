@@ -18,6 +18,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.project.presentation.R
 import com.project.presentation.ui.navigation.PdpDestinationArgs.ID_ARG
+import com.project.presentation.ui.navigation.ReservationArgs.SELECTED_DATE_ARG
 import com.project.presentation.ui.navigation.SrpDestinationsArgs.CITY_ARG
 import com.project.presentation.ui.navigation.SrpDestinationsArgs.TAGS_ARG
 import com.project.presentation.ui.screens.add_food_establishments.AddFoodEstablishmentsScreen
@@ -25,6 +26,7 @@ import com.project.presentation.ui.screens.home.HomeScreen
 import com.project.presentation.ui.screens.login.LoginScreen
 import com.project.presentation.ui.screens.pdp.PdpScreen
 import com.project.presentation.ui.screens.profile.ProfileScreen
+import com.project.presentation.ui.screens.reservation.ReservationScreen
 import com.project.presentation.ui.screens.signup.SignUpScreen
 import com.project.presentation.ui.screens.spalsh.SplashScreen
 import com.project.presentation.ui.screens.srp.SrpScreen
@@ -36,6 +38,10 @@ object SrpDestinationsArgs {
 
 object PdpDestinationArgs {
     const val ID_ARG = "name"
+}
+
+object ReservationArgs {
+    const val SELECTED_DATE_ARG = "date"
 }
 
 sealed class AppDestinations(
@@ -55,6 +61,7 @@ sealed class AppDestinations(
     object AddFoodEstablishments : AppDestinations("add_food_establishments")
     object Srp : AppDestinations("srp_screen")
     object Pdp : AppDestinations("pdp_screen")
+    object AddReservation: AppDestinations("add_reservation_screen")
 }
 
 @Composable
@@ -266,6 +273,26 @@ fun SetupNavGraph(
                 )
             }) {
             PdpScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable(
+            route = "${AppDestinations.AddReservation.route}/{$SELECTED_DATE_ARG}",
+            arguments = listOf(
+                navArgument(SELECTED_DATE_ARG) { type = NavType.LongType }),
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(700)
+                )
+            }) {
+            ReservationScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }

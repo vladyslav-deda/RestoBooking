@@ -82,7 +82,7 @@ fun AddCommentView(
                         onValueChange = {
                             comment = it
                         },
-                        placeholder = { Text(text = stringResource(id = R.string.comment)) },
+                        placeholder = { Text(text = stringResource(id = R.string.feedback)) },
                         keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                         colors = TextFieldDefaults.outlinedTextFieldColors(
                             cursorColor = colorResource(id = R.color.gray),
