@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.domain.model.FoodEstablishment
 import com.project.domain.repository.FoodEstablishmentRepository
+import com.project.domain.repository.SelectedDateForBookingLocalRepository
 import com.project.presentation.ui.view.HomeSearchViewState
 import com.project.presentation.ui.view.register_food_establishment.Tag
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -97,6 +98,8 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onSearchClicked() {
+        val date = _uiState.value.homeSearchViewState.selectedDate!!
+        SelectedDateForBookingLocalRepository.saveDate(date)
         _uiState.update {
             it.copy(
                 continueClicked = true

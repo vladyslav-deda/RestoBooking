@@ -53,19 +53,20 @@ fun HomeScreen(
         Box(modifier = Modifier.fillMaxSize()) {
             if (uiState.isLoading) {
                 LoadingView()
-            }
-            Column(
-                modifier = modifier
-                    .padding(contentPadding)
-                    .fillMaxSize(),
-            ) {
-                HomeSearchView(
-                    viewState = uiState.homeSearchViewState,
-                    onCityChanged = viewModel::onCityChanged,
-                    handleTagClick = viewModel::handleTagSelection,
-                    onSearchClicked = viewModel::onSearchClicked,
-                    onDateSelected = viewModel::onDateChanged
-                )
+            } else {
+                Column(
+                    modifier = modifier
+                        .padding(contentPadding)
+                        .fillMaxSize(),
+                ) {
+                    HomeSearchView(
+                        viewState = uiState.homeSearchViewState,
+                        onCityChanged = viewModel::onCityChanged,
+                        handleTagClick = viewModel::handleTagSelection,
+                        onSearchClicked = viewModel::onSearchClicked,
+                        onDateSelected = viewModel::onDateChanged
+                    )
+                }
             }
         }
     }

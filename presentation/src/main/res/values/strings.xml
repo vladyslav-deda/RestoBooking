@@ -51,5 +51,5 @@
     <string name="comment_message">Залиште коментар для бронювання місця і адміністратор його обов\'яково побачить.</string>
     <string name="start_time_booking">Час початку бронювання</string>
     <string name="end_time_booking">Час закінчення бронювання</string>
-    <string name="comment">Відгук</string>
+    <string name="comment">Коментар</string>
 </resources>

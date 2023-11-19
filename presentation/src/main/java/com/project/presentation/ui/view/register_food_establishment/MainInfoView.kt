@@ -294,18 +294,18 @@ fun MainInfoView(
         MaterialDialog(
             dialogState = timeFromDialogState,
             buttons = {
-                positiveButton(
-                    text = "Ok",
-                    textStyle = MaterialTheme.typography.titleSmall.copy(
-                        colorResource(id = R.color.main_yellow)
+                    positiveButton(
+                        text = "Підтвердити",
+                        textStyle = MaterialTheme.typography.titleSmall.copy(
+                            colorResource(id = R.color.main_yellow)
+                        )
                     )
-                )
-                negativeButton(
-                    text = "Cancel",
-                    textStyle = MaterialTheme.typography.titleSmall.copy(
-                        colorResource(id = R.color.dark_gray)
+                    negativeButton(
+                        text = "Відмінити",
+                        textStyle = MaterialTheme.typography.titleSmall.copy(
+                            colorResource(id = R.color.dark_gray)
+                        )
                     )
-                )
             }
         ) {
             timepicker(
@@ -332,18 +332,18 @@ fun MainInfoView(
         MaterialDialog(
             dialogState = timeToDialogState,
             buttons = {
-                positiveButton(
-                    text = "Ok",
-                    textStyle = MaterialTheme.typography.titleSmall.copy(
-                        colorResource(id = R.color.main_yellow)
+                    positiveButton(
+                        text = "Підтвердити",
+                        textStyle = MaterialTheme.typography.titleSmall.copy(
+                            colorResource(id = R.color.main_yellow)
+                        )
                     )
-                )
-                negativeButton(
-                    text = "Cancel",
-                    textStyle = MaterialTheme.typography.titleSmall.copy(
-                        colorResource(id = R.color.dark_gray)
+                    negativeButton(
+                        text = "Відмінити",
+                        textStyle = MaterialTheme.typography.titleSmall.copy(
+                            colorResource(id = R.color.dark_gray)
+                        )
                     )
-                )
             }
         ) {
             val instant = Instant.ofEpochMilli(viewState.selectedTimeFrom!!)

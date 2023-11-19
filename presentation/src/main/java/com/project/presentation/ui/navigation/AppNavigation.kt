@@ -18,7 +18,6 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.project.presentation.R
 import com.project.presentation.ui.navigation.PdpDestinationArgs.ID_ARG
-import com.project.presentation.ui.navigation.ReservationArgs.SELECTED_DATE_ARG
 import com.project.presentation.ui.navigation.SrpDestinationsArgs.CITY_ARG
 import com.project.presentation.ui.navigation.SrpDestinationsArgs.TAGS_ARG
 import com.project.presentation.ui.screens.add_food_establishments.AddFoodEstablishmentsScreen
@@ -37,11 +36,11 @@ object SrpDestinationsArgs {
 }
 
 object PdpDestinationArgs {
-    const val ID_ARG = "name"
+    const val ID_ARG = "id"
 }
 
 object ReservationArgs {
-    const val SELECTED_DATE_ARG = "date"
+    const val ID_ARG = "id"
 }
 
 sealed class AppDestinations(
@@ -61,7 +60,7 @@ sealed class AppDestinations(
     object AddFoodEstablishments : AppDestinations("add_food_establishments")
     object Srp : AppDestinations("srp_screen")
     object Pdp : AppDestinations("pdp_screen")
-    object AddReservation: AppDestinations("add_reservation_screen")
+    object AddReservation : AppDestinations("add_reservation_screen")
 }
 
 @Composable
@@ -275,13 +274,16 @@ fun SetupNavGraph(
             PdpScreen(
                 navigateBack = {
                     navController.popBackStack()
+                },
+                navigateToReservation = {id->
+                    navController.navigate("${AppDestinations.AddReservation.route}/$id")
                 }
             )
         }
         composable(
-            route = "${AppDestinations.AddReservation.route}/{$SELECTED_DATE_ARG}",
+            route = "${AppDestinations.AddReservation.route}/{${ReservationArgs.ID_ARG}}",
             arguments = listOf(
-                navArgument(SELECTED_DATE_ARG) { type = NavType.LongType }),
+                navArgument(ReservationArgs.ID_ARG) { type = NavType.StringType }),
             enterTransition = {
                 fadeIn(
                     animationSpec = tween(700)
@@ -299,7 +301,6 @@ fun SetupNavGraph(
             )
         }
     }
-
 }
 
 fun navigateAndClearBackStack(route: String, navController: NavHostController) {

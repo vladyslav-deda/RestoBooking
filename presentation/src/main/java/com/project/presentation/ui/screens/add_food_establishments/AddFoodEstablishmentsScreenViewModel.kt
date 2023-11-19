@@ -266,7 +266,7 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
         }
     }
 
-    fun generateTables(count: Int, timeFrom: Long, timeTo: Long): List<Table> {
+    private fun generateTables(count: Int, timeFrom: Long, timeTo: Long): List<Table> {
         val tables = mutableListOf<Table>()
         for (i in 0 until count) {
             val slotsList = mutableListOf<TimeSlot>()

@@ -63,7 +63,8 @@ import java.util.Calendar
 fun PdpScreen(
     modifier: Modifier = Modifier,
     viewModel: PdpScreenViewModel = hiltViewModel(),
-    navigateBack: () -> Unit
+    navigateBack: () -> Unit,
+    navigateToReservation: (String) -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -151,7 +152,10 @@ fun PdpScreen(
                             Button(
                                 modifier = Modifier
                                     .align(Alignment.Center),
-                                onClick = {},
+                                onClick = {
+                                    viewModel.saveHours()
+                                    navigateToReservation(viewModel.getFoodEstablishmentId())
+                                },
                                 shape = RoundedCornerShape(8.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = colorResource(
@@ -234,15 +238,18 @@ private fun FoodEstablishmentDetailsView(
                 tint = colorResource(id = R.color.main_yellow)
             )
             Spacer(modifier = Modifier.width(12.dp))
-            TextButton(onClick = {
-                val u = Uri.parse("tel:$phoneForBooking")
-                val i = Intent(Intent.ACTION_DIAL, u)
-                try {
-                    context.startActivity(i)
-                } catch (s: SecurityException) {
-                    Timber.e(s)
-                }
-            }) {
+            TextButton(
+                onClick = {
+                    val u = Uri.parse("tel:$phoneForBooking")
+                    val i = Intent(Intent.ACTION_DIAL, u)
+                    try {
+                        context.startActivity(i)
+                    } catch (s: SecurityException) {
+                        Timber.e(s)
+                    }
+                },
+                contentPadding = PaddingValues(),
+            ) {
                 Text(
                     text = phoneForBooking,
                     style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black)

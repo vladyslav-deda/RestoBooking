@@ -87,4 +87,5 @@ dependencies {
     implementation("androidx.compose.ui:ui-util:1.5.4")
     implementation ("androidx.compose.material:material-icons-extended-android:1.6.0-alpha08")
     implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation ("com.wdullaer:materialdatetimepicker:4.2.3")
 }
