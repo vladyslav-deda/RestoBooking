@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.domain.model.FoodEstablishment
 import com.project.domain.repository.FoodEstablishmentRepository
-import com.project.domain.repository.SelectedDateForBookingLocalRepository
 import com.project.presentation.ui.navigation.PdpDestinationArgs.ID_ARG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -117,15 +116,6 @@ class PdpScreenViewModel @Inject constructor(
                 )
             }
         }
-    }
-
-    fun saveHours() {
-        SelectedDateForBookingLocalRepository.saveWorkingTimeFrom(
-            _uiState.value.foodEstablishment?.selectedTimeFrom ?: 0
-        )
-        SelectedDateForBookingLocalRepository.saveWorkingTimeTo(
-            _uiState.value.foodEstablishment?.selectedTimeTo ?: 0
-        )
     }
 }
 

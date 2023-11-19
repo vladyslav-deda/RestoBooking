@@ -39,7 +39,8 @@ class SrpViewModel @Inject constructor(
                 )
             }
             foodEstablishmentRepository.fetchFoodEstablishments(
-                city = city.trim()
+                city = city.trim(),
+                withTimeFilters = true
             ).fold(
                 onSuccess = { list ->
                     _uiState.update {

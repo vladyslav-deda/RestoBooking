@@ -18,7 +18,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.presentation.R
 import kotlinx.coroutines.delay
 
-private const val SPLASH_LOADING_TIME = 10000L
+private const val SPLASH_LOADING_TIME = 3000L
 
 @Composable
 fun SplashScreen(

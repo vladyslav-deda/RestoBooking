@@ -153,7 +153,6 @@ fun PdpScreen(
                                 modifier = Modifier
                                     .align(Alignment.Center),
                                 onClick = {
-                                    viewModel.saveHours()
                                     navigateToReservation(viewModel.getFoodEstablishmentId())
                                 },
                                 shape = RoundedCornerShape(8.dp),

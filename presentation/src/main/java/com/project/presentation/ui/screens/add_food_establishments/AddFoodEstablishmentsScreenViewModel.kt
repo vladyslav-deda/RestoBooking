@@ -304,7 +304,7 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
 
     companion object {
         private const val INTERVAL = 30 * 60 * 1000 // 1 hour in milliseconds
-        private const val DAYS_AHEAD = 50
+        private const val DAYS_AHEAD = 30
     }
 }
 

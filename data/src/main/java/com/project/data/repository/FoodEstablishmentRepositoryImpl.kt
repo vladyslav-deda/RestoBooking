@@ -9,6 +9,7 @@ import com.project.data.model.FoodEstablishmentDto
 import com.project.domain.model.Comment
 import com.project.domain.model.FoodEstablishment
 import com.project.domain.repository.FoodEstablishmentRepository
+import com.project.domain.repository.SelectedDateForBookingLocalRepository
 import com.project.domain.repository.UserRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
@@ -46,7 +47,8 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
 
     override suspend fun fetchFoodEstablishments(
         city: String,
-        tags: List<String>
+        tags: List<String>,
+        withTimeFilters: Boolean
     ): Result<List<FoodEstablishment>> =
         withContext(Dispatchers.IO) {
             try {
@@ -58,14 +60,82 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
                 }
                 val task = query.get().await()
 
-                val posts = task.documents.mapNotNull { documentSnapshot ->
+                var foodEstablishment = task.documents.mapNotNull { documentSnapshot ->
                     documentSnapshot.toObject<FoodEstablishmentDto>()?.toDomain()
                 }
-                Result.success(posts)
+                if (withTimeFilters) {
+                    val selectedDate = SelectedDateForBookingLocalRepository.getSavedDate()
+                    val selectedTimeFrom =
+                        SelectedDateForBookingLocalRepository.getSelectedTimeFrom()
+                    val selectedTimeTo = SelectedDateForBookingLocalRepository.getSelectedTimeTo()
+                    val peopleCount = SelectedDateForBookingLocalRepository.getPeopleCount()
+                    val newList = filterFoodEstablishments(
+                        selectedDate = selectedDate,
+                        startTime = selectedTimeFrom,
+                        endTime = selectedTimeTo,
+                        numberOfTables = peopleCount / 4,
+                        foodEstablishments = foodEstablishment
+                    )
+                    foodEstablishment = newList
+                }
+                Result.success(foodEstablishment)
             } catch (e: Exception) {
                 Result.failure(e)
             }
         }
+
+    private fun filterFoodEstablishments(
+        selectedDate: Long,
+        startTime: Long,
+        endTime: Long,
+        numberOfTables: Int,
+        foodEstablishments: List<FoodEstablishment>
+    ): List<FoodEstablishment> {
+        val selectedDateCalendar = Calendar.getInstance()
+        selectedDateCalendar.timeInMillis = selectedDate
+
+        val startTimeCalendar = Calendar.getInstance()
+        startTimeCalendar.timeInMillis = startTime
+
+        val endTimeCalendar = Calendar.getInstance()
+        endTimeCalendar.timeInMillis = endTime
+
+        //TODO - fix logic to found not only 10:30-11:00 timeSlots, but also with more than standart interval
+        return foodEstablishments.filter { establishment ->
+            establishment.tablesForBooking.count { table ->
+                table.timeSlots.any {
+                    val timeSlotTimeFromCalendar = Calendar.getInstance()
+                    timeSlotTimeFromCalendar.timeInMillis = it.timeFrom
+
+                    val timeSlotTimeToCalendar = Calendar.getInstance()
+                    timeSlotTimeToCalendar.timeInMillis = it.timeTo
+
+                    selectedDateCalendar.get(Calendar.YEAR) == timeSlotTimeFromCalendar.get(Calendar.YEAR) &&
+                            selectedDateCalendar.get(Calendar.MONTH) == timeSlotTimeFromCalendar.get(
+                        Calendar.MONTH
+                    ) &&
+                            selectedDateCalendar.get(Calendar.DAY_OF_MONTH) == timeSlotTimeFromCalendar.get(
+                        Calendar.DAY_OF_MONTH
+                    ) &&
+                            startTimeCalendar.get(Calendar.HOUR_OF_DAY) == timeSlotTimeFromCalendar.get(
+                        Calendar.HOUR_OF_DAY
+                    ) &&
+                            startTimeCalendar.get(Calendar.MINUTE) == timeSlotTimeFromCalendar.get(
+                        Calendar.MINUTE
+                    ) &&
+                            endTimeCalendar.get(Calendar.HOUR_OF_DAY) == timeSlotTimeToCalendar.get(
+                        Calendar.HOUR_OF_DAY
+                    ) &&
+                            endTimeCalendar.get(Calendar.MINUTE) == timeSlotTimeToCalendar.get(
+                        Calendar.MINUTE
+                    ) &&
+                            it.reservatorName == null &&
+                            it.reservatorEmail == null &&
+                            it.notes == null
+                }
+            } >= numberOfTables
+        }
+    }
 
     override suspend fun getFoodEstablishmentById(id: String): Result<FoodEstablishment> =
         withContext(Dispatchers.IO) {

@@ -31,11 +31,11 @@ fun HomeScreen(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     if (uiState.continueClicked) {
-        viewModel.resetContinueClickedStatus()
         navigateToSrp(
             uiState.homeSearchViewState.city.trim(),
             uiState.homeSearchViewState.tags.map { it.title }
         )
+        viewModel.resetContinueClickedStatus()
     }
     Scaffold(
         topBar = {
@@ -64,11 +64,13 @@ fun HomeScreen(
                         onCityChanged = viewModel::onCityChanged,
                         handleTagClick = viewModel::handleTagSelection,
                         onSearchClicked = viewModel::onSearchClicked,
-                        onDateSelected = viewModel::onDateChanged
+                        onDateSelected = viewModel::onDateChanged,
+                        onStartTimeChanged = viewModel::onStartTimeChanged,
+                        onEndTimeChanged = viewModel::onEndTimeChanged,
+                        onPeopleCounterChanged = viewModel::onPeopleCounterChanged
                     )
                 }
             }
         }
     }
 }
-

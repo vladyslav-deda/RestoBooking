@@ -3,26 +3,27 @@ package com.project.domain.repository
 object SelectedDateForBookingLocalRepository {
 
     private var date: Long = 0
-    private var workingTimeFrom: Long = 0
-    private var workingTimeTo: Long = 0
+    private var selectedTimeFrom: Long = 0
+    private var selectedTimeTo: Long = 0
+    private var peopleCount: Int = 0
 
-    fun saveDate(date: Long) {
+    fun saveData(
+        date: Long,
+        selectedTimeFrom: Long,
+        selectedTimeTo: Long,
+        peopleCount: Int,
+    ) {
         this.date = date
+        this.selectedTimeFrom = selectedTimeFrom
+        this.selectedTimeTo = selectedTimeTo
+        this.peopleCount = peopleCount
     }
 
     fun getSavedDate() = date
 
-    fun saveWorkingTimeFrom(workingTimeFrom: Long) {
-        this.workingTimeFrom = workingTimeFrom
-    }
+    fun getSelectedTimeFrom() = selectedTimeFrom
 
-    fun getWorkingTimeFrom() = workingTimeFrom
+    fun getSelectedTimeTo() = selectedTimeTo
 
-    fun saveWorkingTimeTo(workingTimeTo: Long) {
-        this.workingTimeTo = workingTimeTo
-    }
-
-    fun getWorkingTimeTo() = workingTimeTo
-
-
+    fun getPeopleCount() = peopleCount
 }

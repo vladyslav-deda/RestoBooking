@@ -99,7 +99,12 @@ class HomeViewModel @Inject constructor(
 
     fun onSearchClicked() {
         val date = _uiState.value.homeSearchViewState.selectedDate!!
-        SelectedDateForBookingLocalRepository.saveDate(date)
+        SelectedDateForBookingLocalRepository.saveData(
+            date = date,
+            selectedTimeFrom = _uiState.value.homeSearchViewState.selectedTimeFrom!!,
+            selectedTimeTo = _uiState.value.homeSearchViewState.selectedTimeTo!!,
+            peopleCount = _uiState.value.homeSearchViewState.peopleCount
+        )
         _uiState.update {
             it.copy(
                 continueClicked = true
@@ -120,6 +125,38 @@ class HomeViewModel @Inject constructor(
             it.copy(
                 homeSearchViewState = it.homeSearchViewState.copy(
                     selectedDate = value
+                )
+            )
+        }
+    }
+
+    fun onPeopleCounterChanged(value: Int) {
+        _uiState.update {
+            it.copy(
+                homeSearchViewState = it.homeSearchViewState.copy(
+                    peopleCount = value
+                )
+            )
+        }
+    }
+
+
+    fun onStartTimeChanged(time: Long) {
+        _uiState.update {
+            it.copy(
+                homeSearchViewState = it.homeSearchViewState.copy(
+                    selectedTimeFrom = time,
+                    selectedTimeTo = null
+                )
+            )
+        }
+    }
+
+    fun onEndTimeChanged(time: Long) {
+        _uiState.update {
+            it.copy(
+                homeSearchViewState = it.homeSearchViewState.copy(
+                    selectedTimeTo = time
                 )
             )
         }

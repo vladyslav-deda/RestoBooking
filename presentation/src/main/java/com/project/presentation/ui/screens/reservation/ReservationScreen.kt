@@ -2,7 +2,6 @@ package com.project.presentation.ui.screens.reservation
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -46,16 +45,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.presentation.R
 import com.project.presentation.ui.view.common.LoadingView
-import com.project.presentation.ui.view.register_food_establishment.AnimatedCounter
-import com.vanpra.composematerialdialogs.MaterialDialog
-import com.vanpra.composematerialdialogs.datetime.time.TimePickerDefaults
-import com.vanpra.composematerialdialogs.datetime.time.timepicker
-import com.vanpra.composematerialdialogs.rememberMaterialDialogState
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.LocalTime
-import java.time.ZoneId
-import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -66,9 +55,6 @@ fun ReservationScreen(
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
-    val timeFromDialogState = rememberMaterialDialogState()
-    val timeToDialogState = rememberMaterialDialogState()
 
     Scaffold(
         topBar = {
@@ -113,68 +99,7 @@ fun ReservationScreen(
                             .verticalScroll(rememberScrollState())
                             .align(Alignment.TopCenter)
                     ) {
-                        InfoMessage(messageRes = R.string.booking_message)
-                        Spacer(modifier = Modifier.height(20.dp))
-                        OutlinedTextField(
-                            value = uiState.getFormattedTimeFrom()
-                                ?: stringResource(R.string.start_time_booking),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    timeFromDialogState.show()
-                                },
-                            onValueChange = {},
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                disabledTextColor = if (uiState.selectedTimeFrom != null) Color.Black
-                                else colorResource(id = R.color.gray),
-                                placeholderColor = colorResource(id = R.color.gray),
-                                disabledBorderColor = Color.Black,
-                                focusedBorderColor = Color.Black,
-                                unfocusedBorderColor = Color.Black
-                            ),
-                            shape = RoundedCornerShape(8.dp),
-                            singleLine = true,
-                            enabled = false
-                        )
-                        Spacer(modifier = Modifier.height(20.dp))
-                        OutlinedTextField(
-                            value = uiState.getFormattedTimeTo()
-                                ?: stringResource(R.string.end_time_booking),
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    timeToDialogState.show()
-                                },
-                            onValueChange = {},
-                            colors = TextFieldDefaults.outlinedTextFieldColors(
-                                disabledTextColor = if (uiState.selectedTimeTo != null) Color.Black
-                                else colorResource(id = R.color.gray),
-                                placeholderColor = colorResource(id = R.color.gray),
-                                disabledBorderColor = Color.Black,
-                                focusedBorderColor = Color.Black,
-                                unfocusedBorderColor = Color.Black
-                            ),
-                            shape = RoundedCornerShape(8.dp),
-                            singleLine = true,
-                            enabled = false
-                        )
-                        Spacer(modifier = Modifier.height(20.dp))
-                        InfoMessage(messageRes = R.string.people_number_message)
-                        Spacer(modifier = Modifier.height(20.dp))
-                        AnimatedCounter(
-                            count = uiState.peopleCount,
-                            onValueDecreaseClick = {
-                                if (uiState.peopleCount > 0) {
-                                    val newValue = uiState.peopleCount - 1
-                                    viewModel.onPeopleCounterChanged(newValue)
-                                }
-                            },
-                            onValueIncreaseClick = {
-                                val newValue = uiState.peopleCount + 1
-                                viewModel.onPeopleCounterChanged(newValue)
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(20.dp))
+
                         InfoMessage(messageRes = R.string.comment_message)
                         Spacer(modifier = Modifier.height(20.dp))
                         OutlinedTextField(
@@ -215,7 +140,6 @@ fun ReservationScreen(
                                 modifier = Modifier
                                     .align(Alignment.Center),
                                 onClick = {},
-                                enabled = uiState.isFinishReservationButtonEnabled(),
                                 shape = RoundedCornerShape(8.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = colorResource(
@@ -235,116 +159,6 @@ fun ReservationScreen(
                     }
                 }
             }
-        }
-    }
-
-    MaterialDialog(
-        dialogState = timeFromDialogState,
-        buttons = {
-            positiveButton(
-                text = "Підтвердити",
-                textStyle = MaterialTheme.typography.titleSmall.copy(
-                    colorResource(id = R.color.main_yellow)
-                )
-            )
-            negativeButton(
-                text = "Відмінити",
-                textStyle = MaterialTheme.typography.titleSmall.copy(
-                    colorResource(id = R.color.dark_gray)
-                )
-            )
-        }
-    ) {
-        val instantTimeFrom = Instant.ofEpochMilli(viewModel.retrieveWorkingTimeFrom())
-        val initialTimeFrom =
-            LocalDateTime.ofInstant(instantTimeFrom, ZoneId.systemDefault()).toLocalTime()
-        val instantTimeTo = Instant.ofEpochMilli(viewModel.retrieveWorkingTimeTo())
-        val initialTimeTo =
-            LocalDateTime.ofInstant(instantTimeTo, ZoneId.systemDefault()).toLocalTime()
-
-        timepicker(
-            initialTime = initialTimeFrom,
-            title = "Оберіть час почаку бронювання",
-            timeRange = initialTimeFrom..initialTimeTo,
-            is24HourClock = true,
-            colors = TimePickerDefaults.colors(
-                activeBackgroundColor = colorResource(id = R.color.main_yellow),
-                inactivePeriodBackground = colorResource(id = R.color.gray),
-                selectorColor = colorResource(id = R.color.main_yellow),
-                selectorTextColor = Color.White,
-                activeTextColor = Color.White,
-                inactiveTextColor = colorResource(id = R.color.dark_gray),
-                inactiveBackgroundColor = colorResource(id = R.color.light_gray)
-            )
-        ) {
-            val date = Calendar.getInstance()
-            date.set(Calendar.HOUR_OF_DAY, it.hour)
-            date.set(Calendar.MINUTE, it.minute)
-            viewModel.onStartTimeChanged(date.timeInMillis)
-        }
-    }
-    MaterialDialog(
-        dialogState = timeToDialogState,
-        buttons = {
-            positiveButton(
-                text = "Підтвердити",
-                textStyle = MaterialTheme.typography.titleSmall.copy(
-                    colorResource(id = R.color.main_yellow)
-                )
-            )
-            negativeButton(
-                text = "Відмінити",
-                textStyle = MaterialTheme.typography.titleSmall.copy(
-                    colorResource(id = R.color.dark_gray)
-                )
-            )
-        }
-    ) {
-        val instantTimeFrom =
-            Instant.ofEpochMilli(uiState.selectedTimeFrom ?: viewModel.retrieveWorkingTimeFrom())
-        val initialTimeFrom =
-            LocalDateTime.ofInstant(instantTimeFrom, ZoneId.systemDefault()).toLocalTime()
-        val modifiedInitialTimeFrom = if (uiState.selectedTimeFrom != null) {
-            initialTimeFrom.plusMinutes(30)
-        } else {
-            initialTimeFrom
-        }
-
-        val instantTimeTo = Instant.ofEpochMilli(viewModel.retrieveWorkingTimeTo())
-        val initialTimeTo =
-            LocalDateTime.ofInstant(instantTimeTo, ZoneId.systemDefault()).toLocalTime()
-
-        val interval = 30
-
-        val timeRange: ClosedRange<LocalTime> = modifiedInitialTimeFrom..initialTimeTo
-        val generatedTimes = mutableListOf<LocalTime>()
-
-        var currentTime = modifiedInitialTimeFrom
-        while (currentTime <= initialTimeTo) {
-            generatedTimes.add(currentTime)
-            currentTime = currentTime.plusMinutes(interval.toLong())
-        }
-
-        timepicker(
-            initialTime = initialTimeFrom!!,
-            title = "Вкажіть час закінчення бронювання",
-            timeRange = timeRange.start..timeRange.endInclusive,
-            is24HourClock = true,
-            colors = TimePickerDefaults.colors(
-                activeBackgroundColor = colorResource(id = R.color.main_yellow),
-                inactivePeriodBackground = colorResource(id = R.color.gray),
-                selectorColor = colorResource(id = R.color.main_yellow),
-                selectorTextColor = Color.White,
-                activeTextColor = Color.White,
-                inactiveTextColor = colorResource(id = R.color.dark_gray),
-                inactiveBackgroundColor = colorResource(id = R.color.gray),
-            )
-        ) {
-            val date = Calendar.getInstance()
-            date.set(Calendar.HOUR_OF_DAY, it.hour)
-            date.set(Calendar.MINUTE, it.minute)
-
-            viewModel.onEndTimeChanged(date.timeInMillis)
         }
     }
 }

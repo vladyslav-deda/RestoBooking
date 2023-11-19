@@ -8,7 +8,8 @@ interface FoodEstablishmentRepository {
 
     suspend fun fetchFoodEstablishments(
         city: String = "",
-        tags: List<String> = emptyList()
+        tags: List<String> = emptyList(),
+        withTimeFilters:Boolean = false
     ): Result<List<FoodEstablishment>>
 
     suspend fun getFoodEstablishmentById(
