@@ -139,7 +139,9 @@ fun ReservationScreen(
                             Button(
                                 modifier = Modifier
                                     .align(Alignment.Center),
-                                onClick = {},
+                                onClick = {
+                                    viewModel.finishReservation()
+                                },
                                 shape = RoundedCornerShape(8.dp),
                                 colors = ButtonDefaults.buttonColors(
                                     containerColor = colorResource(

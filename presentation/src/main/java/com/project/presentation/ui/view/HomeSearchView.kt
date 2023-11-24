@@ -316,7 +316,8 @@ fun HomeSearchView(
                 allowedDateValidator = {
                     val now = LocalDate.now()
                     val oneWeekForward = LocalDate.now().plusDays(7)
-                    it.dayOfMonth >= now.dayOfMonth && it.dayOfMonth < oneWeekForward.dayOfMonth
+                    it.isEqual(now) || it.isEqual(oneWeekForward) || (it.isAfter(now) && it.isBefore(oneWeekForward))
+
                 },
                 colors = DatePickerDefaults.colors(
                     headerBackgroundColor = colorResource(id = R.color.main_yellow),

@@ -8,6 +8,8 @@ import com.project.data.mapper.Mapper.toDto
 import com.project.data.model.FoodEstablishmentDto
 import com.project.domain.model.Comment
 import com.project.domain.model.FoodEstablishment
+import com.project.domain.model.Table
+import com.project.domain.model.TimeSlot
 import com.project.domain.repository.FoodEstablishmentRepository
 import com.project.domain.repository.SelectedDateForBookingLocalRepository
 import com.project.domain.repository.UserRepository
@@ -192,5 +194,84 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
             Result.failure(e)
         }
+    }
+
+    override suspend fun addReservation(
+        foodEstablishmentId: String,
+        timeSlot: TimeSlot
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        val currentUser = userRepository.currentUser
+        try {
+            val collection = firestore.collection(FOOD_ESTABLISHMENT_COLLECTION)
+            val task =
+                collection.whereEqualTo(FoodEstablishment::id.name, foodEstablishmentId).get()
+                    .await()
+            val idInDatabase = task.documents[0].id
+            val foodEstablishmentRef = collection.document(idInDatabase)
+
+            val document = foodEstablishmentRef.get().await()
+            val foodEstablishment = document.toObject(FoodEstablishmentDto::class.java)?.toDomain()
+            val tablesForBooking = foodEstablishment?.tablesForBooking?.toMutableList()
+
+            val tableAndTimeSlotIndexes = getTableAndTimeSlotIndexes(tablesForBooking, timeSlot)
+            val newTimeSlot = timeSlot.copy(
+                reservatorName = currentUser?.displayName,
+                reservatorEmail = currentUser?.email
+            )
+            val tableForReservation =
+                tablesForBooking?.get(tableAndTimeSlotIndexes.first!!)
+            val newTimeSlots = tableForReservation?.timeSlots?.toMutableList()
+            newTimeSlots?.set(tableAndTimeSlotIndexes.second!!, newTimeSlot)
+            tablesForBooking?.set(tableAndTimeSlotIndexes.first!!, tableForReservation!!)
+
+            val images: List<String> =
+                foodEstablishment?.photoList?.map { it.uri.toString() } ?: emptyList()
+            val updatedFoodEstablishment: FoodEstablishmentDto? =
+                foodEstablishment?.copy(tablesForBooking = tablesForBooking ?: emptyList())
+                    ?.toDto(images)
+
+            if (updatedFoodEstablishment != null) {
+                foodEstablishmentRef.set(updatedFoodEstablishment).await()
+                return@withContext Result.success(Unit)
+            }
+            Result.failure(Exception("Comment was not added successfully"))
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    private fun getTableAndTimeSlotIndexes(
+        tablesForBooking: MutableList<Table>?,
+        timeSlot: TimeSlot
+    ): Pair<Int?, Int?> {
+        val timeFromCalendar = Calendar.getInstance().apply {
+            timeInMillis = timeSlot.timeFrom
+        }
+        tablesForBooking?.forEachIndexed { tableIndex, table ->
+            table.timeSlots.forEachIndexed { timeSlotIndex, slot ->
+                val currentSlotTimeFromCalendar = Calendar.getInstance().apply {
+                    timeInMillis = slot.timeFrom
+                }
+                if (
+                    timeFromCalendar.get(Calendar.YEAR) == currentSlotTimeFromCalendar.get(Calendar.YEAR) &&
+                    timeFromCalendar.get(Calendar.MONTH) == currentSlotTimeFromCalendar.get(Calendar.MONTH) &&
+                    timeFromCalendar.get(Calendar.DAY_OF_MONTH) == currentSlotTimeFromCalendar.get(
+                        Calendar.DAY_OF_MONTH
+                    ) &&
+                    timeFromCalendar.get(Calendar.HOUR_OF_DAY) == currentSlotTimeFromCalendar.get(
+                        Calendar.HOUR_OF_DAY
+                    ) &&
+                    timeFromCalendar.get(Calendar.MINUTE) == currentSlotTimeFromCalendar.get(
+                        Calendar.MINUTE
+                    ) &&
+                    timeSlot.reservatorEmail == null &&
+                    timeSlot.reservatorName == null
+                ) {
+                    return Pair(tableIndex, timeSlotIndex)
+                }
+            }
+        }
+        return Pair(null, null)
     }
 }

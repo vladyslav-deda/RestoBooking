@@ -1,6 +1,7 @@
 package com.project.domain.repository
 
 import com.project.domain.model.FoodEstablishment
+import com.project.domain.model.TimeSlot
 
 interface FoodEstablishmentRepository {
 
@@ -9,7 +10,7 @@ interface FoodEstablishmentRepository {
     suspend fun fetchFoodEstablishments(
         city: String = "",
         tags: List<String> = emptyList(),
-        withTimeFilters:Boolean = false
+        withTimeFilters: Boolean = false
     ): Result<List<FoodEstablishment>>
 
     suspend fun getFoodEstablishmentById(
@@ -20,5 +21,10 @@ interface FoodEstablishmentRepository {
         foodEstablishmentId: String,
         commentText: String,
         rating: Int
+    ): Result<Unit>
+
+    suspend fun addReservation(
+        foodEstablishmentId: String,
+        timeSlot: TimeSlot
     ): Result<Unit>
 }
