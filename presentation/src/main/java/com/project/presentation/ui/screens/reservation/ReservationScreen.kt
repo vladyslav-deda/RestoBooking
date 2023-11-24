@@ -55,7 +55,9 @@ fun ReservationScreen(
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
+    if (uiState.navigateBack) {
+        navigateBack()
+    }
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
