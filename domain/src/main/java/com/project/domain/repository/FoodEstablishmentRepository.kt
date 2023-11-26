@@ -22,9 +22,4 @@ interface FoodEstablishmentRepository {
         commentText: String,
         rating: Int
     ): Result<Unit>
-
-    suspend fun addReservation(
-        foodEstablishmentId: String,
-        timeSlot: TimeSlot
-    ): Result<Unit>
 }

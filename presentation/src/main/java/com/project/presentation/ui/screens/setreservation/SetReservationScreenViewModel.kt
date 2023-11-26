@@ -1,10 +1,10 @@
-package com.project.presentation.ui.screens.reservation
+package com.project.presentation.ui.screens.setreservation
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.domain.model.TimeSlot
-import com.project.domain.repository.FoodEstablishmentRepository
+import com.project.domain.repository.ReservationRepository
 import com.project.domain.repository.SelectedDateForBookingLocalRepository
 import com.project.presentation.ui.navigation.PdpDestinationArgs
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,8 +17,8 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class ReservationScreenViewModel @Inject constructor(
-    private val foodEstablishmentRepository: FoodEstablishmentRepository,
+class SetReservationScreenViewModel @Inject constructor(
+    private val reservationRepository: ReservationRepository,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -41,7 +41,7 @@ class ReservationScreenViewModel @Inject constructor(
             _uiState.update {
                 it.copy(isLoading = true)
             }
-            foodEstablishmentRepository.addReservation(
+            reservationRepository.addReservation(
                 foodEstablishmentId = id,
                 timeSlot = TimeSlot(
                     timeFrom = SelectedDateForBookingLocalRepository.getSelectedTimeFrom(),

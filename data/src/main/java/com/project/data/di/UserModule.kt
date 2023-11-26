@@ -8,8 +8,10 @@ import com.project.data.interactors.GetCurrentUserUseCaseImpl
 import com.project.data.interactors.LoginUserUseCaseImpl
 import com.project.data.interactors.SignUpUserUseCaseImpl
 import com.project.data.repository.FoodEstablishmentRepositoryImpl
+import com.project.data.repository.ReservationRepositoryImpl
 import com.project.data.repository.UserRepositoryImpl
 import com.project.domain.repository.FoodEstablishmentRepository
+import com.project.domain.repository.ReservationRepository
 import com.project.domain.repository.UserRepository
 import com.project.domain.usecase.GetCurrentUserUseCase
 import com.project.domain.usecase.LoginUserUseCase
@@ -45,6 +47,14 @@ object UserModule {
     @Provides
     fun provideFoodEstablishmentRepository(repository: UserRepository): FoodEstablishmentRepository =
         FoodEstablishmentRepositoryImpl(
+            storage = Firebase.storage.reference,
+            firestore = Firebase.firestore,
+            userRepository = repository
+        )
+
+    @Provides
+    fun provideReservationRepository(repository: UserRepository): ReservationRepository =
+        ReservationRepositoryImpl(
             storage = Firebase.storage.reference,
             firestore = Firebase.firestore,
             userRepository = repository

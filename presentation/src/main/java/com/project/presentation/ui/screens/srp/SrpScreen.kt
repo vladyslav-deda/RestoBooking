@@ -119,19 +119,6 @@ fun SrpScreen(
 
                             Spacer(modifier = Modifier.height(20.dp))
                         }
-//                    items(uiState.list) {
-//                        SrpItemView(
-//                            viewState = SrpItemViewState(
-//                                photo = it.photoList[0],
-//                                name = it.name,
-//                                foodEstablishmentType = it.foodEstablishmentType,
-//                                rating = it.rating,
-//                                tags = it.tags
-//                            )
-//                        ) {
-//
-//                        }
-//                    }
                     }
                 }
             }

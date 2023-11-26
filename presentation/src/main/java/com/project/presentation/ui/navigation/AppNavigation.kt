@@ -23,9 +23,10 @@ import com.project.presentation.ui.navigation.SrpDestinationsArgs.TAGS_ARG
 import com.project.presentation.ui.screens.add_food_establishments.AddFoodEstablishmentsScreen
 import com.project.presentation.ui.screens.home.HomeScreen
 import com.project.presentation.ui.screens.login.LoginScreen
+import com.project.presentation.ui.screens.myreservations.MyReservationsScreen
 import com.project.presentation.ui.screens.pdp.PdpScreen
 import com.project.presentation.ui.screens.profile.ProfileScreen
-import com.project.presentation.ui.screens.reservation.ReservationScreen
+import com.project.presentation.ui.screens.setreservation.SetReservationScreen
 import com.project.presentation.ui.screens.signup.SignUpScreen
 import com.project.presentation.ui.screens.spalsh.SplashScreen
 import com.project.presentation.ui.screens.srp.SrpScreen
@@ -54,7 +55,7 @@ sealed class AppDestinations(
     object SignUp : AppDestinations("sign_up_screen")
     object Home : AppDestinations("home_screen", "Головна", R.drawable.ic_home)
     object Reservations :
-        AppDestinations("reservations_screen", "Мої заклади", R.drawable.ic_my_reservation)
+        AppDestinations("reservations_screen", "Мої бронювання", R.drawable.ic_my_reservation)
 
     object Profile : AppDestinations("profile_screen", "Профіль", R.drawable.ic_profile)
     object AddFoodEstablishments : AppDestinations("add_food_establishments")
@@ -178,9 +179,11 @@ fun SetupNavGraph(
                     animationSpec = tween(700)
                 )
             }) {
-            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                Text(text = "Reservations Screen", style = MaterialTheme.typography.bodyLarge)
-            }
+            MyReservationsScreen(
+                navigateToPdp = { id ->
+                    navController.navigate("${AppDestinations.Pdp.route}/$id")
+                }
+            )
         }
         composable(
             route = AppDestinations.Profile.route,
@@ -294,7 +297,7 @@ fun SetupNavGraph(
                     animationSpec = tween(700)
                 )
             }) {
-            ReservationScreen(
+            SetReservationScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }

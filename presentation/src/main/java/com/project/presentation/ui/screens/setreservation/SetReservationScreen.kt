@@ -1,4 +1,4 @@
-package com.project.presentation.ui.screens.reservation
+package com.project.presentation.ui.screens.setreservation
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.background
@@ -48,9 +48,9 @@ import com.project.presentation.ui.view.common.LoadingView
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ReservationScreen(
+fun SetReservationScreen(
     modifier: Modifier = Modifier,
-    viewModel: ReservationScreenViewModel = hiltViewModel(),
+    viewModel: SetReservationScreenViewModel = hiltViewModel(),
     navigateBack: () -> Unit
 ) {
 
