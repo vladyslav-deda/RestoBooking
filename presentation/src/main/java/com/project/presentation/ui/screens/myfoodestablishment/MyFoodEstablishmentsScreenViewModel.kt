@@ -2,7 +2,6 @@ package com.project.presentation.ui.screens.myfoodestablishment
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.project.domain.model.FoodEstablishment
 import com.project.domain.repository.FoodEstablishmentRepository
 import com.project.presentation.ui.screens.myfoodestablishment.view.MyFoodEstablishmentViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +14,7 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class MyFoodEstablishmentsViewModel @Inject constructor(
+class MyFoodEstablishmentsScreenViewModel @Inject constructor(
     private val foodEstablishmentRepository: FoodEstablishmentRepository
 ) : ViewModel() {
 

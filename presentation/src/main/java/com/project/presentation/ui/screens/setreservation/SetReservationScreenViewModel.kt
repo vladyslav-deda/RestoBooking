@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.project.domain.model.TimeSlot
 import com.project.domain.repository.ReservationRepository
 import com.project.domain.repository.SelectedDateForBookingLocalRepository
-import com.project.presentation.ui.navigation.PdpDestinationArgs
+import com.project.presentation.ui.navigation.ArgsName.ID_ARG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -22,7 +22,7 @@ class SetReservationScreenViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
-    private val id: String = checkNotNull(savedStateHandle[PdpDestinationArgs.ID_ARG])
+    private val id: String = checkNotNull(savedStateHandle[ID_ARG])
 
     private val _uiState: MutableStateFlow<ReservationScreenUiState> =
         MutableStateFlow(ReservationScreenUiState())

@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.domain.model.FoodEstablishment
 import com.project.domain.repository.FoodEstablishmentRepository
-import com.project.presentation.ui.navigation.PdpDestinationArgs.ID_ARG
+import com.project.presentation.ui.navigation.ArgsName.ID_ARG
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

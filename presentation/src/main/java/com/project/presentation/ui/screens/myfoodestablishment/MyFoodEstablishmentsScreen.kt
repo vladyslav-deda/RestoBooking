@@ -1,7 +1,6 @@
 package com.project.presentation.ui.screens.myfoodestablishment
 
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -10,7 +9,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,8 +34,8 @@ import com.project.presentation.ui.view.common.LoadingView
 @Composable
 fun MyFoodEstablishmentsScreen(
     modifier: Modifier = Modifier,
-    viewModel: MyFoodEstablishmentsViewModel = hiltViewModel(),
-    navigateToFoodEstablishmentsDetailsForReservator: (String) -> Unit,
+    viewModel: MyFoodEstablishmentsScreenViewModel = hiltViewModel(),
+    navigateToFoodEstablishmentsDetailsForAdmin: (String) -> Unit,
     navigateBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -87,7 +85,7 @@ fun MyFoodEstablishmentsScreen(
                         ) {
                             items(uiState.items) { item ->
                                 MyFoodEstablishmentItemView(viewState = item) {
-                                    navigateToFoodEstablishmentsDetailsForReservator(item.id)
+                                    navigateToFoodEstablishmentsDetailsForAdmin(item.id)
                                 }
                                 Spacer(modifier = Modifier.height(20.dp))
                             }

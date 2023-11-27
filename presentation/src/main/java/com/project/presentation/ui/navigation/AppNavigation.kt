@@ -4,12 +4,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
@@ -17,10 +12,11 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.project.presentation.R
-import com.project.presentation.ui.navigation.PdpDestinationArgs.ID_ARG
-import com.project.presentation.ui.navigation.SrpDestinationsArgs.CITY_ARG
-import com.project.presentation.ui.navigation.SrpDestinationsArgs.TAGS_ARG
+import com.project.presentation.ui.navigation.ArgsName.CITY_ARG
+import com.project.presentation.ui.navigation.ArgsName.ID_ARG
+import com.project.presentation.ui.navigation.ArgsName.TAGS_ARG
 import com.project.presentation.ui.screens.add_food_establishments.AddFoodEstablishmentsScreen
+import com.project.presentation.ui.screens.fedetailsforadmin.FoodEstablishmentDetailsForAdminScreen
 import com.project.presentation.ui.screens.home.HomeScreen
 import com.project.presentation.ui.screens.login.LoginScreen
 import com.project.presentation.ui.screens.myfoodestablishment.MyFoodEstablishmentsScreen
@@ -32,18 +28,12 @@ import com.project.presentation.ui.screens.signup.SignUpScreen
 import com.project.presentation.ui.screens.spalsh.SplashScreen
 import com.project.presentation.ui.screens.srp.SrpScreen
 
-object SrpDestinationsArgs {
+object ArgsName {
     const val CITY_ARG = "city"
     const val TAGS_ARG = "tags"
-}
-
-object PdpDestinationArgs {
     const val ID_ARG = "id"
 }
 
-object ReservationArgs {
-    const val ID_ARG = "id"
-}
 
 sealed class AppDestinations(
     val route: String,
@@ -64,6 +54,8 @@ sealed class AppDestinations(
     object Pdp : AppDestinations("pdp_screen")
     object AddReservation : AppDestinations("add_reservation_screen")
     object MyFoodEstablishmentsScreen : AppDestinations("my_food_establishments_screen")
+    object FoodEstablishmentDetailsForAdminScreen :
+        AppDestinations("food_establishments_for_admin_screen")
 }
 
 @Composable
@@ -289,9 +281,9 @@ fun SetupNavGraph(
             )
         }
         composable(
-            route = "${AppDestinations.AddReservation.route}/{${ReservationArgs.ID_ARG}}",
+            route = "${AppDestinations.AddReservation.route}/{${ID_ARG}}",
             arguments = listOf(
-                navArgument(ReservationArgs.ID_ARG) { type = NavType.StringType }),
+                navArgument(ID_ARG) { type = NavType.StringType }),
             enterTransition = {
                 fadeIn(
                     animationSpec = tween(700)
@@ -321,9 +313,29 @@ fun SetupNavGraph(
                 )
             }) {
             MyFoodEstablishmentsScreen(
-                navigateToFoodEstablishmentsDetailsForReservator = {
-
+                navigateToFoodEstablishmentsDetailsForAdmin = {
+                    navController.navigate("${AppDestinations.FoodEstablishmentDetailsForAdminScreen.route}/$id")
                 },
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable(
+            route = "${AppDestinations.FoodEstablishmentDetailsForAdminScreen.route}/{${ID_ARG}}",
+            arguments = listOf(
+                navArgument(ID_ARG) { type = NavType.StringType }),
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(700)
+                )
+            }) {
+            FoodEstablishmentDetailsForAdminScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }
