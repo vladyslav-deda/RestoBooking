@@ -195,4 +195,20 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
             Result.failure(e)
         }
     }
+
+    override suspend fun getFoodEstablishmentOfCurrentUser(): Result<List<FoodEstablishment>> =
+        withContext(Dispatchers.IO) {
+            try {
+                val allFoodEstablishments = fetchFoodEstablishments().getOrElse {
+                    return@withContext Result.failure(Throwable("Food establishment was not fetched successfully"))
+                }
+                val currentUser = userRepository.currentUser
+                val finalList = allFoodEstablishments.filter {
+                    it.ownerName == currentUser?.displayName
+                }
+                Result.success(finalList)
+            } catch (t: Throwable) {
+                Result.failure(t)
+            }
+        }
 }

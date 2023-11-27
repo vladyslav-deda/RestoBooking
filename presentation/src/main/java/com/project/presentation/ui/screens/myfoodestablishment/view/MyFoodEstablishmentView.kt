@@ -1,4 +1,4 @@
-package com.project.presentation.ui.screens.myreservations.view
+package com.project.presentation.ui.screens.myfoodestablishment.view
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
@@ -18,29 +18,26 @@ import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.project.presentation.R
+import com.project.presentation.ui.view.RatingBar
 
 @Composable
-fun MyReservationItemView(
+fun MyFoodEstablishmentItemView(
     modifier: Modifier = Modifier,
-    viewState: MyReservationItemViewState,
-    navigateToPdp: () -> Unit,
-    removeReservation: () -> Unit
+    viewState: MyFoodEstablishmentViewState,
+    navigateToFoodEstablishmentDetailsForReservator: () -> Unit
 ) {
     Card(
         modifier = modifier
             .clickable {
-                navigateToPdp()
+                navigateToFoodEstablishmentDetailsForReservator()
             }
             .fillMaxWidth(),
         border = BorderStroke(2.dp, colorResource(id = R.color.gray)),
@@ -64,24 +61,15 @@ fun MyReservationItemView(
                     contentDescription = null
                 )
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    modifier = Modifier
-                        .size(20.dp),
-                    painter = painterResource(id = R.drawable.ic_calendar),
-                    contentDescription = null,
-                    tint = colorResource(id = R.color.main_yellow)
+            if (viewState.rating > 0) {
+                Spacer(modifier = Modifier.height(16.dp))
+                RatingBar(
+                    rating = viewState.rating
                 )
-                Spacer(modifier = Modifier.width(12.dp))
-                Text(
-                    text = viewState.date,
-                    style = MaterialTheme.typography.titleMedium
-                )
+                Spacer(modifier = Modifier.height(12.dp))
+            } else {
+                Spacer(modifier = Modifier.height(16.dp))
             }
-            Spacer(modifier = Modifier.height(12.dp))
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
@@ -98,12 +86,16 @@ fun MyReservationItemView(
                     style = MaterialTheme.typography.titleMedium
                 )
             }
-            TextButton(onClick = removeReservation) {
+            Spacer(modifier = Modifier.height(12.dp))
+            if (viewState.commentsWithoutAnswers > 0) {
                 Text(
-                    modifier = Modifier.fillMaxWidth(),
-                    textAlign = TextAlign.End,
-                    text = "Відмінити бронювання",
-                    style = MaterialTheme.typography.titleMedium.copy(color = Color.Red)
+                    text = "Кількість користувачів, які не отримали зворотнього зв'язку: ${viewState.commentsWithoutAnswers}, виправте це якнайшвидше!",
+                    style = MaterialTheme.typography.titleMedium.copy(color = colorResource(id = R.color.red))
+                )
+            } else {
+                Text(
+                    text = "Чудово! Усі користувачі отримали зворотній зв'язок",
+                    style = MaterialTheme.typography.titleMedium.copy(color = colorResource(id = R.color.green))
                 )
             }
         }
@@ -114,15 +106,14 @@ fun MyReservationItemView(
     showBackground = true
 )
 @Composable
-fun MyReservationItemViewPreview() {
-    MyReservationItemView(
-        viewState = MyReservationItemViewState(
-            foodEstablishmentId = "",
+fun MyFoodEstablishmentItemViewPreview() {
+    MyFoodEstablishmentItemView(
+        viewState = MyFoodEstablishmentViewState(
+            id = "",
             name = "Ресторан \"Тест\"",
-            date = "10 вересня 13:00 - 16:00",
+            rating = 4.6f,
             address = "Келецька 95б, Вінниця"
         ),
-        navigateToPdp = {},
-        removeReservation = {}
+        navigateToFoodEstablishmentDetailsForReservator = {}
     )
 }

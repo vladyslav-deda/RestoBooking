@@ -23,6 +23,7 @@ import com.project.presentation.ui.navigation.SrpDestinationsArgs.TAGS_ARG
 import com.project.presentation.ui.screens.add_food_establishments.AddFoodEstablishmentsScreen
 import com.project.presentation.ui.screens.home.HomeScreen
 import com.project.presentation.ui.screens.login.LoginScreen
+import com.project.presentation.ui.screens.myfoodestablishment.MyFoodEstablishmentsScreen
 import com.project.presentation.ui.screens.myreservations.MyReservationsScreen
 import com.project.presentation.ui.screens.pdp.PdpScreen
 import com.project.presentation.ui.screens.profile.ProfileScreen
@@ -62,6 +63,7 @@ sealed class AppDestinations(
     object Srp : AppDestinations("srp_screen")
     object Pdp : AppDestinations("pdp_screen")
     object AddReservation : AppDestinations("add_reservation_screen")
+    object MyFoodEstablishmentsScreen : AppDestinations("my_food_establishments_screen")
 }
 
 @Composable
@@ -206,6 +208,9 @@ fun SetupNavGraph(
                         launchSingleTop = true
                         popUpTo(0) { inclusive = true }
                     }
+                },
+                navigateToMyFoodEstablishmentsScreen = {
+                    navController.navigate(AppDestinations.MyFoodEstablishmentsScreen.route)
                 }
             )
         }
@@ -278,7 +283,7 @@ fun SetupNavGraph(
                 navigateBack = {
                     navController.popBackStack()
                 },
-                navigateToReservation = {id->
+                navigateToReservation = { id ->
                     navController.navigate("${AppDestinations.AddReservation.route}/$id")
                 }
             )
@@ -298,6 +303,27 @@ fun SetupNavGraph(
                 )
             }) {
             SetReservationScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable(
+            route = AppDestinations.MyFoodEstablishmentsScreen.route,
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(700)
+                )
+            }) {
+            MyFoodEstablishmentsScreen(
+                navigateToFoodEstablishmentsDetailsForReservator = {
+
+                },
                 navigateBack = {
                     navController.popBackStack()
                 }

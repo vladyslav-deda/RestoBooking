@@ -52,4 +52,5 @@
     <string name="start_time_booking">Початок</string>
     <string name="end_time_booking">Кінець</string>
     <string name="comment">Коментар</string>
+    <string name="my_food_establishments">Мої заклади харчування</string>
 </resources>

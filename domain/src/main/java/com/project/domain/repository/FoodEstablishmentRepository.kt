@@ -1,7 +1,6 @@
 package com.project.domain.repository
 
 import com.project.domain.model.FoodEstablishment
-import com.project.domain.model.TimeSlot
 
 interface FoodEstablishmentRepository {
 
@@ -22,4 +21,6 @@ interface FoodEstablishmentRepository {
         commentText: String,
         rating: Int
     ): Result<Unit>
+
+    suspend fun getFoodEstablishmentOfCurrentUser(): Result<List<FoodEstablishment>>
 }
