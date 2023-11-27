@@ -258,8 +258,6 @@ fun HomeSearchView(
                 .clip(shape = RoundedCornerShape(20.dp))
                 .padding(10.dp)
                 .align(Alignment.Start)
-            //.fillMaxSize()
-            //.weight(1f)
         ) {
             FlowRow(
                 modifier = Modifier

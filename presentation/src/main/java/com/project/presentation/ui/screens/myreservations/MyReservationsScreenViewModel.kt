@@ -2,10 +2,13 @@ package com.project.presentation.ui.screens.myreservations
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.project.domain.model.FoodEstablishment
 import com.project.domain.model.Reservation
+import com.project.domain.model.TimeSlot
 import com.project.domain.repository.ReservationRepository
 import com.project.presentation.ui.screens.myreservations.view.MyReservationItemViewState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.async
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -30,6 +33,29 @@ class MyReservationsScreenViewModel @Inject constructor(
     private val timeFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     init {
+        retrieveReservations()
+    }
+
+    fun removeReservation(
+        foodEstablishmentId: String,
+        timeSlot: TimeSlot
+    ) {
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true) }
+            reservationRepository.removeReservation(foodEstablishmentId, timeSlot)
+                .fold(
+                    onSuccess = {
+                        retrieveReservations()
+                    },
+                    onFailure = {
+                        Timber.e(it)
+                    }
+                )
+            _uiState.update { it.copy(isLoading = false) }
+        }
+    }
+
+    private fun retrieveReservations() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             reservationRepository.getReservationsForCurrentUser()
@@ -48,7 +74,8 @@ class MyReservationsScreenViewModel @Inject constructor(
                                 foodEstablishmentId = it.foodEstablishment.id,
                                 name = name,
                                 date = reservationTime,
-                                address = address
+                                address = address,
+                                timeSlot = it.timeSlot!!
                             )
                         }
                         _uiState.update {

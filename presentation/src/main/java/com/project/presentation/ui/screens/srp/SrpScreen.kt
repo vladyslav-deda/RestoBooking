@@ -38,6 +38,7 @@ import com.project.domain.model.Photo
 import com.project.presentation.R
 import com.project.presentation.ui.view.SrpItemView
 import com.project.presentation.ui.view.SrpItemViewState
+import com.project.presentation.ui.view.common.EmptyListView
 import com.project.presentation.ui.view.common.LoadingView
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -88,7 +89,7 @@ fun SrpScreen(
                 )
                 if (uiState.isLoading) {
                     LoadingView()
-                } else {
+                } else if (uiState.list.isNotEmpty()) {
                     LazyColumn(
                         modifier = Modifier.padding(20.dp)
                     ) {
@@ -120,6 +121,8 @@ fun SrpScreen(
                             Spacer(modifier = Modifier.height(20.dp))
                         }
                     }
+                } else {
+                    EmptyListView(text = "Не було знайдено жодного закладу, який би відповідав Вашим критеріям пошуку")
                 }
             }
         }

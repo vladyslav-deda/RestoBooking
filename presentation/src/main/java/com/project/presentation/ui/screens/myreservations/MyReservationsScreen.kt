@@ -1,5 +1,7 @@
 package com.project.presentation.ui.screens.myreservations
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -19,12 +21,20 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.project.presentation.R
 import com.project.presentation.ui.screens.myreservations.view.MyReservationItemView
+import com.project.presentation.ui.view.common.EmptyListView
 import com.project.presentation.ui.view.common.LoadingView
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -32,7 +42,7 @@ import com.project.presentation.ui.view.common.LoadingView
 fun MyReservationsScreen(
     modifier: Modifier = Modifier,
     viewModel: MyReservationsScreenViewModel = hiltViewModel(),
-    navigateToPdp: (String) -> Unit
+    navigateToPdp: (String) -> Unit,
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -62,7 +72,7 @@ fun MyReservationsScreen(
                         .fillMaxSize()
                 ) {
                     if (uiState.reservations.isEmpty()) {
-                        EmptyListView()
+                        EmptyListView(text = "Жодного бронювання не було знайдено")
                     } else {
                         Column {
                             Text(
@@ -76,9 +86,16 @@ fun MyReservationsScreen(
                                 items(uiState.reservations) { item ->
                                     MyReservationItemView(
                                         viewState = item,
-                                    ) {
-                                        navigateToPdp(item.foodEstablishmentId)
-                                    }
+                                        removeReservation = {
+                                            viewModel.removeReservation(
+                                                foodEstablishmentId = item.foodEstablishmentId,
+                                                timeSlot = item.timeSlot
+                                            )
+                                        },
+                                        navigateToPdp = {
+                                            navigateToPdp(item.foodEstablishmentId)
+                                        }
+                                    )
                                     Spacer(modifier = Modifier.height(20.dp))
                                 }
                             }
@@ -88,21 +105,5 @@ fun MyReservationsScreen(
                 }
             }
         }
-    }
-}
-
-@Composable
-fun EmptyListView(
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .fillMaxSize()
-    ) {
-        Text(
-            modifier = Modifier.align(Alignment.Center),
-            text = "Жодного бронювання не було знайдено",
-            style = MaterialTheme.typography.titleMedium
-        )
     }
 }

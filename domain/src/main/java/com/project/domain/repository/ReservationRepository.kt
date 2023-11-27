@@ -11,4 +11,9 @@ interface ReservationRepository {
     ): Result<Unit>
 
     suspend fun getReservationsForCurrentUser(): Result<List<Reservation>>
+
+    suspend fun removeReservation(
+        foodEstablishmentId: String,
+        timeSlot: TimeSlot
+    ): Result<Unit>
 }

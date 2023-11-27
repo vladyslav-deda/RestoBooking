@@ -1,5 +1,6 @@
 package com.project.data.repository
 
+import android.provider.ContactsContract.CommonDataKinds.Email
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
@@ -45,7 +46,12 @@ class ReservationRepositoryImpl @Inject constructor(
             val foodEstablishment = document.toObject(FoodEstablishmentDto::class.java)?.toDomain()
             val tablesForBooking = foodEstablishment?.tablesForBooking?.toMutableList()
 
-            val tableAndTimeSlotIndexes = getTableAndTimeSlotIndexes(tablesForBooking, timeSlot)
+            val tableAndTimeSlotIndexes = getTableAndTimeSlotIndexes(
+                tablesForBooking = tablesForBooking,
+                timeSlot = timeSlot,
+                reservatorEmail = null,
+                reservatorName = null
+            )
             val newTimeSlot = timeSlot.copy(
                 reservatorName = currentUser?.displayName,
                 reservatorEmail = currentUser?.email
@@ -66,13 +72,6 @@ class ReservationRepositoryImpl @Inject constructor(
                 foodEstablishment?.copy(tablesForBooking = tablesForBooking ?: emptyList())
                     ?.toDto(images)
 
-            updatedFoodEstablishment?.tablesForBooking?.forEach {
-                it.timeSlots.forEach {
-                    if (it.reservatorEmail!=null){
-                        Log.i("myLogs", "addReservation: ${it.reservatorEmail}")
-                    }
-                }
-            }
             if (updatedFoodEstablishment != null) {
                 foodEstablishmentRef.set(updatedFoodEstablishment).await()
                 return@withContext Result.success(Unit)
@@ -102,7 +101,7 @@ class ReservationRepositoryImpl @Inject constructor(
                     foodEstablishment.tablesForBooking.forEach {
                         it.timeSlots.forEach { timeSlot ->
                             val timeSlotDate = Date(timeSlot.timeFrom)
-                            if (timeSlot.reservatorEmail != null) {
+                            if (timeSlot.reservatorEmail == currentUserEmail/* && !timeSlotDate.before(currentDate)*/) {
                                 reservations.add(
                                     Reservation(
                                         timeSlot = timeSlot,
@@ -120,9 +119,66 @@ class ReservationRepositoryImpl @Inject constructor(
             }
         }
 
+    override suspend fun removeReservation(
+        foodEstablishmentId: String,
+        timeSlot: TimeSlot
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        val currentUser = userRepository.currentUser
+        try {
+            val collection = firestore.collection(FOOD_ESTABLISHMENT_COLLECTION)
+            val task =
+                collection.whereEqualTo(FoodEstablishment::id.name, foodEstablishmentId).get()
+                    .await()
+            val idInDatabase = task.documents[0].id
+            val foodEstablishmentRef = collection.document(idInDatabase)
+
+            val document = foodEstablishmentRef.get().await()
+            val foodEstablishment = document.toObject(FoodEstablishmentDto::class.java)?.toDomain()
+            val tablesForBooking = foodEstablishment?.tablesForBooking?.toMutableList()
+
+            val tableAndTimeSlotIndexes = getTableAndTimeSlotIndexes(
+                tablesForBooking = tablesForBooking,
+                timeSlot = timeSlot,
+                reservatorEmail = currentUser?.email,
+                reservatorName = currentUser?.displayName
+            )
+            val newTimeSlot = timeSlot.copy(
+                reservatorName = null,
+                reservatorEmail = null,
+                notes = null
+            )
+            val tableForReservation =
+                tablesForBooking?.get(tableAndTimeSlotIndexes.first!!)
+            val newTimeSlots = tableForReservation?.timeSlots?.toMutableList()
+
+            newTimeSlots?.set(tableAndTimeSlotIndexes.second!!, newTimeSlot)
+            val newTable = tableForReservation?.copy(
+                timeSlots = newTimeSlots ?: emptyList()
+            )
+            tablesForBooking?.set(tableAndTimeSlotIndexes.first!!, newTable!!)
+
+            val images: List<String> =
+                foodEstablishment?.photoList?.map { it.uri.toString() } ?: emptyList()
+            val updatedFoodEstablishment: FoodEstablishmentDto? =
+                foodEstablishment?.copy(tablesForBooking = tablesForBooking ?: emptyList())
+                    ?.toDto(images)
+
+            if (updatedFoodEstablishment != null) {
+                foodEstablishmentRef.set(updatedFoodEstablishment).await()
+                return@withContext Result.success(Unit)
+            }
+            Result.failure(Exception("Comment was not removed successfully"))
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     private fun getTableAndTimeSlotIndexes(
         tablesForBooking: MutableList<Table>?,
-        timeSlot: TimeSlot
+        timeSlot: TimeSlot,
+        reservatorEmail: String?,
+        reservatorName: String?
     ): Pair<Int?, Int?> {
         val timeFromCalendar = Calendar.getInstance().apply {
             timeInMillis = timeSlot.timeFrom
@@ -144,8 +200,8 @@ class ReservationRepositoryImpl @Inject constructor(
                     timeFromCalendar.get(Calendar.MINUTE) == currentSlotTimeFromCalendar.get(
                         Calendar.MINUTE
                     ) &&
-                    timeSlot.reservatorEmail == null &&
-                    timeSlot.reservatorName == null
+                    timeSlot.reservatorEmail == reservatorEmail &&
+                    timeSlot.reservatorName == reservatorName
                 ) {
                     return Pair(tableIndex, timeSlotIndex)
                 }

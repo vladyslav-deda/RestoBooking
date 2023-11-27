@@ -28,5 +28,7 @@ data class HomeSearchViewState(
         timeFormat.format(it)
     }
 
-    fun isSearchButtonEnabled() = city.isNotEmpty() && tags.any { it.isSelected }
+    fun isSearchButtonEnabled() =
+        city.isNotEmpty() && tags.any { it.isSelected } && selectedDate != null &&
+                selectedTimeFrom != null && selectedTimeTo != null && peopleCount > 0
 }

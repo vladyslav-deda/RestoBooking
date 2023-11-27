@@ -15,11 +15,14 @@ import androidx.compose.material.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.project.presentation.R
@@ -28,7 +31,8 @@ import com.project.presentation.R
 fun MyReservationItemView(
     modifier: Modifier = Modifier,
     viewState: MyReservationItemViewState,
-    navigateToPdp: () -> Unit
+    navigateToPdp: () -> Unit,
+    removeReservation: () -> Unit
 ) {
     Card(
         modifier = modifier
@@ -81,6 +85,15 @@ fun MyReservationItemView(
                     style = MaterialTheme.typography.titleMedium
                 )
             }
+            Spacer(modifier = Modifier.height(12.dp))
+            TextButton(onClick = removeReservation) {
+                Text(
+                    modifier = Modifier.fillMaxWidth(),
+                    textAlign = TextAlign.End,
+                    text = "Відмінити бронювання",
+                    style = MaterialTheme.typography.titleMedium.copy(color = Color.Red)
+                )
+            }
         }
     }
 }
@@ -96,6 +109,8 @@ fun MyReservationItemViewPreview() {
             name = "Ресторан \"Тест\"",
             date = "10 вересня 13:00 - 16:00",
             address = "Келецька 95б, Вінниця"
-        )
-    ) {}
+        ),
+        navigateToPdp = {},
+        removeReservation = {}
+    )
 }
