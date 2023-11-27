@@ -16,17 +16,15 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.project.domain.model.Photo
 import com.project.presentation.R
 import com.project.presentation.ui.screens.myreservations.view.MyReservationItemView
-import com.project.presentation.ui.view.SrpItemView
-import com.project.presentation.ui.view.SrpItemViewState
 import com.project.presentation.ui.view.common.LoadingView
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,7 +32,7 @@ import com.project.presentation.ui.view.common.LoadingView
 fun MyReservationsScreen(
     modifier: Modifier = Modifier,
     viewModel: MyReservationsScreenViewModel = hiltViewModel(),
-    navigateToPdp:(String)->Unit
+    navigateToPdp: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -66,18 +64,25 @@ fun MyReservationsScreen(
                     if (uiState.reservations.isEmpty()) {
                         EmptyListView()
                     } else {
-                        LazyColumn(
-                            modifier = Modifier.padding(20.dp)
-                        ) {
-                            items(uiState.reservations) {  item ->
-                                MyReservationItemView(
-                                    viewState = item,
-                                ) {
-                                    navigateToPdp(item.foodEstablishmentId)
+                        Column {
+                            Text(
+                                modifier = Modifier.padding(20.dp),
+                                text = stringResource(R.string.reservations),
+                                style = MaterialTheme.typography.headlineMedium
+                            )
+                            LazyColumn(
+                                modifier = Modifier.padding(20.dp)
+                            ) {
+                                items(uiState.reservations) { item ->
+                                    MyReservationItemView(
+                                        viewState = item,
+                                    ) {
+                                        navigateToPdp(item.foodEstablishmentId)
+                                    }
+                                    Spacer(modifier = Modifier.height(20.dp))
                                 }
-
-                                Spacer(modifier = Modifier.height(20.dp))
                             }
+                            Spacer(modifier = Modifier.height(80.dp))
                         }
                     }
                 }
@@ -90,13 +95,14 @@ fun MyReservationsScreen(
 fun EmptyListView(
     modifier: Modifier = Modifier
 ) {
-    Column(
+    Box(
         modifier = modifier
+            .fillMaxSize()
     ) {
         Text(
+            modifier = Modifier.align(Alignment.Center),
             text = "Жодного бронювання не було знайдено",
             style = MaterialTheme.typography.titleMedium
         )
-
     }
 }

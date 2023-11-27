@@ -5,9 +5,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -31,10 +34,15 @@ fun MyReservationItemView(
         modifier = modifier
             .clickable {
                 navigateToPdp()
-            },
+            }
+            .fillMaxWidth(),
         border = BorderStroke(2.dp, colorResource(id = R.color.gray)),
+        shape = RoundedCornerShape(16.dp)
     ) {
-        Column {
+        Column(
+            modifier = Modifier
+                .padding(20.dp)
+        ) {
             Text(
                 text = viewState.name,
                 style = MaterialTheme.typography.titleLarge
@@ -45,7 +53,7 @@ fun MyReservationItemView(
             ) {
                 Icon(
                     modifier = Modifier
-                        .size(15.dp),
+                        .size(20.dp),
                     painter = painterResource(id = R.drawable.ic_calendar),
                     contentDescription = null,
                     tint = colorResource(id = R.color.main_yellow)
@@ -62,7 +70,7 @@ fun MyReservationItemView(
             ) {
                 Icon(
                     modifier = Modifier
-                        .size(15.dp),
+                        .size(20.dp),
                     painter = painterResource(id = R.drawable.ic_place),
                     contentDescription = null,
                     tint = colorResource(id = R.color.main_yellow)
