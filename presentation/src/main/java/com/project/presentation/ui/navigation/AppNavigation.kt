@@ -13,6 +13,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import com.project.presentation.R
 import com.project.presentation.ui.navigation.ArgsName.CITY_ARG
+import com.project.presentation.ui.navigation.ArgsName.FE_DETAILS_FOR_ADMIN_ID_ARG
 import com.project.presentation.ui.navigation.ArgsName.ID_ARG
 import com.project.presentation.ui.navigation.ArgsName.TAGS_ARG
 import com.project.presentation.ui.screens.add_food_establishments.AddFoodEstablishmentsScreen
@@ -32,8 +33,8 @@ object ArgsName {
     const val CITY_ARG = "city"
     const val TAGS_ARG = "tags"
     const val ID_ARG = "id"
+    const val FE_DETAILS_FOR_ADMIN_ID_ARG = "id_fe_for_admin"
 }
-
 
 sealed class AppDestinations(
     val route: String,
@@ -314,7 +315,7 @@ fun SetupNavGraph(
             }) {
             MyFoodEstablishmentsScreen(
                 navigateToFoodEstablishmentsDetailsForAdmin = {
-                    navController.navigate("${AppDestinations.FoodEstablishmentDetailsForAdminScreen.route}/$id")
+                    navController.navigate("${AppDestinations.FoodEstablishmentDetailsForAdminScreen.route}/$it")
                 },
                 navigateBack = {
                     navController.popBackStack()
@@ -322,9 +323,9 @@ fun SetupNavGraph(
             )
         }
         composable(
-            route = "${AppDestinations.FoodEstablishmentDetailsForAdminScreen.route}/{${ID_ARG}}",
+            route = "${AppDestinations.FoodEstablishmentDetailsForAdminScreen.route}/{$FE_DETAILS_FOR_ADMIN_ID_ARG}",
             arguments = listOf(
-                navArgument(ID_ARG) { type = NavType.StringType }),
+                navArgument(FE_DETAILS_FOR_ADMIN_ID_ARG) { type = NavType.StringType }),
             enterTransition = {
                 fadeIn(
                     animationSpec = tween(700)
