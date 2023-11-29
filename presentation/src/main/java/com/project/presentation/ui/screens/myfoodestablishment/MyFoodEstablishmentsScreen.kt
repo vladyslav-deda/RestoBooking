@@ -77,27 +77,27 @@ fun MyFoodEstablishmentsScreen(
         ) {
             if (uiState.isLoading) {
                 LoadingView()
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-            ) {
-                if (uiState.items.isEmpty()) {
-                    EmptyListView(text = "У Вас немає ніяких зареєстрованих закладів")
-                } else {
-                    LazyColumn(
-                        modifier = Modifier.padding(20.dp)
-                    ) {
-                        items(uiState.items) { item ->
-                            MyFoodEstablishmentItemView(viewState = item) {
-                                navigateToFoodEstablishmentsDetailsForAdmin(item.id)
+            } else {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                ) {
+                    if (uiState.items.isEmpty()) {
+                        EmptyListView(text = "У Вас немає ніяких зареєстрованих закладів")
+                    } else {
+                        LazyColumn(
+                            modifier = Modifier.padding(20.dp)
+                        ) {
+                            items(uiState.items) { item ->
+                                MyFoodEstablishmentItemView(viewState = item) {
+                                    navigateToFoodEstablishmentsDetailsForAdmin(item.id)
+                                }
+                                Spacer(modifier = Modifier.height(20.dp))
                             }
-                            Spacer(modifier = Modifier.height(20.dp))
                         }
                     }
                 }
             }
-
         }
     }
 }
