@@ -53,6 +53,7 @@ import com.project.presentation.R
 import com.project.presentation.ui.screens.pdp.view.AddCommentView
 import com.project.presentation.ui.screens.pdp.view.PhotoSliderView
 import com.project.presentation.ui.view.RatingBar
+import com.project.presentation.ui.view.common.CommentView
 import com.project.presentation.ui.view.common.LoadingView
 import com.project.presentation.ui.view.common.TagsView
 import timber.log.Timber
@@ -132,7 +133,7 @@ fun PdpScreen(
                         ) {
                             viewModel.showAddCommentDialog(true)
                         }
-                        Spacer(modifier = Modifier.height(100.dp))
+                        Spacer(modifier = Modifier.height(80.dp))
                     }
                     Column(
                         modifier = Modifier
@@ -345,45 +346,6 @@ private fun FoodEstablishmentDetailsView(
     }
 }
 
-@Composable
-fun CommentView(
-    modifier: Modifier = Modifier,
-    comment: Comment
-) {
-    Column(
-        modifier = modifier
-    ) {
-        Spacer(modifier = Modifier.height(12.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Text(
-                text = comment.author,
-                style = MaterialTheme.typography.bodyLarge.copy(color = Color.Black)
-            )
-            Text(
-                text = DateMapper.mapDate(comment.dateAdded),
-                style = MaterialTheme.typography.bodySmall.copy(color = colorResource(id = R.color.gray))
-            )
-        }
-        Spacer(modifier = Modifier.height(8.dp))
-        RatingBar(
-            rating = comment.rating.toFloat(),
-            starSize = 12
-        )
-        comment.commentText?.let {
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(
-                text = it,
-                style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black)
-            )
-        }
-        Spacer(modifier = Modifier.height(12.dp))
-    }
-}
-
 @Preview(
     showBackground = true,
     backgroundColor = 16777215
@@ -401,22 +363,30 @@ fun FoodEstablishmentDetailsViewPreview() {
         workingTime = "10:00-23:00",
         description = "Чудовий заклад для відпочинку з друзями та у великій компанії",
         comments = listOf(
-            Comment(author = "Vladyslav Deda", commentText = "чудовий заклад", 3, currentDate),
-            Comment(author = "Vladyslav Deda", commentText = "чудовий заклад", 3, currentDate),
-            Comment(author = "Vladyslav Deda", commentText = "чудовий заклад", 3, currentDate)
+            Comment(
+                id = "",
+                author = "Vladyslav Deda",
+                commentText = "чудовий заклад",
+                3,
+                currentDate,
+                textOfReplyToComment = "Ми врахуємо",
+                currentDate
+            ),
+            Comment(
+                id = "",
+                author = "Vladyslav Deda",
+                commentText = "чудовий заклад",
+                3,
+                currentDate
+            ),
+            Comment(
+                id = "",
+                author = "Vladyslav Deda",
+                commentText = "чудовий заклад",
+                3,
+                currentDate
+            )
         ),
         onAddCommentClicked = {}
-    )
-}
-
-@Preview(
-    showBackground = true,
-    backgroundColor = 16777215
-)
-@Composable
-fun CommentViewPreview() {
-    val currentDate = Calendar.getInstance().timeInMillis
-    CommentView(
-        comment = Comment(author = "Vladyslav Deda", commentText = "чудовий заклад", 3, currentDate)
     )
 }

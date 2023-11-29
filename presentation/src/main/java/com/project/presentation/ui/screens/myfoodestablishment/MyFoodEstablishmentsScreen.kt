@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +40,10 @@ fun MyFoodEstablishmentsScreen(
     navigateBack: () -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    SideEffect {
+        viewModel.retrieveFoodEstablishments()
+    }
 
     Scaffold(
         topBar = {
@@ -72,27 +77,27 @@ fun MyFoodEstablishmentsScreen(
         ) {
             if (uiState.isLoading) {
                 LoadingView()
-            } else {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    if (uiState.items.isEmpty()) {
-                        EmptyListView(text = "У Вас немає ніяких зареєстрованих закладів")
-                    } else {
-                        LazyColumn(
-                            modifier = Modifier.padding(20.dp)
-                        ) {
-                            items(uiState.items) { item ->
-                                MyFoodEstablishmentItemView(viewState = item) {
-                                    navigateToFoodEstablishmentsDetailsForAdmin(item.id)
-                                }
-                                Spacer(modifier = Modifier.height(20.dp))
+            }
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+            ) {
+                if (uiState.items.isEmpty()) {
+                    EmptyListView(text = "У Вас немає ніяких зареєстрованих закладів")
+                } else {
+                    LazyColumn(
+                        modifier = Modifier.padding(20.dp)
+                    ) {
+                        items(uiState.items) { item ->
+                            MyFoodEstablishmentItemView(viewState = item) {
+                                navigateToFoodEstablishmentsDetailsForAdmin(item.id)
                             }
+                            Spacer(modifier = Modifier.height(20.dp))
                         }
                     }
                 }
             }
+
         }
     }
 }

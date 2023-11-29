@@ -23,6 +23,10 @@ class MyFoodEstablishmentsScreenViewModel @Inject constructor(
     val uiState: StateFlow<MyFoodEstablishmentsUiModel> = _uiState.asStateFlow()
 
     init {
+        retrieveFoodEstablishments()
+    }
+
+    fun retrieveFoodEstablishments() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             foodEstablishmentRepository.getFoodEstablishmentOfCurrentUser()
@@ -35,7 +39,8 @@ class MyFoodEstablishmentsScreenViewModel @Inject constructor(
                                 id = it.id,
                                 name = name,
                                 rating = it.rating,
-                                address = address
+                                address = address,
+                                commentsWithoutAnswers = it.comments.count { it.textOfReplyToComment == null }
                             )
                         }
                         _uiState.update { it.copy(items = resultList) }

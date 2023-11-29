@@ -53,4 +53,7 @@
     <string name="end_time_booking">Кінець</string>
     <string name="comment">Коментар</string>
     <string name="my_food_establishments">Мої заклади харчування</string>
+    <string name="add_your_reply">Впишіть свою відповідь нижче</string>
+    <string name="answer">Відповідь</string>
+    <string name="reply">Відповісти</string>
 </resources>

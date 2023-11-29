@@ -18,10 +18,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.outlined.KeyboardArrowDown
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -36,24 +37,19 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
 import com.project.presentation.R
+import com.project.presentation.ui.screens.fedetailsforadmin.view.AddReplyForCommentDialog
 import com.project.presentation.ui.screens.fedetailsforadmin.view.TimeSlotDetailsItemView
-import com.project.presentation.ui.screens.fedetailsforadmin.view.TimeSlotDetailsViewState
-import com.project.presentation.ui.screens.myreservations.view.MyReservationItemView
 import com.project.presentation.ui.view.RatingBar
+import com.project.presentation.ui.view.common.CommentView
 import com.project.presentation.ui.view.common.EmptyListView
 import com.project.presentation.ui.view.common.LoadingView
 
@@ -66,13 +62,42 @@ fun FoodEstablishmentDetailsForAdminScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val rotation = remember {
+    val rotationForReservation = remember {
+        Animatable(initialValue = 0f)
+    }
+    val rotationForCommentsWithoutAnswers = remember {
+        Animatable(initialValue = 0f)
+    }
+    val rotationForComments = remember {
         Animatable(initialValue = 0f)
     }
 
+    if (uiState.isReplyDialogShowed) {
+        AddReplyForCommentDialog(
+            onDismissDialog = {
+                viewModel.hideReplyDialog()
+            },
+            onReplyClicked = {
+                viewModel.onReplyClicked(it)
+            })
+    }
+
     LaunchedEffect(uiState.isTimeSlotsShowed) {
-        rotation.animateTo(
+        rotationForReservation.animateTo(
             targetValue = if (uiState.isTimeSlotsShowed) 180f else 0f,
+            animationSpec = tween(durationMillis = 800),
+        )
+    }
+
+    LaunchedEffect(uiState.isCommentsWithoutAnswersShowed) {
+        rotationForCommentsWithoutAnswers.animateTo(
+            targetValue = if (uiState.isCommentsWithoutAnswersShowed) 180f else 0f,
+            animationSpec = tween(durationMillis = 800),
+        )
+    }
+    LaunchedEffect(uiState.isCommentsShowed) {
+        rotationForComments.animateTo(
+            targetValue = if (uiState.isCommentsShowed) 180f else 0f,
             animationSpec = tween(durationMillis = 800),
         )
     }
@@ -172,7 +197,7 @@ fun FoodEstablishmentDetailsForAdminScreen(
                                 Icon(
                                     modifier = Modifier
                                         .size(40.dp)
-                                        .rotate(rotation.value),
+                                        .rotate(rotationForReservation.value),
                                     imageVector = Icons.Outlined.KeyboardArrowDown,
                                     contentDescription = null,
                                     tint = colorResource(id = R.color.main_yellow)
@@ -211,6 +236,123 @@ fun FoodEstablishmentDetailsForAdminScreen(
                                     .height(height = 2.dp)
                                     .background(colorResource(id = R.color.main_yellow))
                             )
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .background(colorResource(id = R.color.light_yellow))
+                                    .clickable {
+                                        viewModel.handleCommentsVisibility(!uiState.isCommentsShowed)
+                                    }
+                                    .padding(horizontal = 20.dp, vertical = 10.dp),
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Text(
+                                    text = "Усі коментарі",
+                                    style = MaterialTheme.typography.bodyLarge.copy(color = Color.Black)
+                                )
+                                Icon(
+                                    modifier = Modifier
+                                        .size(40.dp)
+                                        .rotate(rotationForComments.value),
+                                    imageVector = Icons.Outlined.KeyboardArrowDown,
+                                    contentDescription = null,
+                                    tint = colorResource(id = R.color.main_yellow)
+                                )
+                            }
+                            AnimatedVisibility(visible = uiState.isCommentsShowed) {
+                                if (viewModel.isCommentsWitAnswerPresent()) {
+                                    LazyColumn(
+                                        modifier = Modifier.padding(20.dp)
+                                    ) {
+                                        itemsIndexed(viewModel.getCommentsWithAnswer()) { index, comment ->
+                                            CommentView(comment = comment)
+                                            if (viewModel.getCommentsWithAnswer().lastIndex != index) {
+                                                Divider(
+                                                    color = colorResource(id = R.color.main_yellow),
+                                                    thickness = 1.dp
+                                                )
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    Text(
+                                        modifier = Modifier
+                                            .padding(20.dp)
+                                            .fillMaxWidth(),
+                                        textAlign = TextAlign.Center,
+                                        text = "Коментарів не знайдено",
+                                        style = MaterialTheme.typography.titleMedium.copy(
+                                            color = colorResource(
+                                                id = R.color.dark_gray
+                                            )
+                                        )
+                                    )
+                                }
+                            }
+                            Spacer(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(height = 2.dp)
+                                    .background(colorResource(id = R.color.main_yellow))
+                            )
+                            if (viewModel.isCommentsWithoutAnswerPresent()) {
+                                Row(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .background(colorResource(id = R.color.light_red))
+                                        .clickable {
+                                            viewModel.handleCommentsWithoutAnswersVisibility(!uiState.isCommentsWithoutAnswersShowed)
+                                        }
+                                        .padding(horizontal = 20.dp, vertical = 10.dp),
+                                    horizontalArrangement = Arrangement.SpaceBetween,
+                                    verticalAlignment = Alignment.CenterVertically
+                                ) {
+                                    Text(
+                                        text = "Коментарі які потребують відповіді",
+                                        style = MaterialTheme.typography.bodyLarge.copy(color = Color.Black)
+                                    )
+                                    Icon(
+                                        modifier = Modifier
+                                            .size(40.dp)
+                                            .rotate(rotationForCommentsWithoutAnswers.value),
+                                        imageVector = Icons.Outlined.KeyboardArrowDown,
+                                        contentDescription = null,
+                                        tint = if (viewModel.isCommentsWithoutAnswerPresent()) {
+                                            colorResource(id = R.color.red)
+                                        } else {
+                                            colorResource(id = R.color.main_yellow)
+                                        }
+                                    )
+                                }
+                                AnimatedVisibility(visible = uiState.isCommentsWithoutAnswersShowed) {
+                                    LazyColumn(
+                                        modifier = Modifier.padding(20.dp)
+                                    ) {
+                                        itemsIndexed(viewModel.getCommentsWithoutAnswer()) { index, comment ->
+                                            CommentView(
+                                                comment = comment,
+                                                isEnableToAnswer = true,
+                                                onReplyClicked = {
+                                                    viewModel.showReplyDialog(comment.id ?: "")
+                                                }
+                                            )
+                                            if (viewModel.getCommentsWithoutAnswer().lastIndex != index) {
+                                                Divider(
+                                                    color = colorResource(id = R.color.main_yellow),
+                                                    thickness = 1.dp
+                                                )
+                                            }
+                                        }
+                                    }
+                                }
+                                Spacer(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .height(height = 2.dp)
+                                        .background(colorResource(id = R.color.main_yellow))
+                                )
+                            }
                         }
                     }
                 }

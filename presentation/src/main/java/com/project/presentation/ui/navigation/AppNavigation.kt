@@ -248,10 +248,7 @@ fun SetupNavGraph(
             }) {
             SrpScreen(
                 navigateBack = {
-                    navController.navigate(AppDestinations.Home.route) {
-                        launchSingleTop = true
-                        popUpTo(0) { inclusive = true }
-                    }
+                    navController.popBackStack()
                 },
                 navigateToPdp = { id ->
                     navController.navigate("${AppDestinations.Pdp.route}/$id")

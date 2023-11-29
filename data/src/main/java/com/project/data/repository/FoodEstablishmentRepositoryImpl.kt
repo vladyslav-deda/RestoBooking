@@ -8,8 +8,6 @@ import com.project.data.mapper.Mapper.toDto
 import com.project.data.model.FoodEstablishmentDto
 import com.project.domain.model.Comment
 import com.project.domain.model.FoodEstablishment
-import com.project.domain.model.Table
-import com.project.domain.model.TimeSlot
 import com.project.domain.repository.FoodEstablishmentRepository
 import com.project.domain.repository.SelectedDateForBookingLocalRepository
 import com.project.domain.repository.UserRepository
@@ -17,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.util.Calendar
+import java.util.UUID
 import javax.inject.Inject
 
 private const val FOOD_ESTABLISHMENT_COLLECTION = "food_establishments"
@@ -172,7 +171,9 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
             val currentComments = foodEstablishment?.comments?.toMutableList()
 
             val currentDate = Calendar.getInstance().timeInMillis
+            val idOfComment = UUID.randomUUID().toString()
             val newComment = Comment(
+                id = idOfComment,
                 author = currentUser ?: "",
                 commentText = commentText.ifEmpty { null },
                 rating = rating,
@@ -211,4 +212,53 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
                 Result.failure(t)
             }
         }
+
+    override suspend fun addReplyForComment(
+        foodEstablishmentId: String,
+        commentId: String,
+        replyText: String
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val collection = firestore.collection(FOOD_ESTABLISHMENT_COLLECTION)
+            val task =
+                collection.whereEqualTo(FoodEstablishment::id.name, foodEstablishmentId).get()
+                    .await()
+            val idInDatabase = task.documents[0].id
+            val foodEstablishmentRef = collection.document(idInDatabase)
+
+            val document = foodEstablishmentRef.get().await()
+            val foodEstablishment = document.toObject(FoodEstablishmentDto::class.java)?.toDomain()
+            val currentComments = foodEstablishment?.comments?.toMutableList()
+
+            var indexOfComment = 0
+            foodEstablishment?.comments?.forEachIndexed { index, comment ->
+                if (comment.id == commentId) {
+                    indexOfComment = index
+                }
+            }
+            val currentDate = Calendar.getInstance().timeInMillis
+            val commentForChanging = foodEstablishment?.comments?.get(indexOfComment)?.copy(
+                textOfReplyToComment = replyText,
+                dateOfReply = currentDate
+            )
+
+            commentForChanging?.let {
+                currentComments?.set(indexOfComment, commentForChanging)
+            }
+
+            val images: List<String> =
+                foodEstablishment?.photoList?.map { it.uri.toString() } ?: emptyList()
+            val updatedFoodEstablishment: FoodEstablishmentDto? =
+                foodEstablishment?.copy(comments = currentComments ?: emptyList())?.toDto(images)
+
+            if (updatedFoodEstablishment != null) {
+                foodEstablishmentRef.set(updatedFoodEstablishment).await()
+                return@withContext Result.success(Unit)
+            }
+            Result.failure(Exception("Reply \"$replyText\" was not added successfully"))
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
 }

@@ -40,7 +40,14 @@ fun MyFoodEstablishmentItemView(
                 navigateToFoodEstablishmentDetailsForReservator()
             }
             .fillMaxWidth(),
-        border = BorderStroke(2.dp, colorResource(id = R.color.gray)),
+        border = BorderStroke(
+            width = 2.dp,
+            color = if (viewState.commentsWithoutAnswers > 0) {
+                colorResource(id = R.color.red)
+            } else {
+                colorResource(id = R.color.gray)
+            }
+        ),
         shape = RoundedCornerShape(16.dp)
     ) {
         Column(
