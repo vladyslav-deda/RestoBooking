@@ -17,6 +17,7 @@ import com.project.presentation.ui.navigation.ArgsName.FE_DETAILS_FOR_ADMIN_ID_A
 import com.project.presentation.ui.navigation.ArgsName.ID_ARG
 import com.project.presentation.ui.navigation.ArgsName.TAGS_ARG
 import com.project.presentation.ui.screens.add_food_establishments.AddFoodEstablishmentsScreen
+import com.project.presentation.ui.screens.bottom_navigation.BottomNavigationViewModel
 import com.project.presentation.ui.screens.fedetailsforadmin.FoodEstablishmentDetailsForAdminScreen
 import com.project.presentation.ui.screens.home.HomeScreen
 import com.project.presentation.ui.screens.login.LoginScreen
@@ -62,7 +63,8 @@ sealed class AppDestinations(
 @Composable
 fun SetupNavGraph(
     modifier: Modifier = Modifier,
-    navController: NavHostController
+    navController: NavHostController,
+    bottomNavigationViewModel: BottomNavigationViewModel
 ) {
     NavHost(
         navController = navController,
@@ -157,6 +159,7 @@ fun SetupNavGraph(
                 )
             }) {
             HomeScreen(
+                bottomNavigationViewModel = bottomNavigationViewModel,
                 navigateToSrp = { city, tags ->
                     navController.navigate("${AppDestinations.Srp.route}/$city/$tags")
                 }
@@ -193,6 +196,7 @@ fun SetupNavGraph(
                 )
             }) {
             ProfileScreen(
+                bottomNavigationViewModel = bottomNavigationViewModel,
                 navigateToAddFoodEstablishment = {
                     navController.navigate(AppDestinations.AddFoodEstablishments.route)
                 },

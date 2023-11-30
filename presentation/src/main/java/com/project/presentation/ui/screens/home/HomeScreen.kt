@@ -11,11 +11,13 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.project.presentation.ui.screens.bottom_navigation.BottomNavigationViewModel
 import com.project.presentation.ui.view.HomeSearchView
 import com.project.presentation.ui.view.common.LoadingView
 
@@ -24,9 +26,14 @@ import com.project.presentation.ui.view.common.LoadingView
 fun HomeScreen(
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = hiltViewModel(),
+    bottomNavigationViewModel: BottomNavigationViewModel,
     navigateToSrp: (String, List<String>) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    SideEffect {
+        bottomNavigationViewModel.updateBadgeCounter()
+    }
 
     if (uiState.continueClicked) {
         viewModel.resetContinueClickedStatus()

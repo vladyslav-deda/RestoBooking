@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileScreenViewModel @Inject constructor(
-    getCurrentUserUseCase: GetCurrentUserUseCase,
+    private val getCurrentUserUseCase: GetCurrentUserUseCase,
     private val userRepository: UserRepository,
     private val foodEstablishmentRepository: FoodEstablishmentRepository
 ) : ViewModel() {
@@ -24,7 +24,7 @@ class ProfileScreenViewModel @Inject constructor(
     private val _uiState: MutableStateFlow<ProfileUIState> = MutableStateFlow(ProfileUIState())
     val uiState: StateFlow<ProfileUIState> = _uiState.asStateFlow()
 
-    init {
+    fun retrieveDetailsInfo() {
         viewModelScope.launch {
             _uiState.update { it.copy(isLoading = true) }
             val currentUser = getCurrentUserUseCase.invoke().getOrNull()
@@ -34,7 +34,7 @@ class ProfileScreenViewModel @Inject constructor(
                 .getOrNull()?.let {
                     it.forEach {
                         it.comments.forEach {
-                            if (it.textOfReplyToComment.isNullOrEmpty()){
+                            if (it.textOfReplyToComment.isNullOrEmpty()) {
                                 unrepliedCommentsCount++
                             }
                         }

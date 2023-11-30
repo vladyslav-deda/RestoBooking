@@ -4,6 +4,8 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Badge
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -16,10 +18,9 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.project.presentation.R
 import com.project.presentation.ui.navigation.AppDestinations
 
@@ -27,8 +28,10 @@ import com.project.presentation.ui.navigation.AppDestinations
 fun BottomNavigation(
     modifier: Modifier = Modifier,
     navController: NavController,
-    viewModel: BottomNavigationViewModel = hiltViewModel()
+    viewModel: BottomNavigationViewModel
 ) {
+
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     viewModel.getCurrentScreen(navController.currentBackStackEntryAsState().value?.destination?.route)
         ?.let { screen ->
@@ -41,7 +44,14 @@ fun BottomNavigation(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 viewModel.getListOfItems().forEach { item ->
-                    BottomNavigationItem(item = item, isSelected = item.route == screen.route) {
+                    val badgeCount = if (item.route == AppDestinations.Profile.route) {
+                        uiState.unrepliedComments
+                    } else 0
+                    BottomNavigationItem(
+                        item = item,
+                        isSelected = item.route == screen.route,
+                        badgeCount = badgeCount ?: 0
+                    ) {
                         navController.navigate(item.route) {
                             launchSingleTop = true
                             popUpTo(0) { inclusive = true }
@@ -52,11 +62,13 @@ fun BottomNavigation(
         }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BottomNavigationItem(
     modifier: Modifier = Modifier,
     item: AppDestinations,
     isSelected: Boolean,
+    badgeCount: Int = 0,
     onClick: () -> Unit
 ) {
     val background = if (isSelected) colorResource(id = R.color.main_yellow) else Color.Transparent
@@ -90,11 +102,28 @@ fun BottomNavigationItem(
                 style = MaterialTheme.typography.bodyMedium.copy(color = Color.White)
             )
         }
+        if (badgeCount > 0) {
+            Badge(
+                modifier = Modifier
+                    .size(20.dp)
+                    .align(Alignment.TopEnd),
+                containerColor = colorResource(id = R.color.red),
+                contentColor = Color.White
+            ) {
+                Text(text = badgeCount.toString())
+            }
+        }
     }
 }
 
-@Preview
+@Preview(
+    showBackground = true,
+    backgroundColor = 16777215
+)
 @Composable
 fun PreviewBottomNavigation() {
-    BottomNavigation(navController = rememberNavController())
+//    BottomNavigation(
+//        navController = rememberNavController(),
+//        viewModel = BottomNavigationViewModel()
+//    )
 }
