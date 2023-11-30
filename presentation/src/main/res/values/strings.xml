@@ -18,7 +18,7 @@
     <string name="address">Адреса закладу</string>
     <string name="description">Опишіть заклад</string>
     <string name="city">Місто</string>
-    <string name="phone_for_reservation">Телефон для бронювання</string>
+    <string name="phone_for_reservation">Телефон</string>
     <string name="continue_label">Продовжити</string>
     <string name="register_label">Зареєструвати</string>
     <string name="add_tags_message">Додайте теги, по яких користувачі зможуть швидше знайти Ваш заклад. Ви можете обрати з наявних, або ж створити свій власний тег.</string>

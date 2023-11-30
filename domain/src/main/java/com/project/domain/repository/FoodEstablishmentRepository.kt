@@ -1,6 +1,7 @@
 package com.project.domain.repository
 
 import com.project.domain.model.FoodEstablishment
+import com.project.domain.model.StatisticModel
 
 interface FoodEstablishmentRepository {
 
@@ -28,5 +29,10 @@ interface FoodEstablishmentRepository {
         foodEstablishmentId: String,
         commentId: String,
         replyText: String
+    ): Result<Unit>
+
+    suspend fun addStatisticsSurvey(
+        foodEstablishmentId: String,
+        statisticModel: StatisticModel
     ): Result<Unit>
 }

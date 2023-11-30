@@ -15,5 +15,6 @@ data class FoodEstablishment(
     val ownerName: String = "",
     val rating: Float = 0f,
     val comments: List<Comment> = emptyList(),
-    val tablesForBooking: List<Table> = emptyList()
+    val tablesForBooking: List<Table> = emptyList(),
+    val statisticModelList: List<StatisticModel> = emptyList(),
 )

@@ -193,19 +193,6 @@ class AddFoodEstablishmentsScreenViewModel @Inject constructor(
         }
     }
 
-    fun decreaseStepNumber() {
-        val nextStepNumber = _uiState.value.currentStep.stepNumber - 1
-        AddFoodEstablishmentStep.values().firstOrNull {
-            it.stepNumber == nextStepNumber
-        }?.let {
-            _uiState.update {
-                it.copy(
-                    currentStep = it.currentStep
-                )
-            }
-        }
-    }
-
     fun changePhoto(index: Int, uri: Uri) {
         val newList = _uiState.value.addPhotoViewState.photoList.toMutableList()
         newList[index] = Photo(index, uri)
@@ -321,7 +308,7 @@ data class AddFoodEstablishmentsUIState(
     private fun getMaxSteps() = 4
 
     fun getProgress() =
-        if (currentStep.stepNumber == getMaxSteps()) 1f else currentStep.stepNumber * 0.3f
+        if (currentStep.stepNumber == getMaxSteps()) 1f else currentStep.stepNumber * 0.25f
 
     fun getTitle(): String {
         return "${currentStep.stepNumber}/${getMaxSteps()} ${currentStep.title}"

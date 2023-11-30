@@ -24,7 +24,8 @@ object Mapper {
             phoneForBooking = this.phoneForBooking,
             tags = this.tags,
             comments = this.comments,
-            tablesForBooking = this.tablesForBooking
+            tablesForBooking = this.tablesForBooking,
+            statisticsModel = this.statisticModelList
         )
     }
 
@@ -54,7 +55,8 @@ object Mapper {
             tags = this.tags,
             comments = this.comments,
             rating = rating,
-            tablesForBooking = this.tablesForBooking
+            tablesForBooking = this.tablesForBooking,
+            statisticModelList = this.statisticsModel
         )
     }
 }

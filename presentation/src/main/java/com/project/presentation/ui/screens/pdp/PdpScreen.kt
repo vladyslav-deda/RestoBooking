@@ -51,6 +51,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.project.domain.model.Comment
 import com.project.presentation.R
 import com.project.presentation.ui.screens.pdp.view.AddCommentView
+import com.project.presentation.ui.screens.pdp.view.AddSurveyForStatistics
 import com.project.presentation.ui.screens.pdp.view.PhotoSliderView
 import com.project.presentation.ui.view.RatingBar
 import com.project.presentation.ui.view.common.CommentView
@@ -75,6 +76,11 @@ fun PdpScreen(
             onDismissDialog = { viewModel.showAddCommentDialog(false) },
             onAddClicked = { comment, rating -> viewModel.addComment(comment, rating) }
         )
+    }
+    if (uiState.showAddSurveyForStatistics) {
+        AddSurveyForStatistics(onAddClicked = {
+            viewModel.addStatistic(it)
+        })
     }
 
     Scaffold(

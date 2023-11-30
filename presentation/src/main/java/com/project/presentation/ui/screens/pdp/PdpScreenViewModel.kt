@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.project.domain.model.FoodEstablishment
+import com.project.domain.model.StatisticModel
 import com.project.domain.repository.FoodEstablishmentRepository
 import com.project.presentation.ui.navigation.ArgsName.ID_ARG
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -95,6 +96,36 @@ class PdpScreenViewModel @Inject constructor(
                     Timber.e(it)
                 }
             )
+            _uiState.update {
+                it.copy(
+                    isLoading = false,
+                    showAddSurveyForStatistics = true
+                )
+            }
+        }
+    }
+
+    fun addStatistic(
+        map: Map<Int, Int>
+    ) {
+        viewModelScope.launch {
+            _uiState.update {
+                it.copy(
+                    isLoading = true,
+                    showAddSurveyForStatistics = false
+                )
+            }
+            foodEstablishmentRepository.addStatisticsSurvey(
+                id, StatisticModel(map)
+            ).fold(
+                onSuccess = {
+                    Timber.e("Success: addStatistic")
+                },
+                onFailure = {
+                    Timber.e("Error: " + it.localizedMessage)
+                }
+            )
+
             foodEstablishmentRepository.getFoodEstablishmentById(
                 id = id.trim()
             ).fold(
@@ -123,5 +154,6 @@ data class PdpUIState(
     val isLoading: Boolean = false,
     val navigateToSrp: Boolean = false,
     val foodEstablishment: FoodEstablishment? = null,
-    val showAddCommentDialog: Boolean = false
+    val showAddCommentDialog: Boolean = false,
+    val showAddSurveyForStatistics: Boolean = false
 )

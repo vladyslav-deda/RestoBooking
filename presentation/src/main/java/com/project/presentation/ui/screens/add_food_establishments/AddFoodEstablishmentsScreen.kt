@@ -8,11 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -63,22 +59,6 @@ fun AddFoodEstablishmentsScreen(
                     )
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Black),
-                navigationIcon = {
-                    IconButton(
-                        onClick = {
-//                        if (uiState.currentStep.stepNumber == 1) {
-//                            navigateBack()
-//                        } else {
-                            viewModel.decreaseStepNumber()
-//                        }
-                        }) {
-                        Icon(
-                            imageVector = Icons.Filled.ArrowBack,
-                            tint = Color.White,
-                            contentDescription = null
-                        )
-                    }
-                },
             )
         }
     ) { contentPadding ->

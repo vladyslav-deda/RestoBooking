@@ -8,6 +8,7 @@ import com.project.data.mapper.Mapper.toDto
 import com.project.data.model.FoodEstablishmentDto
 import com.project.domain.model.Comment
 import com.project.domain.model.FoodEstablishment
+import com.project.domain.model.StatisticModel
 import com.project.domain.repository.FoodEstablishmentRepository
 import com.project.domain.repository.SelectedDateForBookingLocalRepository
 import com.project.domain.repository.UserRepository
@@ -256,6 +257,41 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
                 return@withContext Result.success(Unit)
             }
             Result.failure(Exception("Reply \"$replyText\" was not added successfully"))
+
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    override suspend fun addStatisticsSurvey(
+        foodEstablishmentId: String,
+        statisticModel: StatisticModel
+    ): Result<Unit> = withContext(Dispatchers.IO) {
+        try {
+            val collection = firestore.collection(FOOD_ESTABLISHMENT_COLLECTION)
+            val task =
+                collection.whereEqualTo(FoodEstablishment::id.name, foodEstablishmentId).get()
+                    .await()
+            val idInDatabase = task.documents[0].id
+            val foodEstablishmentRef = collection.document(idInDatabase)
+
+            val document = foodEstablishmentRef.get().await()
+            val foodEstablishment = document.toObject(FoodEstablishmentDto::class.java)?.toDomain()
+            val statisticModels = foodEstablishment?.statisticModelList?.toMutableList()
+
+            statisticModels?.add(statisticModel)
+
+            val images: List<String> =
+                foodEstablishment?.photoList?.map { it.uri.toString() } ?: emptyList()
+            val updatedFoodEstablishment: FoodEstablishmentDto? =
+                foodEstablishment?.copy(statisticModelList = statisticModels ?: emptyList())
+                    ?.toDto(images)
+
+            if (updatedFoodEstablishment != null) {
+                foodEstablishmentRef.set(updatedFoodEstablishment).await()
+                return@withContext Result.success(Unit)
+            }
+            Result.failure(Exception("Statistic was not added successfully"))
 
         } catch (e: Exception) {
             Result.failure(e)
