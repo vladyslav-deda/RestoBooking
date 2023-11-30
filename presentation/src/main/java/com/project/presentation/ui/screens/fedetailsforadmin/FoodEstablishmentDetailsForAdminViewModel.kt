@@ -161,7 +161,15 @@ class FoodEstablishmentDetailsForAdminViewModel @Inject constructor(
 
     fun onReplyClicked(replyText: String) {
         viewModelScope.launch {
-            _uiState.update { it.copy(isLoading = true, isReplyDialogShowed = false) }
+            _uiState.update {
+                it.copy(
+                    isLoading = true,
+                    isReplyDialogShowed = false,
+                    isTimeSlotsShowed = false,
+                    isCommentsWithoutAnswersShowed = false,
+                    isCommentsShowed = false
+                )
+            }
             foodEstablishmentRepository.addReplyForComment(
                 foodEstablishmentId = foodEstablishment?.id ?: "",
                 commentId = commentForReplyingId ?: "",
