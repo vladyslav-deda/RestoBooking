@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Badge
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -188,7 +187,6 @@ private fun MenuItem(
         }
         if (unrepliedCommentsCount != null && unrepliedCommentsCount > 0) {
             Badge(
-                modifier = Modifier.size(20.dp),
                 containerColor = colorResource(id = R.color.red),
                 contentColor = Color.White
             ) {

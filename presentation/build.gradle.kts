@@ -85,7 +85,9 @@ dependencies {
     implementation("com.google.accompanist:accompanist-pager:0.28.0")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.28.0")
     implementation("androidx.compose.ui:ui-util:1.5.4")
-    implementation ("androidx.compose.material:material-icons-extended-android:1.6.0-alpha08")
-    implementation ("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    implementation ("com.wdullaer:materialdatetimepicker:4.2.3")
+    implementation("androidx.compose.material:material-icons-extended-android:1.6.0-alpha08")
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+    implementation("com.wdullaer:materialdatetimepicker:4.2.3")
+
+    implementation("com.github.tehras:charts:0.2.4-alpha")
 }

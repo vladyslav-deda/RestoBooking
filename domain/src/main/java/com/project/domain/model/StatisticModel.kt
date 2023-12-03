@@ -1,6 +1,6 @@
 package com.project.domain.model
 
-// first int - index of question, second - index of answer
+// first String - index of question, second - index of answer
 data class StatisticModel(
-    val map: Map<Int, Int>
+    val map: Map<String, String>? = null
 )

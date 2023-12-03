@@ -277,14 +277,15 @@ class FoodEstablishmentRepositoryImpl @Inject constructor(
 
             val document = foodEstablishmentRef.get().await()
             val foodEstablishment = document.toObject(FoodEstablishmentDto::class.java)?.toDomain()
-            val statisticModels = foodEstablishment?.statisticModelList?.toMutableList()
+            val statisticModels: MutableList<StatisticModel> =
+                foodEstablishment?.statisticModelList?.toMutableList() ?: mutableListOf()
 
-            statisticModels?.add(statisticModel)
+            statisticModels.add(statisticModel)
 
             val images: List<String> =
                 foodEstablishment?.photoList?.map { it.uri.toString() } ?: emptyList()
             val updatedFoodEstablishment: FoodEstablishmentDto? =
-                foodEstablishment?.copy(statisticModelList = statisticModels ?: emptyList())
+                foodEstablishment?.copy(statisticModelList = statisticModels)
                     ?.toDto(images)
 
             if (updatedFoodEstablishment != null) {

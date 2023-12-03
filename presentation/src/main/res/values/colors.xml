@@ -8,4 +8,9 @@
     <color name="green">#228B22</color>
     <color name="red">#FF5733</color>
     <color name="light_red">#FFB2B4</color>
+    <color name="violet">#7a49a5</color>
+    <color name="blue">#4974a5</color>
+    <color name="malin">#A54974</color>
+    <color name="coral">#b4252a</color>
+    <color name="light_green">#e6e88f</color>
 </resources>

@@ -19,7 +19,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -38,11 +38,11 @@ import com.project.presentation.R
 @Composable
 fun AddSurveyForStatistics(
     onDismissDialog: () -> Unit = {},
-    onAddClicked: (Map<Int, Int>) -> Unit
+    onAddClicked: (Map<Int, String>) -> Unit
 ) {
-    var selected0 by remember { mutableIntStateOf(0) }
-    var selected1 by remember { mutableIntStateOf(0) }
-    var selected2 by remember { mutableIntStateOf(0) }
+    var selected0 by remember { mutableStateOf("") }
+    var selected1 by remember { mutableStateOf("") }
+    var selected2 by remember { mutableStateOf("") }
 
     Dialog(onDismissRequest = { onDismissDialog() }) {
         Surface(
@@ -66,7 +66,7 @@ fun AddSurveyForStatistics(
                     Spacer(modifier = Modifier.height(6.dp))
                     RadioGroup(
                         items = firstItem.answers,
-                        selected = firstItem.answers[selected0],
+                        selected = selected0,
                         setSelected = {
                             selected0 = it
                         }
@@ -80,7 +80,7 @@ fun AddSurveyForStatistics(
                     Spacer(modifier = Modifier.height(6.dp))
                     RadioGroup(
                         items = secondItem.answers,
-                        selected = secondItem.answers[selected1],
+                        selected = selected1,
                         setSelected = {
                             selected1 = it
                         }
@@ -94,7 +94,7 @@ fun AddSurveyForStatistics(
                     Spacer(modifier = Modifier.height(6.dp))
                     RadioGroup(
                         items = thirdItem.answers,
-                        selected = thirdItem.answers[selected2],
+                        selected = selected2,
                         setSelected = {
                             selected2 = it
                         }
@@ -118,6 +118,7 @@ fun AddSurveyForStatistics(
                             },
                             shape = RoundedCornerShape(8.dp),
                             colors = ButtonDefaults.buttonColors(containerColor = colorResource(id = R.color.main_yellow)),
+                            enabled = selected0.isNotEmpty() && selected1.isNotEmpty() && selected2.isNotEmpty()
                         ) {
                             Text(
                                 modifier = Modifier.padding(vertical = 8.dp, horizontal = 22.dp),
@@ -136,20 +137,20 @@ fun AddSurveyForStatistics(
 fun RadioGroup(
     items: List<String>,
     selected: String,
-    setSelected: (selectedIndex: Int) -> Unit,
+    setSelected: (selected: String) -> Unit,
 ) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
         Column(
             verticalArrangement = Arrangement.Center
         ) {
-            items.forEachIndexed { index, item ->
+            items.forEach { item ->
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     RadioButton(
                         selected = selected == item,
                         onClick = {
-                            setSelected(index)
+                            setSelected(item)
                         },
                         enabled = true,
                         colors = RadioButtonDefaults.colors(

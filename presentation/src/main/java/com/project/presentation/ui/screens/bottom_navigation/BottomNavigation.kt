@@ -105,7 +105,6 @@ fun BottomNavigationItem(
         if (badgeCount > 0) {
             Badge(
                 modifier = Modifier
-                    .size(20.dp)
                     .align(Alignment.TopEnd),
                 containerColor = colorResource(id = R.color.red),
                 contentColor = Color.White

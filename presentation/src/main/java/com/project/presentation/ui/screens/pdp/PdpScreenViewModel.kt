@@ -42,6 +42,7 @@ class PdpScreenViewModel @Inject constructor(
                     _uiState.update {
                         it.copy(
                             foodEstablishment = foodEstablishment,
+                            isStatisticButtonEnabled = foodEstablishment.statisticModelList.isNotEmpty(),
                             isLoading = false
                         )
                     }
@@ -106,7 +107,7 @@ class PdpScreenViewModel @Inject constructor(
     }
 
     fun addStatistic(
-        map: Map<Int, Int>
+        intMap: Map<Int, String>
     ) {
         viewModelScope.launch {
             _uiState.update {
@@ -115,8 +116,11 @@ class PdpScreenViewModel @Inject constructor(
                     showAddSurveyForStatistics = false
                 )
             }
+            val stringMap: Map<String, String> = intMap.map { (key, value) ->
+                key.toString() to value.toString()
+            }.toMap()
             foodEstablishmentRepository.addStatisticsSurvey(
-                id, StatisticModel(map)
+                id, StatisticModel(stringMap)
             ).fold(
                 onSuccess = {
                     Timber.e("Success: addStatistic")
@@ -155,5 +159,6 @@ data class PdpUIState(
     val navigateToSrp: Boolean = false,
     val foodEstablishment: FoodEstablishment? = null,
     val showAddCommentDialog: Boolean = false,
-    val showAddSurveyForStatistics: Boolean = false
+    val showAddSurveyForStatistics: Boolean = false,
+    val isStatisticButtonEnabled: Boolean = false
 )

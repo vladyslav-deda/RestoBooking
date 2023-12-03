@@ -66,7 +66,8 @@ fun PdpScreen(
     modifier: Modifier = Modifier,
     viewModel: PdpScreenViewModel = hiltViewModel(),
     navigateBack: () -> Unit,
-    navigateToReservation: (String) -> Unit
+    navigateToReservation: (String) -> Unit,
+    navigateToStatistics: (id: String) -> Unit
 ) {
 
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -102,6 +103,20 @@ fun PdpScreen(
                             tint = Color.White,
                             contentDescription = null
                         )
+                    }
+                },
+                actions = {
+                    if (uiState.isStatisticButtonEnabled) {
+                        IconButton(onClick = {
+                            navigateToStatistics(uiState.foodEstablishment?.id ?: "")
+                        }) {
+                            Icon(
+                                painterResource(id = R.drawable.ic_statistics),
+                                modifier = Modifier.size(20.dp),
+                                contentDescription = null,
+                                tint = Color.White
+                            )
+                        }
                     }
                 },
                 colors = TopAppBarDefaults.smallTopAppBarColors(containerColor = Color.Black)

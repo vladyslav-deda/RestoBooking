@@ -29,6 +29,7 @@ import com.project.presentation.ui.screens.setreservation.SetReservationScreen
 import com.project.presentation.ui.screens.signup.SignUpScreen
 import com.project.presentation.ui.screens.spalsh.SplashScreen
 import com.project.presentation.ui.screens.srp.SrpScreen
+import com.project.presentation.ui.screens.statistic.StatisticsScreen
 
 object ArgsName {
     const val CITY_ARG = "city"
@@ -58,6 +59,8 @@ sealed class AppDestinations(
     object MyFoodEstablishmentsScreen : AppDestinations("my_food_establishments_screen")
     object FoodEstablishmentDetailsForAdminScreen :
         AppDestinations("food_establishments_for_admin_screen")
+
+    object StatisticsScreen : AppDestinations("statistics_screen")
 }
 
 @Composable
@@ -279,6 +282,9 @@ fun SetupNavGraph(
                 },
                 navigateToReservation = { id ->
                     navController.navigate("${AppDestinations.AddReservation.route}/$id")
+                },
+                navigateToStatistics = {
+                    navController.navigate("${AppDestinations.StatisticsScreen.route}/$it")
                 }
             )
         }
@@ -338,6 +344,26 @@ fun SetupNavGraph(
                 )
             }) {
             FoodEstablishmentDetailsForAdminScreen(
+                navigateBack = {
+                    navController.popBackStack()
+                }
+            )
+        }
+        composable(
+            route = "${AppDestinations.StatisticsScreen.route}/{${ID_ARG}}",
+            arguments = listOf(
+                navArgument(ID_ARG) { type = NavType.StringType }),
+            enterTransition = {
+                fadeIn(
+                    animationSpec = tween(700)
+                )
+            },
+            exitTransition = {
+                fadeOut(
+                    animationSpec = tween(700)
+                )
+            }) {
+            StatisticsScreen(
                 navigateBack = {
                     navController.popBackStack()
                 }
